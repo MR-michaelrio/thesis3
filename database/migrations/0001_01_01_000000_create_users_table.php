@@ -32,7 +32,6 @@ class CreateUsersTable extends Migration
             $table->string('name')->nullable();
 
             // Foreign key constraint
-            $table->foreign('id_company')->references('id_company')->on('company')->onDelete('set null');
         });
     }
 
