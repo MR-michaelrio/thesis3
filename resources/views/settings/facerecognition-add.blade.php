@@ -1,7 +1,6 @@
 @extends('index')
 @section('title','Face Recognition Registration')
-@section('content')
-
+@section('css')
 <style>
     .file-item {
         display: flex;
@@ -31,8 +30,21 @@
         margin-left: 10px;
     }
 </style>
+@endsection
 
+@section('content')
+@if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
 <div class="row">
+
     <section class="col-lg-6 connectedSortable">
         <div class="col-12">
             <div class="card">
@@ -49,6 +61,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach($facelist as $a)
                             <tr>
                                 <td>
                                     <div style="background-color:#CED4DA; border-radius:50%; width:50px;height:50px; display: flex; justify-content: center; align-items: center;">
@@ -57,30 +70,15 @@
                                 </td>
                                 <td>
                                     <div class="col">
-                                        [Full Name]
+                                        {{$a->employee->full_name}}
                                     </div>
                                     <div class="col text-primary">
-                                        ID | email.com
+                                        {{$a->id_employee}} | {{$a->employee->user->email}}
                                     </div>
                                 </td>
-                                <td>[Department Code]</td>
+                                <td>{{$a->employee->user->id_department}}</td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <div style="background-color:#CED4DA; border-radius:50%; width:50px;height:50px; display: flex; justify-content: center; align-items: center;">
-                                        <i class="far fa-user fa-2x"></i>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="col">
-                                        [michael]
-                                    </div>
-                                    <div class="col text-primary">
-                                        ID | email.com
-                                    </div>
-                                </td>
-                                <td>[Department Code]</td>
-                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -93,46 +91,68 @@
                 <div class="card-header" style="background-color:#0FBEF2;color:white">
                     <h3 class="card-title">Face Recognition Registration</h3>
                 </div>
-                <div class="card-body">
-                    <div class="col-12">
-                        <div class="form-group">
-                            <label for="employeeID">Employee ID</label>
-                            <input type="text" class="form-control" id="employeeID" placeholder="[Employee ID]">
+                <form action="{{route('attendance.store')}}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <div class="card-body">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="employeeID">Employee ID</label>
+                                <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" name="id_employee" id="employeeID" data-select2-id="2" tabindex="-1" aria-hidden="true">
+                                    <option disabled selected>Employee ID</option>
+                                    @foreach($employee as $e)
+                                        <option value="{{$e->id_employee}}" data-name="{{$e->full_name}}">{{$e->full_name}}</option>
+                                    @endforeach
+                                </select> 
+                                <!-- <input type="text" class="form-control" id="employeeID" placeholder="[Employee ID]"> -->
+                            </div>
+                            <div class="form-group">
+                                <label for="employeeName">Employee Name</label>
+                                <input type="text" class="form-control" id="employeeName" disabled placeholder="[Employee Name]" value="">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="employeeName">Employee Name</label>
-                            <input type="text" class="form-control" id="employeeName" placeholder="[Employee Name]">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="container mt-3">
-                            <h5>Face</h5>
-                            <div class="border rounded p-3 d-flex align-items-center">
-                                <div class="flex-grow-1">
-                                    <label class="d-flex align-items-center" for="file-upload">
-                                        <i class="fas fa-upload"></i>
-                                        <span class="pl-2">Upload files here</span>
-                                    </label>
-                                    <small class="text-muted d-block">Accepted file types: JPEG, JPG</small>
-                                    <input type="file" class="d-none" id="file-upload" accept="image/jpeg, image/jpg, image/png" multiple onchange="handleFileUpload(event)">
+                        <div class="col-12">
+                            <div class="container mt-3">
+                                <h5>Face</h5>
+                                <div class="border rounded p-3 d-flex align-items-center">
+                                    <div class="flex-grow-1">
+                                        <label class="d-flex align-items-center" for="file-upload">
+                                            <i class="fas fa-upload"></i>
+                                            <span class="pl-2">Upload files here</span>
+                                        </label>
+                                        <small class="text-muted d-block">Accepted file types: JPEG, JPG</small>
+                                        <input type="file" class="d-none" name="image" id="file-upload" multiple onchange="handleFileUpload(event)">
+                                    </div>
+                                    <!-- accept="image/jpeg, image/jpg, image/png" -->
+                                    <button type="button" class="btn btn-outline-primary ml-3" onclick="triggerFileInput()">Upload</button>
                                 </div>
-                                <button type="button" class="btn btn-outline-primary ml-3" onclick="triggerFileInput()">Upload</button>
                             </div>
-                        </div>
-                        <div class="container mt-3">
-                            <h5><span id="upload-count">0</span> of <span id="total-count">0</span> files uploaded</h5>
-                            <div id="file-list">
-                                <!-- File items will be dynamically added here -->
+                            <div class="container mt-3">
+                                <h5><span id="upload-count">0</span> of <span id="total-count">0</span> files uploaded</h5>
+                                <div id="file-list">
+                                    <!-- File items will be dynamically added here -->
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                    <div class="card-footer">
+                        <button type="submit">Submit</button>
+                    </div>
+                </form>
             </div>
         </div>
     </section>
 </div>
+@endsection
 
+@section('scripts')
 <script>
+    $(document).ready(function() {
+        // When Employee ID is selected, update the Employee Name field
+        $('#employeeID').change(function() {
+            var employeeName = $('#employeeID option:selected').data('name');
+            $('#employeeName').val(employeeName);
+        });
+    });
     function triggerFileInput() {
         document.getElementById('file-upload').click();
     }

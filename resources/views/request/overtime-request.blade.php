@@ -44,11 +44,12 @@
                                 <label>Requester</label>
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        <input type="text" class="form-control" placeholder="Requester ID" required>
+                                        <input type="text" class="form-control" placeholder="Requester ID" value="{{Auth::id()}}" disabled="">
                                     </div>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" placeholder="Requester Name"
-                                            disabled="">
+                                        <input type="text" class="form-control" placeholder="Requester Name" 
+                                        value="{{ Auth::user()->employee->full_name }}" 
+                                        disabled>                                    
                                     </div>
                                 </div>
                             </div>

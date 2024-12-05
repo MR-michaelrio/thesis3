@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>AdminLTE 3 | Dashboard</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @yield('css')
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -132,7 +135,7 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
                         <li class="nav-item">
-                            <a href="/" class="nav-link">
+                            <a href="{{ route('home') }}" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard
@@ -141,7 +144,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="/calender" class="nav-link">
+                            <a href="{{ route('calender') }}" class="nav-link">
                                 <i class="nav-icon far fa-calendar-alt"></i>
                                 <p>
                                     Calender
@@ -150,7 +153,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="/employe-data" class="nav-link">
+                            <a href="{{ route('employee.index') }}" class="nav-link">
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>
                                     Employe Data
@@ -168,13 +171,13 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="/attendance" class="nav-link">
+                                    <a href="{{route('attendance.index')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Attendance</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/attendance-data" class="nav-link">
+                                    <a href="{{route('attendance.data')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Attendance Data</p>
                                     </a>
@@ -192,13 +195,13 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="/approval-leave-data" class="nav-link">
+                                    <a href="{{route('requestleave.index')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Leave Approval</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/approval-overtime-data" class="nav-link">
+                                    <a href="{{ route('overtimes.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Overtime Approval</p>
                                     </a>
@@ -216,13 +219,13 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="/request-leave" class="nav-link">
+                                    <a href="{{route('requestleave.create')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Leave</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/overtimes/create" class="nav-link">
+                                    <a href="{{route('overtimes.create')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Overtime</p>
                                     </a>
@@ -249,43 +252,43 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="/setting-role" class="nav-link">
+                                    <a href="{{ route('role.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Role Management</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/companies" class="nav-link">
+                                    <a href="{{route('companies.index')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Company Profile</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/department-data" class="nav-link">
+                                    <a href="{{ route('department.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Department/Division</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/shift-data" class="nav-link">
+                                    <a href="{{ route('shift.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Shift</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/leaves" class="nav-link">
+                                    <a href="{{ route('leaves.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Leave Type</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/facerecognition-add" class="nav-link">
+                                    <a href="{{route('attendance.create')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Face Recognition Registration</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/attendance-policy" class="nav-link">
+                                    <a href="{{route('attendance_policy.index')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Attendance Policy</p>
                                     </a>
@@ -296,7 +299,9 @@
                         <li class="nav-item">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit" class="btn nav-link"><i class="nav-icon fas fa-sign-out-alt"></i>Sign Out</button>
+                                <button type="submit" class="btn btn-flat nav-link float-left text-white">
+                                    <i class="nav-icon fas fa-sign-out-alt"></i> Sign Out
+                                </button>
                             </form>
                         </li>
 
@@ -331,10 +336,10 @@
         </div>
         <!-- /.content-wrapper -->
         <footer class="main-footer">
-            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+            <strong>Copyright &copy; 2024 <a href="#">AntTendance</a>.</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
-                <b>Version</b> 3.2.0
+                <b>Version</b> 1.0.1
             </div>
         </footer>
 
@@ -415,7 +420,10 @@
     <!-- Bootstrap4 Duallistbox -->
     <script src="{{asset('assets/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <!-- moment -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 
+    @yield("scripts")
     <!-- Preview Image Company Profile -->
     <script>
         function previewImage(event) {
@@ -426,111 +434,7 @@
             };
             reader.readAsDataURL(event.target.files[0]);
         }
-
-    </script>
-
-    <!-- Calender -->
-    <script>
-    $(document).ready(function () {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        var calendarEl = document.getElementById('calendar');
-        var calendar;
-
-        // Inisialisasi kalender dengan callback untuk mengambil event dari server
-        calendar = new FullCalendar.Calendar(calendarEl, {
-            headerToolbar: {
-                right: 'today',
-                center: 'title',
-                left: 'prev,next'
-            },
-            themeSystem: 'bootstrap',
-            events: function(fetchInfo, successCallback, failureCallback) {
-                $.ajax({
-                    url: '/events/1', // Ganti dengan user ID yang sesuai
-                    method: 'GET',
-                    success: function (events) {
-                        var calendarEvents = events.map(event => ({
-                            id: event.id,
-                            title: event.title,
-                            start: event.start_time,
-                            end: event.end_time,
-                            backgroundColor: event.background_color,
-                            borderColor: event.border_color,
-                            textColor: event.text_color,
-                        }));
-                        successCallback(calendarEvents);
-                    },
-                    error: function () {
-                        failureCallback();
-                        console.log('Failed to fetch events');
-                    }
-                });
-            },
-            editable: false,
-            droppable: false,
-            eventDidMount: function(info) {
-                let deleteButton = $('<button class="delete-btn"><i class="fas fa-trash"></i></button>');
-                $(info.el).append(deleteButton);
-
-                deleteButton.on('click', function(e) {
-                    e.stopPropagation();
-
-                    if (confirm("Are you sure you want to delete this event?")) {
-                        $.ajax({
-                            url: '/events/' + info.event.id,
-                            method: 'DELETE',
-                            success: function () {
-                                info.event.remove();
-                                alert('Event deleted successfully');
-                            },
-                            error: function () {
-                                alert('Failed to delete event');
-                            }
-                        });
-                    }
-                });
-            }
-        });
-
-        calendar.render();
-        // calendar.refetchEvents();
-
-        // Submit form untuk membuat event baru
-        $('#eventForm').submit(function (e) {
-            e.preventDefault();
-
-            let formData = {
-                title: $('#title').val(),
-                start_time: $('#start_time').val(),
-                end_time: $('#end_time').val(),
-                background_color: $('#background_color').val(),
-                border_color: $('#border_color').val(),
-                text_color: $('#text_color').val(),
-            };
-
-            $.ajax({
-                url: '/events',
-                method: 'POST',
-                data: formData,
-                success: function (response) {
-                    alert('Event created successfully: ' + response.message);
-                    $('#eventForm')[0].reset();
-                    calendar.refetchEvents();
-                },
-                error: function (xhr) {
-                    alert('Error creating event: ' + xhr.responseJSON.message);
-                }
-            });
-        });
-    });
-</script>
-
-
+    </script>    
 
     <!-- Table Employe -->
     <script>
@@ -599,6 +503,9 @@
             $('.select2').select2({
                 theme: "bootstrap4" // Optional theme, use "default" or customize as needed
             });
+            $('.select3').select2({
+                theme: "bootstrap4" // Optional theme, use "default" or customize as needed
+            });
             //Initialize Select2 Elements
             $('.select2bs4').select2({
                 theme: 'bootstrap4'
@@ -630,9 +537,54 @@
 
             //Date and time picker
             $('#reservationdatetime').datetimepicker({
+                format: 'DD/MM/YYYY HH:mm', // Format tanggal dan waktu
                 icons: {
-                    time: 'far fa-clock'
-                }
+                    time: 'far fa-clock',
+                    date: 'far fa-calendar',
+                    up: 'fas fa-arrow-up',
+                    down: 'fas fa-arrow-down',
+                    previous: 'fas fa-chevron-left',
+                    next: 'fas fa-chevron-right',
+                    today: 'fas fa-calendar-check',
+                    clear: 'fas fa-trash',
+                    close: 'fas fa-times'
+                },
+                sideBySide: true, // Memastikan picker waktu dan tanggal berdampingan
+                use24hours: true  // Gunakan format 24 jam
+            });
+
+            $('#reservationdatetime1').datetimepicker({
+                format: 'DD/MM/YYYY HH:mm', // Format tanggal dan waktu
+                icons: {
+                    time: 'far fa-clock',
+                    date: 'far fa-calendar',
+                    up: 'fas fa-arrow-up',
+                    down: 'fas fa-arrow-down',
+                    previous: 'fas fa-chevron-left',
+                    next: 'fas fa-chevron-right',
+                    today: 'fas fa-calendar-check',
+                    clear: 'fas fa-trash',
+                    close: 'fas fa-times'
+                },
+                sideBySide: true, // Memastikan picker waktu dan tanggal berdampingan
+                use24hours: true  // Gunakan format 24 jam
+            });
+
+            $('#reservationdatetime2').datetimepicker({
+                format: 'DD/MM/YYYY HH:mm', // Format tanggal dan waktu
+                icons: {
+                    time: 'far fa-clock',
+                    date: 'far fa-calendar',
+                    up: 'fas fa-arrow-up',
+                    down: 'fas fa-arrow-down',
+                    previous: 'fas fa-chevron-left',
+                    next: 'fas fa-chevron-right',
+                    today: 'fas fa-calendar-check',
+                    clear: 'fas fa-trash',
+                    close: 'fas fa-times'
+                },
+                sideBySide: true, // Memastikan picker waktu dan tanggal berdampingan
+                use24hours: true  // Gunakan format 24 jam
             });
 
             //Date range picker

@@ -42,8 +42,8 @@
                             <td>{{ $leave->description }}</td>
                             <td>
                                 <div class="dropdown">
-                                    <button class="btn btn-link" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v"></i>
+                                    <button class="btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-h"></i>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                                         <button type="button" class="btn btn-block text-left" onclick="openEditModal({{ $leave }})" data-toggle="modal" data-target="#modal-default">
@@ -89,12 +89,9 @@
                         <label>Leave Category</label>
                         <select class="form-control" name="category" id="category">
                             <option disabled>Select a leave category</option>
-                            <option>Alaska</option>
-                            <option>California</option>
-                            <option>Delaware</option>
-                            <option>Tennessee</option>
-                            <option>Texas</option>
-                            <option>Washington</option>
+                            <option value="Annual">Annual</option>
+                            <option value="Fixed Duration">Fixed Duration</option>
+                            <option value="Non-Annual">Non-Annual</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -145,7 +142,7 @@
         document.getElementById("default_quota").value = leave.default_quota;
         document.getElementById("description").value = leave.description;
         document.getElementById("valid_date_from").value = leave.valid_date_from || null;
-    document.getElementById("valid_date_end").value = leave.valid_date_end || null;
-}
+        document.getElementById("valid_date_end").value = leave.valid_date_end || null;
+    }
 </script>
 @endsection

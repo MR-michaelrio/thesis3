@@ -63,4 +63,21 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Company::class, 'id_company');
     }
+
+    public function employee()
+    {
+        return $this->hasOne(Employee::class, 'id_users', 'id_user');
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'id_department', 'id_department');
+    }
+
+    
+    public function position()
+    {
+        return $this->belongsTo(DepartmentPosition::class, 'id_department_position', 'id_department_position');
+    }
+    
 }

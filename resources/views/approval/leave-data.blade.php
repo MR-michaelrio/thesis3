@@ -1,447 +1,197 @@
-
 @extends('index')
 @section('title','Leave Data')
+@section('css')
+<style>
+.cursorpointer {
+    cursor: pointer;
+}
+</style>
+@endsection
 @section('content')
 <div class="row">
     <div class="col-12">
         <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">DataTable with default features</h3>
+            <div class="card-header" style="background-color:#0FBEF2;color:white">
+                <h3 class="card-title">Leave Requests</h3>
             </div>
-            <!-- /.card-header -->
             <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="AdminAccount" class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>Rendering engine</th>
-                            <th>Browser</th>
-                            <th>Platform(s)</th>
-                            <th>Engine version</th>
-                            <th>CSS grade</th>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Employee ID</th>
+                            <th>Leave Type</th>
+                            <th>Leave Date</th>
+                            <th>Status</th>
+                            <th>Quota Requested</th>
+                            <th>Leave Time</th>
+                            <th>Approver ID</th>
+                            <th>Request ID</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td>X</td>
+                        @php $no = 1; @endphp
+                        @foreach($leave as $r)
+                        <tr class="data-row cursorpointer" 
+                            data-id="{{ $r->id_request_leave_hdrs }}" 
+                            data-name="{{ $r->employee->full_name }}" 
+                            data-employee="{{ $r->id_employee }}" 
+                            data-leavetype="{{ $r->leavetype->leave_name }}" 
+                            data-leavestart="{{ \Carbon\Carbon::parse($r->leave_start_date)->format('d/m/Y H:i') }}" 
+                            data-leaveend="{{ \Carbon\Carbon::parse($r->leave_end_date)->format('d/m/Y H:i') }}" 
+                            data-status="{{ $r->status }}" 
+                            data-quota="{{ $r->requested_quota }}" 
+                            data-leavetime="{{ $r->leave_time }}" 
+                            data-approver="{{ $r->id_approver ?? 'N/A' }}"
+                            data-approver-name="{{ $r->approver ? $r->approver->full_name : 'N/A' }}"
+                            data-description="{{ $r->request_description }}" 
+                            data-upload="{{ $r->request_file }}">
+                            <td>{{ $no++ }}</td>
+                            <td>{{ $r->employee->full_name }}</td>
+                            <td>{{ $r->id_employee }}</td>
+                            <td>{{ $r->leavetype->leave_name }}</td>
+                            <td>{{ \Carbon\Carbon::parse($r->leave_start_date)->format('d/m/Y H:i') }} - {{ \Carbon\Carbon::parse($r->leave_end_date)->format('d/m/Y H:i') }}</td>
+                            <td>{{ $r->status }}</td>
+                            <td>{{ $r->requested_quota }}</td>
+                            <td>{{ $r->leave_time }}</td>
+                            <td>{{ $r->id_approver }}</td>
+                            <td>{{ $r->id_employee }}</td>
                         </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 5.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td>5</td>
-                            <td>C</td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 5.5
-                            </td>
-                            <td>Win 95+</td>
-                            <td>5.5</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 6
-                            </td>
-                            <td>Win 98+</td>
-                            <td>6</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet Explorer 7</td>
-                            <td>Win XP SP2+</td>
-                            <td>7</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>AOL browser (AOL desktop)</td>
-                            <td>Win XP</td>
-                            <td>6</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Gecko</td>
-                            <td>Firefox 1.0</td>
-                            <td>Win 98+ / OSX.2+</td>
-                            <td>1.7</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Gecko</td>
-                            <td>Firefox 1.5</td>
-                            <td>Win 98+ / OSX.2+</td>
-                            <td>1.8</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Gecko</td>
-                            <td>Firefox 2.0</td>
-                            <td>Win 98+ / OSX.2+</td>
-                            <td>1.8</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Gecko</td>
-                            <td>Firefox 3.0</td>
-                            <td>Win 2k+ / OSX.3+</td>
-                            <td>1.9</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Gecko</td>
-                            <td>Camino 1.0</td>
-                            <td>OSX.2+</td>
-                            <td>1.8</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Gecko</td>
-                            <td>Camino 1.5</td>
-                            <td>OSX.3+</td>
-                            <td>1.8</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Gecko</td>
-                            <td>Netscape 7.2</td>
-                            <td>Win 95+ / Mac OS 8.6-9.2</td>
-                            <td>1.7</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Gecko</td>
-                            <td>Netscape Browser 8</td>
-                            <td>Win 98SE+</td>
-                            <td>1.7</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Gecko</td>
-                            <td>Netscape Navigator 9</td>
-                            <td>Win 98+ / OSX.2+</td>
-                            <td>1.8</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Gecko</td>
-                            <td>Mozilla 1.0</td>
-                            <td>Win 95+ / OSX.1+</td>
-                            <td>1</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Gecko</td>
-                            <td>Mozilla 1.1</td>
-                            <td>Win 95+ / OSX.1+</td>
-                            <td>1.1</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Gecko</td>
-                            <td>Mozilla 1.2</td>
-                            <td>Win 95+ / OSX.1+</td>
-                            <td>1.2</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Gecko</td>
-                            <td>Mozilla 1.3</td>
-                            <td>Win 95+ / OSX.1+</td>
-                            <td>1.3</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Gecko</td>
-                            <td>Mozilla 1.4</td>
-                            <td>Win 95+ / OSX.1+</td>
-                            <td>1.4</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Gecko</td>
-                            <td>Mozilla 1.5</td>
-                            <td>Win 95+ / OSX.1+</td>
-                            <td>1.5</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Gecko</td>
-                            <td>Mozilla 1.6</td>
-                            <td>Win 95+ / OSX.1+</td>
-                            <td>1.6</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Gecko</td>
-                            <td>Mozilla 1.7</td>
-                            <td>Win 98+ / OSX.1+</td>
-                            <td>1.7</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Gecko</td>
-                            <td>Mozilla 1.8</td>
-                            <td>Win 98+ / OSX.1+</td>
-                            <td>1.8</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Gecko</td>
-                            <td>Seamonkey 1.1</td>
-                            <td>Win 98+ / OSX.2+</td>
-                            <td>1.8</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Gecko</td>
-                            <td>Epiphany 2.20</td>
-                            <td>Gnome</td>
-                            <td>1.8</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Webkit</td>
-                            <td>Safari 1.2</td>
-                            <td>OSX.3</td>
-                            <td>125.5</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Webkit</td>
-                            <td>Safari 1.3</td>
-                            <td>OSX.3</td>
-                            <td>312.8</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Webkit</td>
-                            <td>Safari 2.0</td>
-                            <td>OSX.4+</td>
-                            <td>419.3</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Webkit</td>
-                            <td>Safari 3.0</td>
-                            <td>OSX.4+</td>
-                            <td>522.1</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Webkit</td>
-                            <td>OmniWeb 5.5</td>
-                            <td>OSX.4+</td>
-                            <td>420</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Webkit</td>
-                            <td>iPod Touch / iPhone</td>
-                            <td>iPod</td>
-                            <td>420.1</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Webkit</td>
-                            <td>S60</td>
-                            <td>S60</td>
-                            <td>413</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Presto</td>
-                            <td>Opera 7.0</td>
-                            <td>Win 95+ / OSX.1+</td>
-                            <td>-</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Presto</td>
-                            <td>Opera 7.5</td>
-                            <td>Win 95+ / OSX.2+</td>
-                            <td>-</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Presto</td>
-                            <td>Opera 8.0</td>
-                            <td>Win 95+ / OSX.2+</td>
-                            <td>-</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Presto</td>
-                            <td>Opera 8.5</td>
-                            <td>Win 95+ / OSX.2+</td>
-                            <td>-</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Presto</td>
-                            <td>Opera 9.0</td>
-                            <td>Win 95+ / OSX.3+</td>
-                            <td>-</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Presto</td>
-                            <td>Opera 9.2</td>
-                            <td>Win 88+ / OSX.3+</td>
-                            <td>-</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Presto</td>
-                            <td>Opera 9.5</td>
-                            <td>Win 88+ / OSX.3+</td>
-                            <td>-</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Presto</td>
-                            <td>Opera for Wii</td>
-                            <td>Wii</td>
-                            <td>-</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Presto</td>
-                            <td>Nokia N800</td>
-                            <td>N800</td>
-                            <td>-</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Presto</td>
-                            <td>Nintendo DS browser</td>
-                            <td>Nintendo DS</td>
-                            <td>8.5</td>
-                            <td>C/A<sup>1</sup></td>
-                        </tr>
-                        <tr>
-                            <td>KHTML</td>
-                            <td>Konqureror 3.1</td>
-                            <td>KDE 3.1</td>
-                            <td>3.1</td>
-                            <td>C</td>
-                        </tr>
-                        <tr>
-                            <td>KHTML</td>
-                            <td>Konqureror 3.3</td>
-                            <td>KDE 3.3</td>
-                            <td>3.3</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>KHTML</td>
-                            <td>Konqureror 3.5</td>
-                            <td>KDE 3.5</td>
-                            <td>3.5</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Tasman</td>
-                            <td>Internet Explorer 4.5</td>
-                            <td>Mac OS 8-9</td>
-                            <td>-</td>
-                            <td>X</td>
-                        </tr>
-                        <tr>
-                            <td>Tasman</td>
-                            <td>Internet Explorer 5.1</td>
-                            <td>Mac OS 7.6-9</td>
-                            <td>1</td>
-                            <td>C</td>
-                        </tr>
-                        <tr>
-                            <td>Tasman</td>
-                            <td>Internet Explorer 5.2</td>
-                            <td>Mac OS 8-X</td>
-                            <td>1</td>
-                            <td>C</td>
-                        </tr>
-                        <tr>
-                            <td>Misc</td>
-                            <td>NetFront 3.1</td>
-                            <td>Embedded devices</td>
-                            <td>-</td>
-                            <td>C</td>
-                        </tr>
-                        <tr>
-                            <td>Misc</td>
-                            <td>NetFront 3.4</td>
-                            <td>Embedded devices</td>
-                            <td>-</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td>Misc</td>
-                            <td>Dillo 0.8</td>
-                            <td>Embedded devices</td>
-                            <td>-</td>
-                            <td>X</td>
-                        </tr>
-                        <tr>
-                            <td>Misc</td>
-                            <td>Links</td>
-                            <td>Text only</td>
-                            <td>-</td>
-                            <td>X</td>
-                        </tr>
-                        <tr>
-                            <td>Misc</td>
-                            <td>Lynx</td>
-                            <td>Text only</td>
-                            <td>-</td>
-                            <td>X</td>
-                        </tr>
-                        <tr>
-                            <td>Misc</td>
-                            <td>IE Mobile</td>
-                            <td>Windows Mobile 6</td>
-                            <td>-</td>
-                            <td>C</td>
-                        </tr>
-                        <tr>
-                            <td>Misc</td>
-                            <td>PSP browser</td>
-                            <td>PSP</td>
-                            <td>-</td>
-                            <td>C</td>
-                        </tr>
-                        <tr>
-                            <td>Other browsers</td>
-                            <td>All others</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>U</td>
-                        </tr>
+                        @endforeach
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <th>Rendering engine</th>
-                            <th>Browser</th>
-                            <th>Platform(s)</th>
-                            <th>Engine version</th>
-                            <th>CSS grade</th>
-                        </tr>
-                    </tfoot>
                 </table>
             </div>
-            <!-- /.card-body -->
         </div>
     </div>
 </div>
+
+<!-- Modal for Leave Request Detail -->
+<div class="modal fade" id="leaveRequestModal" tabindex="-1" role="dialog" aria-labelledby="leaveRequestModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#0FBEF2;color:white">
+                <h5 class="modal-title" id="leaveRequestModalLabel">Leave Request Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="updateStatusForm" action="{{ route('requestleave.update') }}" method="post">
+                    @method('PUT')
+                    @csrf
+                    <!-- ID Request sebagai hidden input -->
+                    <input type="hidden" name="id_request_leave_hdrs" id="formRequestID">
+                    <!-- Status akan diisi dengan nilai 'approve' atau 'reject' -->
+                    <input type="hidden" name="status" id="formRequestStatus">
+
+                    <div class="col-12">
+                        <h5><strong>Request ID: <span id="id_request_leave_hdrs"></span> by <span id="modalEmployeeName"></span></strong></h5>
+                    </div>
+                    <!-- Data lainnya -->
+                    <div class="col-12">
+                        <strong>Employee ID:</strong> <span id="modalEmployeeID"></span>
+                    </div>
+                    <div class="col-12">
+                        <strong>Leave Category:</strong> <span id="modalLeaveCategory"></span>
+                    </div>
+                    <div class="col-12">
+                        <strong>Leave Type:</strong> <span id="modalLeaveType"></span>
+                    </div>
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-6"><strong>Leave Date:</strong> <span id="modalLeaveDates"></span></div>
+                            <div class="col-6"><strong>Half Day/Full Day:</strong> <span id="modalLeaveTime"></span></div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-6"><strong>Quota Requested:</strong> <span id="modalQuota"></span></div>
+                            <div class="col-6"><strong>Quota Remaining:</strong> <span id="modalRemainingQuota"></span></div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>Description:</label>
+                            <textarea class="form-control" rows="3" disabled="" id="modalDescription"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-12" id="documentSection">
+                        <a id="viewDocumentBtn" class="btn btn-block btn-default" target="_blank" style="display:none"><i class="fas fa-paperclip"></i> Related Attachment</a>
+                        <p id="noDocumentMessage" style="display:none">User did not upload any attachment</p>
+                    </div>
+                    <div class="col-12">
+                        <strong>Approver ID:</strong> <span id="modalApproverID"></span>
+                    </div>
+                    <div class="col-12">
+                        <strong>Approver Name:</strong> <span id="modalApproverName"></span>
+                    </div>
+                    <!-- Tombol Approve/Reject -->
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-success btn-block" onclick="submitStatus('approve')">Approve</button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" class="btn btn-danger btn-block" onclick="submitStatus('reject')">Reject</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Back</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@endsection
+
+@section('scripts')
+<script>
+    // Fungsi untuk submit status approve atau reject
+    function submitStatus(status) {
+        // Masukkan nilai ID dan status ke form
+        const requestID = $("#id_request_leave_hdrs").text();
+        $("#formRequestID").val(requestID);
+        $("#formRequestStatus").val(status);
+
+        // Submit form
+        $("#updateStatusForm").submit();
+    }
+
+    $(document).ready(function() {
+        // Ketika baris diklik
+        $(".data-row").click(function() {
+            // Populate modal dengan data dari baris yang diklik
+            $("#id_request_leave_hdrs").text($(this).data('id'));
+            $("#modalEmployeeName").text($(this).data('name'));
+            $("#modalEmployeeID").text($(this).data('employee'));
+            $("#modalLeaveCategory").text($(this).data('status'));
+            $("#modalLeaveType").text($(this).data('leavetype'));
+            $("#modalLeaveDates").text($(this).data('leavestart') + " - " + $(this).data('leaveend'));
+            $("#modalQuota").text($(this).data('quota'));
+            $("#modalLeaveTime").text($(this).data('leavetime'));
+            $("#modalApproverID").text($(this).data('approver'));
+            $("#modalApproverName").text($(this).data('approver-name'));
+            $("#modalDescription").text($(this).data('description'));
+
+            // Perbarui tombol dokumen
+            var uploadedDoc = $(this).data('upload');
+            if (uploadedDoc) {
+                var documentUrl = '/storage/' + uploadedDoc; // Sesuaikan path ini
+                $("#viewDocumentBtn").attr('href', documentUrl).show();
+                $("#noDocumentMessage").hide();
+            } else {
+                $("#viewDocumentBtn").hide();
+                $("#noDocumentMessage").show();
+            }
+
+            // Tampilkan modal
+            $('#leaveRequestModal').modal('show');
+        });
+    });
+</script>
 @endsection

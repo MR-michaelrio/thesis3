@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Leave;
+use App\Models\User;
 use Illuminate\Http\Request;
-
+use Auth;
 class LeaveController extends Controller
 {
     public function index()
@@ -26,8 +27,10 @@ class LeaveController extends Controller
         //     'id_company' => 'required|integer|exists:company,id_company',
         // ]);
         
+        $user = User::where("id_user", Auth::id())->first();
+        $data = array_merge($request->all(), ['id_company' => $user->id_company]);
+        Leave::create($data);
 
-        Leave::create($request->all());
 
         return redirect()->route('leaves.index')->with('success', 'Leave created successfully.');
     }

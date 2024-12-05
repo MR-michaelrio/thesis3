@@ -11,7 +11,7 @@ class RequestOvertimeController extends Controller
     {
         // Return all overtime records as a collection of resources
         $overtimes = RequestOvertime::all();
-        return view('request.company-profile', compact('overtimes'));;
+        return view('approval.overtime-data', compact('overtimes'));;
     }
 
     public function create()

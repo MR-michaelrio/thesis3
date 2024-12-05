@@ -30,4 +30,9 @@ class Leave extends Model
     {
         return $this->belongsTo(Company::class, 'id_company');
     }
+
+    public function leavetype()
+    {
+        return $this->belongsTo(RequestLeave::class, 'id_leave', 'leave_type');
+    }
 }

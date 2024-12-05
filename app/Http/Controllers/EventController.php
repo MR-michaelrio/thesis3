@@ -17,6 +17,7 @@ class EventController extends Controller
             'background_color' => 'nullable|string',
             'border_color' => 'nullable|string',
             'text_color' => 'nullable|string',
+            'holiday' => 'nullable|string',
         ]);
 
         $event = Event::create([
@@ -26,6 +27,7 @@ class EventController extends Controller
             'background_color' => $request->background_color ?? '#3788d8',
             'border_color' => $request->border_color ?? '#3788d8',
             'text_color' => $request->text_color ?? '#ffffff',
+            'holiday' => $request->holiday
         ]);
 
         return response()->json(['message' => 'Event created successfully', 'event' => $event], 201);
