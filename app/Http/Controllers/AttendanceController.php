@@ -14,6 +14,7 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use Auth;
+use Illuminate\Support\Facades\DB;
 
 class AttendanceController extends Controller
 {
@@ -199,7 +200,7 @@ class AttendanceController extends Controller
                 $attendance->clock_out = $attendance_clock;
                 // Calculate daily total hours worked
                 $attendance->daily_total = sprintf('%02d:%02d', $dailyTotal->h, $dailyTotal->i);
-                $attendance->attendance_status = 'completed'; // You can set this as 'completed' for clock-out
+                $attendance->attendance_status = 'present'; // You can set this as 'completed' for clock-out
                 $attendance->save();
 
                 // Return a response that the attendance was updated
@@ -254,5 +255,22 @@ class AttendanceController extends Controller
         }
     }
 
-
+    public function getAttendanceData()
+    {
+        $idCompany = Auth::user()->id_company;
+    
+        // Ambil data jumlah kehadiran berdasarkan status dan bulan
+        $attendanceData = DB::table('attendance')
+            ->select(
+                DB::raw("MONTH(attendance_date) as month"),
+                DB::raw("SUM(CASE WHEN attendance_status = 'present' THEN 1 ELSE 0 END) as present"),
+                DB::raw("SUM(CASE WHEN attendance_status = 'late' THEN 1 ELSE 0 END) as late"),
+                DB::raw("SUM(CASE WHEN attendance_status = 'on_leave' THEN 1 ELSE 0 END) as on_leave")
+            )
+            ->where('id_company', $idCompany)
+            ->groupBy(DB::raw("MONTH(attendance_date)"))
+            ->get();
+    
+        return response()->json($attendanceData);
+    }
 }

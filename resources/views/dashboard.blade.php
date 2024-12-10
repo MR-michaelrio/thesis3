@@ -293,58 +293,78 @@
     format: 'L',
     inline: true
   })
-    // Data for the line chart
-    var attendanceData = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June'],  // Example months
-        datasets: [
-            {
-                label: 'Present',  // Label for the "Present" line
-                data: [20, 30, 40, 60, 50, 70],  // Example data for Present
-                fill: false,  // Do not fill the area under the line
-                borderColor: 'rgba(0, 123, 255, 1)',  // Line color for Present
-                tension: 0.1  // Line smoothness
-            },
-            {
-                label: 'Absent',  // Label for the "Absent" line
-                data: [30, 40, 50, 30, 40, 50],  // Example data for Absent
-                fill: false,  // Do not fill the area under the line
-                borderColor: 'rgba(220, 53, 69, 1)',  // Line color for Absent
-                tension: 0.1  // Line smoothness
-            },
-            {
-                label: 'On Leave',  // Label for the "On Leave" line
-                data: [10, 20, 30, 10, 20, 10],  // Example data for On Leave
-                fill: false,  // Do not fill the area under the line
-                borderColor: 'rgba(255, 193, 7, 1)',  // Line color for On Leave
-                tension: 0.1  // Line smoothness
-            }
-        ]
-    };
-
-    // Chart.js configuration
-    var ctx = document.getElementById('attendance-chart').getContext('2d');
-    var attendanceChart = new Chart(ctx, {
-        type: 'line',  // Line chart type
-        data: attendanceData,
-        options: {
-            responsive: true,
-            scales: {
-                x: {
-                    beginAtZero: true  // Start the x-axis at zero
-                },
-                y: {
-                    beginAtZero: true  // Start the y-axis at zero
-                }
-            },
-            plugins: {
-                legend: {
-                    position: 'top',  // Position the legend at the top
-                },
-                tooltip: {
-                    enabled: true  // Enable tooltips for each point on the line
-                }
-            }
-        }
+    // Inisialisasi kalender (opsional, pastikan ini sesuai dengan kebutuhan Anda)
+    $('#calendar').datetimepicker({
+        format: 'L',
+        inline: true
     });
+
+    // Fetch data dari backend dan buat grafik setelah data diterima
+    fetch('/attendance-data')
+        .then(response => response.json())
+        .then(data => {
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+            // Inisialisasi data untuk setiap status
+            const presentData = Array(12).fill(0);
+            const lateData = Array(12).fill(0);
+            const onLeaveData = Array(12).fill(0);
+
+            // Isi data berdasarkan hasil query
+            data.forEach(item => {
+                const monthIndex = item.month - 1; // Bulan dalam database biasanya 1-12
+                presentData[monthIndex] = item.present;
+                lateData[monthIndex] = item.late;
+                onLeaveData[monthIndex] = item.on_leave;
+            });
+
+            // Konfigurasi data untuk Chart.js
+            const attendanceData = {
+                labels: months,
+                datasets: [
+                    {
+                        label: 'Present',
+                        data: presentData,
+                        borderColor: 'rgba(0, 123, 255, 1)',
+                        fill: false,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Late',
+                        data: lateData,
+                        borderColor: 'rgba(220, 53, 69, 1)',
+                        fill: false,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'On Leave',
+                        data: onLeaveData,
+                        borderColor: 'rgba(255, 193, 7, 1)',
+                        fill: false,
+                        tension: 0.1
+                    }
+                ]
+            };
+
+            // Render Chart.js
+            const ctx = document.getElementById('attendance-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: attendanceData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: { enabled: true }
+                    },
+                    scales: {
+                        x: { beginAtZero: true },
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching attendance data:', error));
 </script>
+
 @endsection

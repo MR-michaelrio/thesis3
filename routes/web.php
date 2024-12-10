@@ -48,6 +48,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', function () {
         return redirect()->route('home');
     });
+    Route::get('/attendance-data', [AttendanceController::class, 'getAttendanceData']);
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/calender', [HomeController::class, 'calender'])->name('calender');
