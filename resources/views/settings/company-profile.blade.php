@@ -25,7 +25,7 @@
                                 src="{{ $companies->logo ? asset('img/' . $companies->logo) : 'https://media.istockphoto.com/id/1128826884/vector/no-image-vector-symbol-missing-available-icon-no-gallery-for-this-moment.jpg?s=612x612&w=0&k=20&c=390e76zN_TJ7HZHJpnI7jNl7UBpO3UP7hpR2meE1Qd4=' }}" 
                                 alt="Company Logo" 
                                 class="img-thumbnail" 
-                                style="width: 180px; height: 90px;">
+                                style="width: 90px; height: 90px;border-radius:50%">
                         </div>
                     </div>
                     <div for="companyLogo" class="form-label">Company Logo (18:9)</div>
