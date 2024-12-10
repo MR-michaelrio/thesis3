@@ -98,8 +98,11 @@
                                     <label for="maritalStatus">Marital Status</label>
                                     <select class="form-control" id="maritalStatus" name="marital">
                                         <option value="">Select a status</option>
-                                        <option value="Single">Single</option>
                                         <option value="Married">Married</option>
+                                        <option value="Widowed">Widowed</option>
+                                        <option value="Separated">Separated</option>
+                                        <option value="Divorced">Divorced</option>
+                                        <option value="Single">Single</option>
                                     </select>
                                 </div>
                             </div>

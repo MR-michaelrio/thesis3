@@ -30,7 +30,7 @@
                                 </td>
                                 <td>
                                     <div class="col">
-                                        [{{$a->name}}]
+                                        {{$a->name}}
                                     </div>
                                     <div class="col text-primary">
                                         {{$a->id_user}} | {{$a->email}}

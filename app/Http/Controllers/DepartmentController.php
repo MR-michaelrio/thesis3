@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Employee;
 use App\Models\User;
 use Auth;
+use Illuminate\Support\Facades\DB;
 
 class DepartmentController extends Controller
 {
@@ -22,10 +23,7 @@ class DepartmentController extends Controller
     {
         $departments = Department::all();
         // Assuming Employee has a relationship with User
-        $supervisors = Employee::whereHas('user', function($query) {
-            $query->where('role', 'supervisor');
-        })->get();
-        // dd($supervisors);
+        $supervisors = DB::select("SELECT * FROM employee e JOIN users u ON e.id_users = u.id_user WHERE u.role = 'supervisor'");        
         
         return view('settings.department-add', compact('departments', 'supervisors'));
     }
@@ -63,24 +61,18 @@ class DepartmentController extends Controller
     {
         $department = Department::with('positions')->findOrFail($id);
         $departments = Department::all();
+        $position = DepartmentPosition::where("id_department", $department->id_department)->get();
 
         $supervisors = Employee::whereHas('user', function($query) {
             $query->where('role', 'supervisor');
         })->get();
-        return view('settings.department-edit', compact('department','supervisors','departments'));
+        
+        return view('settings.department-edit', compact('department','supervisors','departments',"position"));
     }
 
     // Update a department and its positions
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'department_name' => 'required',
-            'department_code' => 'required',
-            'id_supervisor' => 'required|integer',
-            'description' => 'nullable',
-            'positions' => 'array|required',
-        ]);
-
         $department = Department::findOrFail($id);
         $department->update([
             'department_name' => $request->department_name,
@@ -90,17 +82,25 @@ class DepartmentController extends Controller
             'id_company' => 1, // Example company ID
         ]);
 
-        // Update department positions
-        foreach ($request->positions as $position) {
-            DepartmentPosition::updateOrCreate(
-                ['id' => $position['id']], // Update by ID
-                [
-                    'position_title' => $position['title'],
-                    'position_description' => $position['description'],
-                    'id_department' => $department->id,
-                    'id_company' => 1, // Example company ID
-                ]
-            );
+        // Ambil posisi yang ada untuk departemen ini
+        $existingPositions = DepartmentPosition::where('id_department', $department->id)
+        ->pluck('position_title', 'id_department_position') // Gunakan 'id_department_position'
+        ->toArray();
+        $positions = json_decode($request->positions, true);
+
+        if($positions){
+        // Update atau tambahkan posisi baru
+            foreach ($positions as $position) {
+                if (!in_array($position['title'], $existingPositions)) {
+                    // Jika posisi tidak ada, buat posisi baru
+                    DepartmentPosition::create([
+                        'position_title' => $position['title'],
+                        'position_description' => $position['description'],
+                        'id_department' => $id,
+                        'id_company' => Auth::user()->id_company, // Example company ID
+                    ]);
+                }
+            }
         }
 
         return redirect()->route('department.index')->with('success', 'Department updated successfully');
@@ -115,4 +115,17 @@ class DepartmentController extends Controller
 
         return redirect()->route('department.index')->with('success', 'Department deleted successfully');
     }
+
+    public function updateposition(Request $request)
+    {
+
+        // Find the position by ID and update it
+        $position = DepartmentPosition::findOrFail($request->id);
+        $position->position_title = $request->title;
+        $position->position_description = $request->description;
+        $position->save();
+
+        return response()->json(['message' => 'Position updated successfully', 'position' => $position,"success"=>200]);
+    }
+
 }
