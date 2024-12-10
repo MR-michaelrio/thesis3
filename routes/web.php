@@ -35,6 +35,10 @@ Route::prefix('thesis')->group(function () {
         Route::resource('attendance', AttendanceController::class);
         Route::resource('employee', EmployeeController::class);
         Route::resource('role', RoleController::class);
+        Route::post('/role/admin/{id}', [RoleController::class, 'roleadmin'])->name('role.admin');
+        Route::post('/role/employee/{id}', [RoleController::class, 'roleemployee'])->name('role.employee');
+        Route::post('/role/supervisor/{id}', [RoleController::class, 'rolesupervisor'])->name('role.supervisor');
+
         Route::resource('shift', ShiftController::class);
         Route::resource('overtimes', RequestOvertimeController::class);
         Route::resource('leaves', LeaveController::class);

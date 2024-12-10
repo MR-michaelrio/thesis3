@@ -86,7 +86,7 @@ class EmployeeController extends Controller
                 'supervisor' => $request['supervisor'] ?? null,
                 'start_work' => $request['start_work'],
                 'stop_work' => $request['stop_work'] ?? null,
-                'role' => $request['role'],
+                'role' => "employee",
                 'phone' => $request['phone'],
                 'emergency_name' => $request['emergency_name'],
                 'emergency_relation' => $request['emergency_relation'],

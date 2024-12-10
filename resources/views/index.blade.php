@@ -120,13 +120,21 @@
             <!-- Sidebar -->
             <div class="sidebar">
                 <!-- Sidebar user panel (optional) -->
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
-                        <img src="{{asset('profile_picture/'.Auth::user()->employee->profile_picture)}}" class="img-circle elevation-2" style="width:35px;height:35px"
-                            alt="User Image">
-                    </div>
-                    <div class="info">
-                        <a href="#" class="d-block">{{ Auth::user()->employee->full_name }} - {{ Auth::user()->role }}</a>
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex items-center space-x-3 ">
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col ">
+                            @if ($a->employee->profile_picture)
+                                <img src="{{ asset('profile_picture/' . Auth::user()->employee->profile_picture) }}" class="img-circle" style="width:40px; height:40px; object-fit: cover;" alt="User Image">
+                            @else
+                                <div style="background-color:#CED4DA; border-radius:50%; width:40px; height:40px; display: flex; justify-content: center; align-items: center;">
+                                    <i class="far fa-user fa-2x"></i>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="col" style="color:white">
+                            <div class="text-base text-capitalize">{{ Auth::user()->employee->full_name }}</div>
+                            <div class="text-sm text-capitalize">{{ Auth::user()->role }}</div>
+                        </div>
                     </div>
                 </div>
 

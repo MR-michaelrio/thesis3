@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Auth;
 class RoleController extends Controller
 {
     /**
@@ -12,10 +13,43 @@ class RoleController extends Controller
     public function index()
     {
         //
-        $admin = User::where("role","admin")->get();
-        $employee = User::where("role","employee")->get();
-        $supervisor = User::where("role","supervisor")->get();
+        $admin = User::where("role","admin")->where("id_company",Auth::user()->id_company)->get();
+        $employee = User::where("role","employee")->where("id_company",Auth::user()->id_company)->get();
+        $supervisor = User::where("role","supervisor")->where("id_company",Auth::user()->id_company)->get();
         return view("settings.role-management", compact("admin","employee","supervisor"));
+    }
+
+    public function roleadmin($id)
+    {
+        // Find the user by their ID
+        $user = User::find($id);
+
+        // Check if the user exists
+        $user->role = 'admin';
+        $user->save();
+        return redirect()->route('role.index');
+        
+    }
+
+
+    public function roleemployee($id)
+    {
+        // Find the user by their ID
+        $user = User::find($id);
+
+        $user->role = 'employee';
+        $user->save();
+        return redirect()->route('role.index');
+    }
+
+    public function rolesupervisor($id)
+    {
+        // Find the user by their ID
+        $user = User::find($id);
+
+        $user->role = 'supervisor';
+        $user->save();
+        return redirect()->route('role.index');
     }
 
     /**
