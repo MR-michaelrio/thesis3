@@ -112,28 +112,16 @@ class EmployeeController extends Controller
                 'id_users' => $user->id_user,
                 'id_company' => Auth::user()->id_company,
             ];
-            // Upload profile picture jika ada
-            // if ($request->hasFile('profile_picture')) {
-            //     // Simpan file di storage
-            //     $profilePicture = $request->file('profile_picture')->store('profile_pictures', 'public');
-            //     // Simpan nama file di database
-            //     $employeeData['profile_picture'] = $profilePicture;
-            // }
-            
+
             if ($request->hasFile('profile_picture')) {
-                // Delete old logo if exists in public/img
-                if ($company->logo && file_exists(public_path('profile_picture/' . $company->logo))) {
-                    unlink(public_path('profile_picture/' . $company->logo));
-                }
-    
                 // Get the file from the request
-                $logo = $request->file('profile_picture');
+                $profile_picture = $request->file('profile_picture');
                 
                 // Generate the file name (you can add a timestamp to avoid conflicts)
-                $profilePictureName = time() . '-' . $logo->getClientOriginalName();
+                $profilePictureName = time() . '-' . $profile_picture->getClientOriginalName();
                 
                 // Move the file to the public/img directory
-                $logo->move(public_path('profile_picture'), $logoName);
+                $profile_picture->move(public_path('profile_picture'), $profilePictureName);
     
                 // Update the company's logo with the new file name
                 $employeeData['profile_picture'] = $profilePictureName;
