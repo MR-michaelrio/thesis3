@@ -49,6 +49,17 @@
                         </div>
 
                         <div class="row">
+                            <!-- Identification Number -->
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="identification_number">Identification Number <span style="color:red">*</span></label>
+                                    <input type="text" class="form-control" id="identification_number" name="identification_number"
+                                        placeholder="Enter Identification Number">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <!-- First Name -->
                             <div class="col-md-6">
                                 <div class="form-group">

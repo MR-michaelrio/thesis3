@@ -92,6 +92,7 @@ class EmployeeController extends Controller
                 'emergency_relation' => $request['emergency_relation'],
                 'emergency_phone' => $request['emergency_phone'],
                 'id_company' => Auth::user()->id_company,
+                'identification_number' => $request->identification_number
             ]);
         
             // Format tanggal lahir

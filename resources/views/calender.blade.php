@@ -135,7 +135,7 @@
                     hour12: false // Menggunakan format 24 jam
                 },
                 eventDidMount: function(info) {
-                    let deleteButton = $('<button class="delete-btn"><i class="fas fa-trash"></i></button>');
+                    let deleteButton = $('<button class="delete-btn" style="background-color:white;border-radius:5px"><i class="fas fa-trash" ></i></button>');
                     if (info.event.backgroundColor === 'red' || info.event.backgroundColor === '#ff0000') {
                         deleteButton.css('color', 'white'); // Ubah warna tombol menjadi putih
                     }
@@ -193,5 +193,5 @@
                 });
             });
         });
-    </script>
+</script>
 @endsection
