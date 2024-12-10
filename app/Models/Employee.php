@@ -63,4 +63,9 @@ class Employee extends Model
         return $this->hasMany(FaceEncoding::class, 'id_employee', 'id_employee');
     }
 
+    public function assignShifts()
+    {
+        return $this->hasMany(AssignShift::class, 'id_employee', 'id_employee');
+    }
+
 }

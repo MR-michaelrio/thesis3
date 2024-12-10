@@ -46,12 +46,14 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/events/{id}', [EventController::class, 'destroy']);
 
     Route::get('/', function () {
-        return view('dashboard');
+        return redirect()->route('home');
     });
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/calender', [HomeController::class, 'calender'])->name('calender');
 });
-
+// Route::get('/test', function () {
+//     return view('test');
+// });
 Auth::routes();
 

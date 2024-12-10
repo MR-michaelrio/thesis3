@@ -288,7 +288,9 @@
                             <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" name="id_department_position" data-select2-id="2" tabindex="-1" aria-hidden="true">
                                 <option disabled selected>Select</option>    
                                 @foreach($departmentPosition as $d)
-                                    <option value="{{$d->id_department_position}}">{{$d->position_title}}</option>
+                                    <option value="{{$d->id_department_position}}">
+                                        {{$d->position_title}}
+                                    </option>                               
                                 @endforeach
                             </select>
                         </div>
@@ -374,10 +376,11 @@
             </div>
         </section>
     </div>
-
-    
 </form>
 
+@endsection
+
+@section('scripts')
 <script>
     function loadProfileImage(event) {
         var reader = new FileReader();

@@ -7,7 +7,7 @@
         <!-- small box -->
         <div class="small-box bg-info" style="height:142.52px">
             <div class="inner" style="height:112.24px">
-                <h3>150</h3>
+                <h3>{{$RequestLeave}}</h3>
 
                 <p>Leave Request</p>
             </div>
@@ -22,7 +22,7 @@
         <!-- small box -->
         <div class="small-box bg-danger" style="height:142.52px">
             <div class="inner" style="height:112.24px">
-                <h3>53</h3>
+                <h3>{{$RequestOvertime}}</h3>
 
                 <p>Overtime Request</p>
             </div>
@@ -37,7 +37,7 @@
         <!-- small box -->
         <div class="small-box bg-warning" style="height:142.52px">
             <div class="inner" style="height:112.24px">
-                <h3>44</h3>
+                <h3>{{$Employee}}</h3>
 
                 <p>Total Employees</p>
             </div>
@@ -67,58 +67,52 @@
     <section class="col-lg-7 connectedSortable">
         <!-- solid sales graph -->
         <div class="card bg-gradient-info">
-            <div class="card-header border-0">
-                <h3 class="card-title">
-                    <i class="fas fa-th mr-1"></i>
-                    Sales Graph
-                </h3>
+    <div class="card-header border-0">
+        <h3 class="card-title">
+            <i class="fas fa-th mr-1"></i>
+            Attendance Graph
+        </h3>
 
-                <div class="card-tools">
-                    <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
-                        <i class="fas fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn bg-info btn-sm" data-card-widget="remove">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="card-body">
-                <canvas class="chart" id="line-chart"
-                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-            </div>
-            <!-- /.card-body -->
-            <div class="card-footer bg-transparent">
-                <div class="row">
-                    <div class="col-4 text-center">
-                        <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60"
-                            data-fgColor="#39CCCC">
-
-                        <div class="text-white">Mail-Orders</div>
-                    </div>
-                    <!-- ./col -->
-                    <div class="col-4 text-center">
-                        <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"
-                            data-fgColor="#39CCCC">
-
-                        <div class="text-white">Online</div>
-                    </div>
-                    <!-- ./col -->
-                    <div class="col-4 text-center">
-                        <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"
-                            data-fgColor="#39CCCC">
-
-                        <div class="text-white">In-Store</div>
-                    </div>
-                    <!-- ./col -->
-                </div>
-                <!-- /.row -->
-            </div>
-            <!-- /.card-footer -->
+        <div class="card-tools">
+            <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn bg-info btn-sm" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
+    </div>
+    <div class="card-body">
+        <canvas class="chart" id="attendance-chart"
+            style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+    </div>
+    <div class="card-footer bg-transparent">
+        <div class="row">
+            <div class="col-4 text-center">
+                <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60"
+                    data-fgColor="#39CCCC">
+
+                <div class="text-white">Present</div>
+            </div>
+            <div class="col-4 text-center">
+                <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"
+                    data-fgColor="#39CCCC">
+
+                <div class="text-white">Absent</div>
+            </div>
+            <div class="col-4 text-center">
+                <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"
+                    data-fgColor="#39CCCC">
+
+                <div class="text-white">On Leave</div>
+            </div>
+        </div>
+    </div>
+</div>
         <!-- /.card -->
          
         <!-- TO DO List -->
-        <div class="card">
+        <!-- <div class="card">
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="ion ion-clipboard mr-1"></i>
@@ -135,25 +129,19 @@
                     </ul>
                 </div>
             </div>
-            <!-- /.card-header -->
             <div class="card-body">
                 <ul class="todo-list" data-widget="todo-list">
                     <li>
-                        <!-- drag handle -->
                         <span class="handle">
                             <i class="fas fa-ellipsis-v"></i>
                             <i class="fas fa-ellipsis-v"></i>
                         </span>
-                        <!-- checkbox -->
                         <div class="icheck-primary d-inline ml-2">
                             <input type="checkbox" value="" name="todo1" id="todoCheck1">
                             <label for="todoCheck1"></label>
                         </div>
-                        <!-- todo text -->
                         <span class="text">Design a nice theme</span>
-                        <!-- Emphasis label -->
                         <small class="badge badge-danger"><i class="far fa-clock"></i> 2 mins</small>
-                        <!-- General tools such as edit or delete-->
                         <div class="tools">
                             <i class="fas fa-edit"></i>
                             <i class="fas fa-trash-o"></i>
@@ -241,11 +229,10 @@
                     </li>
                 </ul>
             </div>
-            <!-- /.card-body -->
             <div class="card-footer clearfix">
                 <button type="button" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Add item</button>
             </div>
-        </div>
+        </div> -->
         <!-- /.card -->
     </section>
     <!-- /.Left col -->
@@ -296,4 +283,68 @@
     <!-- right col -->
 </div>
 <!-- /.row (main row) -->
+@endsection
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    $('#calendar').datetimepicker({
+    format: 'L',
+    inline: true
+  })
+    // Data for the line chart
+    var attendanceData = {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June'],  // Example months
+        datasets: [
+            {
+                label: 'Present',  // Label for the "Present" line
+                data: [20, 30, 40, 60, 50, 70],  // Example data for Present
+                fill: false,  // Do not fill the area under the line
+                borderColor: 'rgba(0, 123, 255, 1)',  // Line color for Present
+                tension: 0.1  // Line smoothness
+            },
+            {
+                label: 'Absent',  // Label for the "Absent" line
+                data: [30, 40, 50, 30, 40, 50],  // Example data for Absent
+                fill: false,  // Do not fill the area under the line
+                borderColor: 'rgba(220, 53, 69, 1)',  // Line color for Absent
+                tension: 0.1  // Line smoothness
+            },
+            {
+                label: 'On Leave',  // Label for the "On Leave" line
+                data: [10, 20, 30, 10, 20, 10],  // Example data for On Leave
+                fill: false,  // Do not fill the area under the line
+                borderColor: 'rgba(255, 193, 7, 1)',  // Line color for On Leave
+                tension: 0.1  // Line smoothness
+            }
+        ]
+    };
+
+    // Chart.js configuration
+    var ctx = document.getElementById('attendance-chart').getContext('2d');
+    var attendanceChart = new Chart(ctx, {
+        type: 'line',  // Line chart type
+        data: attendanceData,
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    beginAtZero: true  // Start the x-axis at zero
+                },
+                y: {
+                    beginAtZero: true  // Start the y-axis at zero
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',  // Position the legend at the top
+                },
+                tooltip: {
+                    enabled: true  // Enable tooltips for each point on the line
+                }
+            }
+        }
+    });
+</script>
 @endsection

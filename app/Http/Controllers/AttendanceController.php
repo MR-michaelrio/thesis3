@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Employee;
 use App\Models\FaceEncoding;
+use App\Models\Shift;
+use App\Models\Attendance;
+use App\Models\AttendancePolicy;
+use App\Models\AssignShift;
+
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
@@ -23,7 +28,12 @@ class AttendanceController extends Controller
 
     public function data()
     {
-        return view('attendance/attendance-data');
+        $attendance = Attendance::with('employee.user', 'shift')
+        ->where('id_company', Auth::user()->id_company)
+        ->orderBy('attendance_date', 'desc')  // Sort by 'attendance_date' in ascending order
+        ->get();
+            // dd($attendance);
+        return view('attendance/attendance-data',compact("attendance"));
     }
 
     /**
@@ -151,23 +161,98 @@ class AttendanceController extends Controller
     
     public function checkin(Request $request)
     {
-        $attendance_date = $request->attendance_date ?? Carbon::now()->toDateString();
-        $clock_in = $request->clock_in ?? Carbon::now(); // Get current time (YYYY-MM-DD HH:MM:SS)
-        
-        // Create a new attendance record
-        $attendance = Attendance::create([
-            'id_employee' => $request->id_employee,
-            'attendance_date' => $attendance_date,
-            'shift_id' => 1,
-            'clock_in' => $clock_in,
-            'attendance_status' => $request->attendance_status,
-            'id_company' => Auth::user()->id_company,
-        ]);
+        $currentTime = Carbon::now('Asia/Jakarta'); // Get the current time using Carbon
 
-        // Return response
-        return response()->json([
-            'message' => 'Attendance successfully stored!',
-            'attendance' => $attendance,
-        ], 201);
+        // Get attendance date and clock-in time from the request or default to the current date/time
+        $attendance_date = $request->attendance_date; // Format YYYY-MM-DD
+        $attendance_clock = $request->clock; // Default to current time if not provided
+        $id_employee = $request->id_employee;
+        // Fetch the employee's shift assignment
+        $assignshift = AssignShift::where('id_employee', $id_employee)->first();
+
+        // If no shift assignment found, return an error response
+        if (!$assignshift) {
+            return response()->json([
+                'message' => 'No shift assignment found for the employee.',
+            ], 201); // Not Found
+        }
+
+        $attendance = Attendance::where('id_employee', $id_employee)
+                            ->where('attendance_date', $attendance_date)
+                            ->first();
+
+        // If attendance exists and clock-out is already recorded, return message
+        if ($attendance && $attendance->clock_out) {
+            return response()->json([
+                'message' => 'Already clocked out!',
+            ], 201); // OK
+        }
+
+        // Check if the current time is after the employee's clock-out time
+        if ($currentTime->format('H:i:s') >= $assignshift->shift->clock_out) {
+            if ($attendance) {
+                $clockIn = Carbon::createFromFormat('H:i:s', $attendance->clock_in);
+                $clockOut = Carbon::createFromFormat('H:i:s', $attendance_clock);
+                $dailyTotal = $clockIn->diff($clockOut);
+
+                // Update the attendance record with the clock-out time
+                $attendance->clock_out = $attendance_clock;
+                // Calculate daily total hours worked
+                $attendance->daily_total = sprintf('%02d:%02d', $dailyTotal->h, $dailyTotal->i);
+                $attendance->attendance_status = 'completed'; // You can set this as 'completed' for clock-out
+                $attendance->save();
+
+                // Return a response that the attendance was updated
+                return response()->json([
+                    'message' => 'Attendance clock-out updated!',
+                    'attendance' => $attendance,
+                ], 200); // OK
+            } else {
+                // If no attendance record is found to update
+                return response()->json([
+                    'message' => 'No attendance record found to update.',
+                ], 201); // Not Found
+            }
+        } else {
+            // If attendance exists and clock-in is already recorded, return message
+            if ($attendance && $attendance->clock_in) {
+                return response()->json([
+                    'message' => 'Already clocked in!',
+                ], 201); // OK
+            }
+            // Get the clock-in time assigned to the shift
+            $clock_in_assign = $assignshift->shift->clock_in;
+            $attendance_policy = AttendancePolicy::where("id_company",Auth::user()->id_company)->first();
+            $late_tolerance = $attendance_policy->late_tolerance;
+
+            $clock_in_assign_minutes = (int)date('H', strtotime($clock_in_assign)) * 60 + (int)date('i', strtotime($clock_in_assign));
+            $allowed_latest_time = $clock_in_assign_minutes + $late_tolerance;
+
+            $attendance_clock_minutes = (int)date('H', strtotime($attendance_clock)) * 60 + (int)date('i', strtotime($attendance_clock));
+
+            $attendance_status = ($attendance_clock_minutes > $allowed_latest_time) ? 'late' : 'present';
+
+            
+            // Determine the attendance status based on whether the employee is late or on time
+            // $attendance_status = (($clock_in_assign + $late_tolerance) < $attendance_clock) ? 'late' : 'present';
+
+            // Create a new attendance record for the employee
+            $attendance = Attendance::create([
+                'id_employee' => $request->id_employee, // Ensure the employee ID is passed correctly
+                'attendance_date' => $attendance_date,
+                'shift_id' => $assignshift->id_shift,
+                'clock_in' => $attendance_clock,
+                'attendance_status' => $attendance_status,
+                'id_company' => Auth::user()->id_company,
+            ]);
+
+            // Return a success response after storing the attendance
+            return response()->json([
+                'message' => 'Attendance successfully stored!',
+                'attendance' => $attendance,
+            ], 201); // Created
+        }
     }
+
+
 }

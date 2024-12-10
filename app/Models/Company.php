@@ -25,5 +25,8 @@ class Company extends Model
         'company_email',
         'company_phone',
     ];
-    
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_company');
+    }
 }

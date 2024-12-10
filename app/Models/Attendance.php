@@ -29,7 +29,7 @@ class Attendance extends Model
     // Define the relationship with Employee (assuming you have an Employee model)
     public function employee()
     {
-        return $this->belongsTo(Employee::class, 'id_employee');
+        return $this->belongsTo(Employee::class, 'id_employee', 'id_employee');
     }
 
     // Define the relationship with Shift (assuming you have a Shift model)

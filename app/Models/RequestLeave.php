@@ -30,6 +30,7 @@ class RequestLeave extends Model
         'leave_end_time',
         'request_description',
         'requested_quota',
+        'created_at'
     ];
 
     // Define relationships

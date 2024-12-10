@@ -57,7 +57,8 @@
     const canvas = document.getElementById('canvas');
     const context = canvas.getContext('2d');
     let stream = null;
-    let isPopupDisplayed = false; // Flag untuk memeriksa apakah popup sedang ditampilkan
+    let isPopupDisplayed = false; // Prevent multiple popups
+    let captureInterval = null; // Store interval reference
 
     // Access the camera
     function startCamera() {
@@ -67,7 +68,7 @@
                 video.srcObject = mediaStream;
             })
             .catch((err) => {
-                console.error('Error accessing the camera: ', err);
+                console.error('Error accessing the camera:', err);
             });
     }
 
@@ -79,13 +80,12 @@
 
     startCamera();
 
-    // Display popup
     function showPopup(name) {
-        isPopupDisplayed = true; // Set flag ketika popup ditampilkan
-        const existingOverlay = document.getElementById('popup-overlay');
-        const existingPopup = document.getElementById('popup');
-        if (existingOverlay) document.body.removeChild(existingOverlay);
-        if (existingPopup) document.body.removeChild(existingPopup);
+        if (isPopupDisplayed) return; // Prevent multiple popups
+        isPopupDisplayed = true; // Set flag
+        stopCamera(); // Stop camera
+        clearInterval(captureInterval); // Stop capturing frames
+
         const overlay = document.createElement('div');
         overlay.id = 'popup-overlay';
         overlay.style.position = 'fixed';
@@ -117,61 +117,93 @@
         document.body.appendChild(popup);
 
         document.getElementById('confirmButton').addEventListener('click', () => {
-            console.log("Klik setuju",name);
-            const id_employe = name;
+            console.log("Klik setuju:", name);
+            const loadingMessage = document.createElement('div');
+            loadingMessage.id = 'loadingMessage';
+            loadingMessage.style.position = 'fixed';
+            loadingMessage.style.top = '50%';
+            loadingMessage.style.left = '50%';
+            loadingMessage.style.transform = 'translate(-50%, -50%)';
+            loadingMessage.style.padding = '20px';
+            loadingMessage.style.background = 'rgba(0, 0, 0, 0.7)';
+            loadingMessage.style.color = 'white';
+            loadingMessage.style.borderRadius = '10px';
+            loadingMessage.style.fontSize = '16px';
+            loadingMessage.innerHTML = 'Processing attendance, please wait...';
+
+            document.body.appendChild(loadingMessage);
+
+
+            // Send attendance data
             const currentDate = new Date();
-            const attendanceDate = currentDate.toISOString().split('T')[0]; // YYYY-MM-DD format
-            const clockIn = currentDate.toISOString(); // Full timestamp: YYYY-MM-DDTHH:mm:ss.sssZ
+            const attendanceDate = currentDate.toISOString().split('T')[0]; // YYYY-MM-DD
+            const clock = currentDate.toTimeString().split(' ')[0]; // HH:mm:ss
 
-            const payload = {
-                id_employe: id_employe,
-                attendance_date: attendanceDate,  // Send the current date
-                clock_in: clockIn       // Send the current timestamp
-            };
+            document.body.removeChild(popup);
 
-            axios.post("{{route('attendance.checkin')}}", payload)
+            isPopupDisplayed = false; // Reset flag
+
+            axios.post("{{route('attendance.checkin')}}", {
+                id_employee: name,
+                attendance_date: attendanceDate,
+                clock: clock,
+            })
                 .then(response => {
-                    console.log("Hasil Absen :", response);
-                    const faceNames = response.data.face_names;
+                    console.log("Hasil Absen:", response.data);
+                    alert(response.data.message);
+
+                    document.body.removeChild(loadingMessage);
+                    document.body.removeChild(overlay);
+                    startCamera(); // Restart camera
+                    startFrameCapture(); // Restart frame capture
                 })
                 .catch(error => {
-                    console.error('Error Absen:', error.response ? error.response.data : error.message);
+                    console.error("Error Absen:", error.response ? error.response.data : error.message);
+                    alert(error.response ? error.response.data.message : "An error occurred.");
+                    document.body.removeChild(overlay);
+                    document.body.removeChild(popup);
+
+                    isPopupDisplayed = false; // Reset flag
+                    startCamera(); // Restart camera
+                    startFrameCapture(); // Restart frame capture
+                    document.body.removeChild(loadingMessage);
+
                 });
 
-            document.body.removeChild(overlay);
-            document.body.removeChild(popup);
-            isPopupDisplayed = false; // Reset flag setelah popup ditutup
-            startCamera(); // Mulai ulang kamera
+            
         }, { once: true });
     }
 
-    // Capture frame every X milliseconds and send to the backend
-    setInterval(() => {
-        if (isPopupDisplayed) return; // Skip jika popup sedang ditampilkan
+    function startFrameCapture() {
+        captureInterval = setInterval(() => {
+            if (isPopupDisplayed) return; // Skip if popup is displayed
 
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        // Convert the canvas image to Blob
-        canvas.toBlob((blob) => {
-            const formData = new FormData();
-            formData.append('image', blob, 'frame.jpg');
+            canvas.toBlob((blob) => {
+                const formData = new FormData();
+                formData.append('image', blob, 'frame.jpg');
 
-            // Send the frame to the backend
-            axios.post('/recognize', formData)
-                .then(response => {
-                    console.log("Hasil:", response.data.message || response.data.face_names);
-                    const faceNames = response.data.face_names;
-                    
-                    if (faceNames.length > 0) {
-                        stopCamera(); // Stop the camera
-                        showPopup(faceNames[0]); // Show the popup with the first detected name
-                    }
-                })
-                .catch(error => {
-                    console.error('Error processing frame:', error.response ? error.response.data : error.message);
-                });
-        }, 'image/jpeg');
-    }, 500); // Adjust interval to control the frame rate
+                axios.post('/recognize', formData)
+                    .then(response => {
+                        console.log("Hasil:", response.data.message || response.data.face_names);
+                        const faceNames = response.data.face_names || [];
+                        if(faceNames[0] === "Unknown"){
+                            console.log("Wajah tidak dikenali, mencoba lagi...");
+                            return;
+                        }else{
+                            if (faceNames.length > 0) {
+                                showPopup(faceNames[0]); // Show popup with the first detected name
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error processing frame:', error.response ? error.response.data : error.message);
+                    });
+            }, 'image/jpeg');
+        }, 500);
+    }
+
+    startFrameCapture(); // Start capturing frames
 </script>
-
 @endsection

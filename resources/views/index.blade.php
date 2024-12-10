@@ -75,9 +75,9 @@
                 </li>
             </ul>
 
-            <!-- Right navbar links -->
+            <!-- Right navbar links
             <ul class="navbar-nav ml-auto">
-                <!-- Notifications Dropdown Menu -->
+                Notifications Dropdown Menu
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="far fa-bell"></i>
@@ -104,7 +104,7 @@
                         <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
                     </div>
                 </li>
-            </ul>
+            </ul> -->
         </nav>
         <!-- /.navbar -->
 
@@ -112,9 +112,9 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="index3.html" class="brand-link" style="background-color:#0998C1;">
-                <img src="{{asset('assets/dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo"
+                <img src="{{asset('img/' . Auth::user()->company->logo)}}" alt="AdminLTE Logo"
                     class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-bold" style="color:white">COMPANY NAME</span>
+                <span class="brand-text font-weight-bold" style="color:white">{{Auth::user()->company->company_name}}</span>
             </a>
 
             <!-- Sidebar -->
@@ -122,11 +122,11 @@
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="{{asset('assets/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2"
+                        <img src="{{asset('storage/'.Auth::user()->employee->profile_picture)}}" class="img-circle elevation-2" style="width:35px;height:35px"
                             alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">{{ Auth::id() }}</a>
+                        <a href="#" class="d-block">{{ Auth::user()->employee->full_name }} - {{ Auth::user()->role }}</a>
                     </div>
                 </div>
 

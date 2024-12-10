@@ -20,4 +20,9 @@ class Shift extends Model
         'shift_description',
         'id_company',
     ];
+
+    public function assignShifts()
+    {
+        return $this->hasMany(AssignShift::class, 'id_shift', 'id_shift');
+    }
 }
