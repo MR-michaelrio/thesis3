@@ -71,7 +71,7 @@
                             style="color:white"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="index3.html" class="nav-link" style="color:white">Admin Panel</a>
+                    <a href="{{route('home')}}" class="nav-link" style="color:white">Admin Panel</a>
                 </li>
             </ul>
 
@@ -122,7 +122,7 @@
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="{{asset('storage/'.Auth::user()->employee->profile_picture)}}" class="img-circle elevation-2" style="width:35px;height:35px"
+                        <img src="{{asset('profile_picture/'.Auth::user()->employee->profile_picture)}}" class="img-circle elevation-2" style="width:35px;height:35px"
                             alt="User Image">
                     </div>
                     <div class="info">
