@@ -31,7 +31,7 @@
                     </thead>
                     <tbody>
                         @foreach($employees as $employee)
-                        <tr>
+                        <tr onclick="window.location.href='{{ route('employee.edit', $employee->id_employee) }}'" style="cursor: pointer;">
                             <td>{{ $employee->full_name }}</td>
                             <td>{{ $employee->id_employee }}</td>
                             <td>{{ $employee->user->department->department_name ?? '-' }}</td>

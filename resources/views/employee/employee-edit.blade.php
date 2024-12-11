@@ -1,15 +1,16 @@
 @extends('index')
 @section('title', 'Personal Information')
 @section('content')
-<form method="POST" action="{{ route('employee.store') }}" enctype="multipart/form-data">
+<form method="POST" action="{{ route('employee.update',$employee->id_employee) }}" enctype="multipart/form-data">
     @csrf
+    @method("PUT")
     <div class="row">
-        <section class="col-12 mt-4 mb-4">
-            <div class="text-center float-right">
-                <button type="reset" class="btn btn-default">Discard</button>
-                <button type="submit" class="btn btn-primary mr-2">Add</button>
-            </div>
-        </section>
+    <section class="col-12 mt-4 mb-4">
+        <div class="text-center float-right">
+            <button type="reset" class="btn btn-default">Discard</button>
+            <button type="submit" class="btn btn-primary mr-2">Update</button>
+        </div>
+    </section>
         <section class="col-lg-6 connectedSortable">
             <div class="col-12">
                 <div class="card">
@@ -25,7 +26,7 @@
                         <!-- Profile Image Section -->
                         <div class="text-center mb-4">
                             <div style="position: relative; display: inline-block;">
-                                <img src="https://media.istockphoto.com/id/1128826884/vector/no-image-vector-symbol-missing-available-icon-no-gallery-for-this-moment.jpg?s=612x612&w=0&k=20&c=390e76zN_TJ7HZHJpnI7jNl7UBpO3UP7hpR2meE1Qd4="
+                                <img src="{{ asset('profile_picture/' . $employee->profile_picture) }}" 
                                     id="profileImagePreview" alt="Profile Image" class="rounded-circle" width="120"
                                     height="120" style="border: 2px solid #ccc;">
                                 <label for="profileImageInput"
@@ -37,13 +38,14 @@
                                 onchange="loadProfileImage(event)">
                         </div>
 
+
                         <div class="row">
                             <!-- Identification Number -->
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="identification_number">Identification Number <span style="color:red">*</span></label>
                                     <input type="text" class="form-control" id="identification_number" name="identification_number"
-                                        placeholder="Enter Identification Number">
+                                        placeholder="Enter Identification Number" value="{{$employee->user->identification_number}}">
                                 </div>
                             </div>
                         </div>
@@ -54,7 +56,7 @@
                                 <div class="form-group">
                                     <label for="firstName">First Name <span style="color:red">*</span></label>
                                     <input type="text" class="form-control" id="firstName" name="first_name"
-                                        placeholder="Enter first name">
+                                        placeholder="Enter first name" value="{{$employee->first_name}}">
                                 </div>
                             </div>
                             <!-- Last Name -->
@@ -62,7 +64,7 @@
                                 <div class="form-group">
                                     <label for="lastName">Last Name <span style="color:red">*</span></label>
                                     <input type="text" class="form-control" id="lastName" name="last_name"
-                                        placeholder="Enter last name">
+                                        placeholder="Enter last name" value="{{$employee->last_name}}">
                                 </div>
                             </div>
                         </div>
@@ -76,25 +78,27 @@
                                     <label for="gender">Gender <span style="color:red">*</span></label>
                                     <select class="form-control" id="gender" name="gender">
                                         <option value="">Select a gender</option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
+                                        <option value="Male" {{ old('gender', $employee->gender) == 'Male' ? 'selected' : '' }}>Male</option>
+                                        <option value="Female" {{ old('gender', $employee->gender) == 'Female' ? 'selected' : '' }}>Female</option>
                                     </select>
                                 </div>
                             </div>
+
                             <!-- Marital Status -->
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="maritalStatus">Marital Status</label>
                                     <select class="form-control" id="maritalStatus" name="marital">
                                         <option value="">Select a status</option>
-                                        <option value="Married">Married</option>
-                                        <option value="Widowed">Widowed</option>
-                                        <option value="Separated">Separated</option>
-                                        <option value="Divorced">Divorced</option>
-                                        <option value="Single">Single</option>
+                                        <option value="Married" {{ old('marital', $employee->marital) == 'Married' ? 'selected' : '' }}>Married</option>
+                                        <option value="Widowed" {{ old('marital', $employee->marital) == 'Widowed' ? 'selected' : '' }}>Widowed</option>
+                                        <option value="Separated" {{ old('marital', $employee->marital) == 'Separated' ? 'selected' : '' }}>Separated</option>
+                                        <option value="Divorced" {{ old('marital', $employee->marital) == 'Divorced' ? 'selected' : '' }}>Divorced</option>
+                                        <option value="Single" {{ old('marital', $employee->marital) == 'Single' ? 'selected' : '' }}>Single</option>
                                     </select>
                                 </div>
                             </div>
+
                         </div>
 
                         <div class="row">
@@ -104,11 +108,11 @@
                                     <label for="religion">Religion <span style="color:red">*</span></label>
                                     <select class="form-control" id="religion" name="religion">
                                         <option value="">Select a religion</option>
-                                        <option value="Christianity">Christianity</option>
-                                        <option value="Islam">Islam</option>
-                                        <option value="Hinduism">Hinduism</option>
-                                        <option value="Buddhism">Buddhism</option>
-                                        <option value="Other">Other</option>
+                                        <option value="Christianity" {{ old('religion', $employee->religion) == 'Christianity' ? 'selected' : '' }}>Christianity</option>
+                                        <option value="Islam" {{ old('religion', $employee->religion) == 'Islam' ? 'selected' : '' }}>Islam</option>
+                                        <option value="Hinduism" {{ old('religion', $employee->religion) == 'Hinduism' ? 'selected' : '' }}>Hinduism</option>
+                                        <option value="Buddhism" {{ old('religion', $employee->religion) == 'Buddhism' ? 'selected' : '' }}>Buddhism</option>
+                                        <option value="Other" {{ old('religion', $employee->religion) == 'Other' ? 'selected' : '' }}>Other</option>
                                     </select>
                                 </div>
                             </div>
@@ -122,7 +126,7 @@
                                 <div class="form-group">
                                     <label for="placeOfBirth">Place of Birth <span style="color:red">*</span></label>
                                     <input type="text" class="form-control" id="placeOfBirth" name="place_of_birth"
-                                        placeholder="Enter place of birth">
+                                        placeholder="Enter place of birth" value="{{$employee->place_of_birth}}">
                                 </div>
                             </div>
                             <!-- Date of Birth -->
@@ -130,17 +134,19 @@
                                 <div class="form-group">
                                     <label for="dateOfBirth">Date of Birth <span style="color:red">*</span></label>
                                     <div class="input-group date" id="reservationdate1" data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input" name="date_of_birth"
-                                            placeholder="DD/MM/YYYY" data-target="#reservationdate1">
-                                        <div class="input-group-append" data-target="#reservationdate1"
-                                            data-toggle="datetimepicker">
+                                        <input type="text" 
+                                            class="form-control datetimepicker-input" 
+                                            name="date_of_birth" 
+                                            placeholder="DD/MM/YYYY" 
+                                            data-target="#reservationdate1" 
+                                            value="{{ old('date_of_birth', \Carbon\Carbon::parse($employee->date_of_birth)->format('d/m/Y')) }}">
+                                        <div class="input-group-append" data-target="#reservationdate1" data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
                     </div>
                 </div>
                 <div class="card">
@@ -162,21 +168,21 @@
                                 <div class="form-group">
                                     <label for="fullAddress">Full Address <span style="color:red">*</span></label>
                                     <textarea class="form-control" id="fullAddress" name="full_address"
-                                        placeholder="Enter full address"></textarea>
+                                        placeholder="Enter full address">{{$employee->addressEmployee->full_address}}</textarea>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="country">Country <span style="color:red">*</span></label>
                                     <input type="text" class="form-control" id="country" name="country"
-                                        placeholder="Enter country">
+                                        placeholder="Enter country" value="{{$employee->addressEmployee->country}}">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="postalCode">Postal Code</label>
                                     <input type="text" class="form-control" id="postalCode" name="postal_code"
-                                        placeholder="Enter postal code">
+                                        placeholder="Enter postal code" value="{{$employee->addressEmployee->postal_code}}">
                                 </div>
                             </div>
                         </div>
@@ -202,28 +208,28 @@
                                 <div class="form-group">
                                     <label for="phone">Phone <span style="color:red">*</span></label>
                                     <input type="text" class="form-control" id="phone" name="phone"
-                                        placeholder="Enter phone">
+                                        placeholder="Enter phone" value="{{$employee->user->phone}}">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="emergency_name">Emergency Name <span style="color:red">*</span></label>
                                     <input type="text" class="form-control" id="emergency_name" name="emergency_name"
-                                        placeholder="Enter Emergency Name">
+                                        placeholder="Enter Emergency Name" value="{{$employee->user->emergency_name}}">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="emergency_relation">Emergency Relation <span style="color:red">*</span></label>
                                     <input type="text" class="form-control" id="emergency_relation" name="emergency_relation"
-                                        placeholder="Enter Emergency Relation">
+                                        placeholder="Enter Emergency Relation" value="{{$employee->user->emergency_relation}}">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="emergency_phone">Emergency Phone <span style="color:red">*</span></label>
                                     <input type="text" class="form-control" id="emergency_phone" name="emergency_phone"
-                                        placeholder="Enter Emergency Phone">
+                                        placeholder="Enter Emergency Phone" value="{{$employee->user->emergency_phone}}">
                                 </div>
                             </div>
                         </div>
@@ -249,7 +255,7 @@
                     <div class="card-body" style="display: block;">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email address<span style="color:red">*</span></label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" name="email" placeholder="Enter email">
+                            <input type="email" class="form-control" id="exampleInputEmail1" name="email" placeholder="Enter email" value="{{$employee->user->email}}">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Password<span style="color:red">*</span></label>
@@ -280,18 +286,21 @@
                         <div class="form-group">
                             <label for="gender">Department<span style="color:red">*</span></label>
                             <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" name="id_department" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                <option disabled selected>Select</option>    
+                                <option>Select</option>    
                                 @foreach($department as $d)
-                                    <option value="{{$d->id_department}}">{{$d->department_name}}</option>
+                                <option value="{{ $d->id_department }}" 
+                                        {{ old('id_department', $employee->user->id_department) == $d->id_department ? 'selected' : '' }}>
+                                    {{ $d->department_name }}
+                                </option>                                
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="gender">Position Title<span style="color:red">*</span></label>
                             <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" name="id_department_position" data-select2-id="2" tabindex="-1" aria-hidden="true">
-                                <option disabled selected>Select</option>    
+                                <option>Select</option>    
                                 @foreach($departmentPosition as $d)
-                                    <option value="{{$d->id_department_position}}">
+                                    <option value="{{$d->id_department_position}}" {{ old('id_department_position', $employee->user->id_department_position) == $d->id_department_position   ? 'selected' : '' }}>
                                         {{$d->position_title}}
                                     </option>                               
                                 @endforeach
@@ -300,9 +309,11 @@
                         <div class="form-group">
                             <label for="gender">Reports to<span style="color:red">*</span></label>
                             <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" name="supervisor" data-select2-id="3" tabindex="-1" aria-hidden="true">
-                                <option disabled selected>Select</option>    
+                                <option>Select</option>    
                                 @foreach($user as $d)
-                                    <option value="{{$d->id_user}}">{{$d->name}}</option>
+                                    <option value="{{$d->id_user}}" {{ old('supervisor', $employee->user->supervisor) == $d->id_user   ? 'selected' : '' }}>
+                                        {{$d->name}}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -315,7 +326,7 @@
                                     <label for="dateOfBirth">Start Date<span style="color:red">*</span></label>
                                     <div class="input-group date" id="reservationdate2" data-target-input="nearest">
                                         <input type="text" class="form-control datetimepicker-input"
-                                            placeholder="DD/MM/YYYY" name="start_work" data-target="#reservationdate2">
+                                            placeholder="DD/MM/YYYY" name="start_work" data-target="#reservationdate2" value="{{ old('start_work', $employee->user->start_work) }}">
                                         <div class="input-group-append" data-target="#reservationdate2"
                                             data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -328,7 +339,7 @@
                                     <label for="dateOfBirth">Contract End Date<span style="color:red">*</span></label>
                                     <div class="input-group date" id="reservationdate3" data-target-input="nearest">
                                         <input type="text" class="form-control datetimepicker-input"
-                                            placeholder="DD/MM/YYYY" name="stop_work" data-target="#reservationdate3">
+                                            placeholder="DD/MM/YYYY" name="stop_work" data-target="#reservationdate3" value="{{ old('stop_work',$employee->user->stop_work) }}">
                                         <div class="input-group-append" data-target="#reservationdate3"
                                             data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -359,9 +370,9 @@
                                 <div class="form-group">
                                     <label for="gender">Monday</label>
                                     <select class="form-control select2 monday select2-hidden-accessible" style="width: 100%;" name="monday" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                        <option disabled selected>Select</option>    
+                                        <option>Select</option>    
                                         @foreach($shift as $d)
-                                            <option value="{{$d->id_shift}}">{{$d->shift_name}}  [{{$d->clock_in}} - {{$d->clock_out}}]</option>
+                                            <option value="{{$d->id_shift}}" {{ old('id_shift', $assignShift->id_shift ?? '') == $d->id_shift ? 'selected' : '' }}>{{$d->shift_name}}  [{{$d->clock_in}} - {{$d->clock_out}}]</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -370,7 +381,7 @@
                                 <div class="form-group">
                                     <label for="gender">Tuesday</label>
                                     <select class="form-control select2 tuesday select2-hidden-accessible" style="width: 100%;" name="tuesday" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                        <option disabled selected>Select</option>    
+                                        <option>Select</option>    
                                         @foreach($shift as $d)
                                             <option value="{{$d->id_shift}}">{{$d->shift_name}}  [{{$d->clock_in}} - {{$d->clock_out}}]</option>
                                         @endforeach
@@ -462,7 +473,12 @@
                                         <select class="form-control select2 {{ $day }} select2-hidden-accessible" style="width: 100%;" name="{{ $day }}" data-select2-id="1" tabindex="-1" aria-hidden="true">
                                             <option value="">Select</option>
                                             @foreach($shift as $d)
-                                                <option value="{{ $d->id_shift }}">
+                                                @php
+                                                    // Find the assigned shift for the current day
+                                                    $assignedShift = $assignShiftByDay->get($dayMapping[$day], collect())->first();
+                                                @endphp
+                                                <option value="{{ $d->id_shift }}"
+                                                    {{ old($day, $assignedShift->id_shift ?? '') == $d->id_shift ? 'selected' : '' }}>
                                                     {{ $d->shift_name }} [{{ $d->clock_in }} - {{ $d->clock_out }}]
                                                 </option>
                                             @endforeach
@@ -472,7 +488,6 @@
                             </div>
                         @endforeach
                     </div>
-                    <!-- /.card-body -->
                 </div>
 
                 <div class="card">
@@ -496,7 +511,9 @@
                                     <input type="checkbox" 
                                         id="leave_{{$l->id_leave}}" 
                                         name="leaves[]" 
-                                        value="{{$l->id_leave}}" >
+                                        value="{{$l->id_leave}}" 
+                                        {{ in_array($l->id_leave, $employeeLeaves) ? 'checked' : '' }}
+                                        style="transform: scale(1.5);">
                                     </div>
                                     <div class="col-11">
                                         <div class="row" >

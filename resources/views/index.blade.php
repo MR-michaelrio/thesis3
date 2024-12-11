@@ -123,7 +123,7 @@
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex items-center space-x-3 ">
                     <div class="row justify-content-center align-items-center">
                         <div class="col ">
-                            @if ($a->employee->profile_picture)
+                            @if(Auth::user()->employee->profile_picture)
                                 <img src="{{ asset('profile_picture/' . Auth::user()->employee->profile_picture) }}" class="img-circle" style="width:40px; height:40px; object-fit: cover;" alt="User Image">
                             @else
                                 <div style="background-color:#CED4DA; border-radius:50%; width:40px; height:40px; display: flex; justify-content: center; align-items: center;">

@@ -67,5 +67,8 @@ class Employee extends Model
     {
         return $this->hasMany(AssignShift::class, 'id_employee', 'id_employee');
     }
-
+    public function addressEmployee()
+    {
+        return $this->belongsTo(AddressEmployee::class, 'id_address_employee', 'id_address_employee');
+    }
 }

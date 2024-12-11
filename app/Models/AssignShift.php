@@ -12,6 +12,7 @@ class AssignShift extends Model
     protected $table = 'assign_shift';
 
     protected $primaryKey = 'id_assign_shift';
+    public $timestamps = false;
 
     protected $fillable = [
         'id_employee',

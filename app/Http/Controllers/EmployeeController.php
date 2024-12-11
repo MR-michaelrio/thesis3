@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Employee;
 use App\Models\AddressEmployee;
 use App\Models\User;
+use App\Models\Shift;
+use App\Models\AssignShift;
+use App\Models\AssignLeave;
+use App\Models\Leave;
 use App\Models\Department;
 use App\Models\DepartmentPosition;
 use Illuminate\Support\Facades\Hash;
@@ -27,45 +31,14 @@ class EmployeeController extends Controller
         $department = Department::where("id_company",Auth::user()->id_company)->get();
         $departmentPosition = DepartmentPosition::where("id_company",Auth::user()->id_company)->get();
         $user = User::where("role", "supervisor")->where("id_company",Auth::user()->id_company)->get();
-        return view('employee.employee-add', compact('department', 'departmentPosition', 'user'));
+        $shift = Shift::where("id_company",Auth::user()->id_company)->get();
+        $leave = Leave::where("id_company", Auth::user()->id_company)->get();
+
+        return view('employee.employee-add', compact('department', 'departmentPosition', 'user', 'shift', 'leave'));
     }
 
     public function store(Request $request)
     {
-        // Validasi input
-        // $request = $request->validate([
-        //     // Validasi employee_address
-        //     'country' => 'required|string|max:255',
-        //     'postal_code' => 'required|string|max:20',
-        //     'full_address' => 'required|string|max:255',
-
-        //     // Validasi employee
-        //     'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-        //     'first_name' => 'required|string|max:50',
-        //     'last_name' => 'required|string|max:50',
-        //     'gender' => 'required|string|in:male,female',
-        //     'marital' => 'required|string|in:single,married',
-        //     'religion' => 'required|string|max:50',
-        //     'place_of_birth' => 'required|string|max:100',
-        //     'date_of_birth' => 'required|date',
-        //     'id_company_employee' => 'required|integer|exists:companies,id',
-
-        //     // Validasi user
-        //     'name' => 'required|string|max:255',
-        //     'email' => 'required|string|email|max:255|unique:users,email',
-        //     'password' => 'required|string|min:8',
-        //     'id_department' => 'required|integer|exists:departments,id',
-        //     'id_department_position' => 'required|integer|exists:department_positions,id',
-        //     'supervisor' => 'nullable|integer|exists:users,id',
-        //     'start_work' => 'required|date',
-        //     'stop_work' => 'nullable|date|after_or_equal:start_work',
-        //     'role' => 'required|string|max:50',
-        //     'phone' => 'required|string|max:15',
-        //     'emergency_name' => 'required|string|max:100',
-        //     'emergency_relation' => 'required|string|max:50',
-        //     'emergency_phone' => 'required|string|max:15',
-        // ]);
-
         try {
             // Buat data di tabel employee_address
             $address = AddressEmployee::create([
@@ -129,6 +102,37 @@ class EmployeeController extends Controller
             }
             // Buat data di tabel employee
             $employee = Employee::create($employeeData);
+            
+            if ($request->has('leaves')) {
+                foreach ($request->input('leaves') as $leaveId) {
+                    AssignLeave::create([
+                        'id_employee' => $employee->id_employee,
+                        'id_leave' => $leaveId,
+                        'quota' => 0, // Set this to the appropriate value
+                        'remaining' => 0, // Set this to the appropriate value
+                        'id_company' => Auth::user()->id_company,
+                    ]);
+                }
+            }
+
+            $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            $dayMapping = [
+                'monday' => 1,
+                'tuesday' => 2,
+                'wednesday' => 3,
+                'thursday' => 4,
+                'friday' => 5,
+                'saturday' => 6,
+                'sunday' => 7,
+            ];
+
+            foreach ($days as $day) {
+                AssignShift::create([
+                    'id_employee' => $employee->id_employee,
+                    'id_shift' => $request->$day ?? null, // Jika kosong, biarkan null
+                    'day' => $dayMapping[$day],
+                ]);
+            }
 
             // Redirect ke route employee.index dengan pesan sukses
             return redirect()->route('employee.index')->with('success', 'Employee created successfully!');
@@ -142,28 +146,119 @@ class EmployeeController extends Controller
     public function edit($id)
     {
         $employee = Employee::findOrFail($id);
-        $addresses = AddressEmployee::all();
-        $users = User::all();
-        return view('employee.edit', compact('employee', 'addresses', 'users'));
+        $assignShift = AssignShift::where('id_employee', $employee->id_employee)->get();
+        $employeeLeaves = AssignLeave::where('id_employee', $employee->id_employee)->pluck('id_leave')->toArray();
+
+        // Fetch other necessary data
+        $department = Department::where("id_company", Auth::user()->id_company)->get();
+        $departmentPosition = DepartmentPosition::where("id_company", Auth::user()->id_company)->get();
+        $user = User::where("role", "supervisor")->where("id_company", Auth::user()->id_company)->get();
+        $shift = Shift::where("id_company", Auth::user()->id_company)->get();
+        $leave = Leave::where("id_company", Auth::user()->id_company)->get();
+
+        $assignShiftByDay = $assignShift->groupBy('day');
+
+        return view('employee.employee-edit', compact('leave','employee', 'employeeLeaves', 'assignShiftByDay', 'department', 'departmentPosition', 'user', 'shift'));
+
     }
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'gender' => 'nullable|string',
-            'marital' => 'nullable|string',
-            'religion' => 'nullable|string',
-            'date_of_birth' => 'nullable|date',
-            'id_address_employee' => 'nullable|integer',
-            'id_users' => 'nullable|integer',
-        ]);
+        try {
+            // Find the employee
+            $employee = Employee::findOrFail($id);
+        
+            // Update employee details
+            $employee->update([
+                'first_name' => $request->input('first_name'),
+                'last_name' => $request->input('last_name'),
+                'full_name' => $request->input('first_name') . ' ' . $request->input('last_name'),
+                'gender' => $request->input('gender'),
+                'marital' => $request->input('marital'),
+                'religion' => $request->input('religion'),
+                'place_of_birth' => $request->input('place_of_birth'),
+                'date_of_birth' => Carbon::createFromFormat('d/m/Y', $request->input('date_of_birth'))->format('Y-m-d'),
+            ]);
+            // Update profile picture if it's provided
+            if ($request->hasFile('profile_picture')) {
+                $profile_picture = $request->file('profile_picture');
+                $profilePictureName = time() . '-' . $profile_picture->getClientOriginalName();
+                $profile_picture->move(public_path('profile_picture'), $profilePictureName);
+                $employee->profile_picture = $profilePictureName;
+                $employee->save();
+            }
 
-        $employee = Employee::findOrFail($id);
-        $employee->update($request->all());
-        return redirect()->route('employee.index')->with('success', 'Employee updated successfully!');
+            // Update employee address if necessary
+            $employeeAddress = AddressEmployee::findOrFail($employee->id_address_employee);
+            $employeeAddress->update([
+                'country' => $request->input('country'),
+                'postal_code' => $request->input('postal_code'),
+                'full_address' => $request->input('full_address'),
+            ]);
+        
+            
+        
+            // Update email and password if provided
+            $user = User::findOrFail($employee->id_users);
+        
+            // Only update email if it's provided and not the same as the current one
+            if ($request->has('email') && $request->email != $user->email) {
+                $user->email = $request->input('email');
+            }
+        
+            // Only update password if provided
+            if ($request->has('password')) {
+                $user->password = Hash::make($request->input('password'));
+            }
+
+            $user->identification_number = $request->identification_number;
+            // Save the user changes
+            $user->save();
+        
+            // Update assign_leave data (assuming employee leaves are passed in the form)
+            // First, delete all existing assign_leave records
+            AssignLeave::where('id_employee', $employee->id_employee)->delete();
+        
+            // Create new assign_leave records from the request
+            if ($request->has('leaves')) {
+                foreach ($request->input('leaves') as $leaveId) {
+                    AssignLeave::create([
+                        'id_employee' => $employee->id_employee,
+                        'id_leave' => $leaveId,
+                        'quota' => 0, // Set this to the appropriate value
+                        'remaining' => 0, // Set this to the appropriate value
+                        'id_company' => Auth::user()->id_company,
+                    ]);
+                }
+            }
+        
+            // Update assign_shift data (for each day of the week)
+            $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            $dayMapping = [
+                'monday' => 1,
+                'tuesday' => 2,
+                'wednesday' => 3,
+                'thursday' => 4,
+                'friday' => 5,
+                'saturday' => 6,
+                'sunday' => 7,
+            ];
+        
+            foreach ($days as $day) {
+                AssignShift::updateOrCreate(
+                    ['id_employee' => $employee->id_employee, 'day' => $dayMapping[$day]],
+                    ['id_shift' => $request->$day ?? null]
+                );
+            }
+        
+            // Return success response
+            return redirect()->route('employee.index')->with('success', 'Employee updated successfully!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to update employee: ' . $e->getMessage());
+        }
+        
     }
+
 
     public function destroy($id)
     {
