@@ -28,7 +28,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/attendance/data', [AttendanceController::class, 'data'])->name('attendance.data');
     Route::post('/attendance/checkin', [AttendanceController::class, 'checkin'])->name('attendance.checkin');
-    Route::post('/recognize', [AttendanceController::class, 'recognize']);
+    Route::post('/recognize', [AttendanceController::class, 'recognize'])->name('recognize');
     Route::post('/recognize2', [AttendanceController::class, 'processFrame']);
         
     Route::resource('attendance', AttendanceController::class);

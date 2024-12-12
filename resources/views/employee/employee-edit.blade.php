@@ -280,7 +280,7 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body" style="display: block;">
-                        @if(Auth::user()->role == "admin")
+                        @if(Auth::user()->role == "admin" && Auth::user()->employee->id_employee != $employee->id_employee)
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Email address</label>
                                 <input type="email" class="form-control" id="exampleInputEmail1" name="email" placeholder="Enter email" value="{{$employee->user->email}}">

@@ -119,7 +119,7 @@ class AttendanceController extends Controller
     
         try {
             $client = new Client();
-            $response = $client->post('http://localhost:6002/process_frame', [
+            $response = $client->post('http://185.199.53.230:6002/process_frame', [
                 'multipart' => [
                     [
                         'name' => 'image',

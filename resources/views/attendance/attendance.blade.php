@@ -184,7 +184,7 @@
                 const formData = new FormData();
                 formData.append('image', blob, 'frame.jpg');
 
-                axios.post('/recognize', formData)
+                axios.post('{{route("recognize")}}', formData)
                     .then(response => {
                         console.log("Hasil:", response.data.message || response.data.face_names);
                         const faceNames = response.data.face_names || [];

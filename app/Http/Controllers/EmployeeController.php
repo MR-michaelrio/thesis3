@@ -39,7 +39,12 @@ class EmployeeController extends Controller
     {
         $department = Department::where("id_company",Auth::user()->id_company)->get();
         $departmentPosition = DepartmentPosition::where("id_company",Auth::user()->id_company)->get();
-        $user = User::where("role", "supervisor")->where("id_company",Auth::user()->id_company)->get();
+        $user = User::where(function($query) {
+            $query->where('role', 'supervisor')
+                  ->orWhere('role', 'admin');
+        })
+        ->where('id_company', Auth::user()->id_company)
+        ->get();
         $shift = Shift::where("id_company",Auth::user()->id_company)->get();
         $leave = Leave::where("id_company", Auth::user()->id_company)->get();
 
