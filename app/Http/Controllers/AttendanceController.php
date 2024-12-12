@@ -29,11 +29,26 @@ class AttendanceController extends Controller
 
     public function data()
     {
-        $attendance = Attendance::with('employee.user', 'shift')
-        ->where('id_company', Auth::user()->id_company)
-        ->orderBy('attendance_date', 'desc')  // Sort by 'attendance_date' in ascending order
-        ->get();
-            // dd($attendance);
+        if (Auth::user()->role == "supervisor") {
+            $attendance = Attendance::with('employee.user', 'shift')
+                ->where('id_company', Auth::user()->id_company)
+                ->whereHas('employee.user', function($query) {
+                    $query->where('id_department', Auth::user()->id_department);
+                })
+                ->orderBy('attendance_date', 'desc')
+                ->get();
+        } else if (Auth::user()->role == "employee") {
+            $attendance = Attendance::with('employee.user', 'shift')
+                ->where('id_company', Auth::user()->id_company)
+                ->where('id_employee', Auth::user()->employee->id_employee)
+                ->orderBy('attendance_date', 'desc')
+                ->get();        
+        }else{
+            $attendance = Attendance::with('employee.user', 'shift')
+                            ->where('id_company', Auth::user()->id_company)
+                            ->orderBy('attendance_date', 'desc')  // Sort by 'attendance_date' in ascending order
+                            ->get();
+        }
         return view('attendance/attendance-data',compact("attendance"));
     }
 
@@ -258,19 +273,34 @@ class AttendanceController extends Controller
     public function getAttendanceData()
     {
         $idCompany = Auth::user()->id_company;
-    
-        // Ambil data jumlah kehadiran berdasarkan status dan bulan
-        $attendanceData = DB::table('attendance')
-            ->select(
-                DB::raw("MONTH(attendance_date) as month"),
-                DB::raw("SUM(CASE WHEN attendance_status = 'present' THEN 1 ELSE 0 END) as present"),
-                DB::raw("SUM(CASE WHEN attendance_status = 'late' THEN 1 ELSE 0 END) as late"),
-                DB::raw("SUM(CASE WHEN attendance_status = 'on_leave' THEN 1 ELSE 0 END) as on_leave")
-            )
-            ->where('id_company', $idCompany)
-            ->groupBy(DB::raw("MONTH(attendance_date)"))
-            ->get();
-    
+
+        if(Auth::user()->role == "admin")
+        {
+            $attendanceData = DB::table('attendance')
+                ->select(
+                    DB::raw("MONTH(attendance_date) as month"),
+                    DB::raw("SUM(CASE WHEN attendance_status = 'present' THEN 1 ELSE 0 END) as present"),
+                    DB::raw("SUM(CASE WHEN attendance_status = 'late' THEN 1 ELSE 0 END) as late"),
+                    DB::raw("SUM(CASE WHEN attendance_status = 'on_leave' THEN 1 ELSE 0 END) as on_leave")
+                )
+                ->where('id_company', $idCompany)
+                ->groupBy(DB::raw("MONTH(attendance_date)"))
+                ->get();
+        
+        }else{
+            $attendanceData = DB::table('attendance')
+                ->select(
+                    DB::raw("MONTH(attendance_date) as month"),
+                    DB::raw("SUM(CASE WHEN attendance_status = 'present' THEN 1 ELSE 0 END) as present"),
+                    DB::raw("SUM(CASE WHEN attendance_status = 'late' THEN 1 ELSE 0 END) as late"),
+                    DB::raw("SUM(CASE WHEN attendance_status = 'on_leave' THEN 1 ELSE 0 END) as on_leave")
+                )
+                ->where('id_company', $idCompany)
+                ->where('id_employee', Auth::user()->employee->id_employee)
+                ->groupBy(DB::raw("MONTH(attendance_date)"))
+                ->get();
+        }
+        
         return response()->json($attendanceData);
     }
 }

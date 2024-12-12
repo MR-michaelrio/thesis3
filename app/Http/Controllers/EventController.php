@@ -5,22 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\ExternalEvent;
-
+use Auth;
 class EventController extends Controller
 {
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string',
-            'start_time' => 'required|date',
-            'end_time' => 'nullable|date|after_or_equal:start_time',
-            'background_color' => 'nullable|string',
-            'border_color' => 'nullable|string',
-            'text_color' => 'nullable|string',
-            'holiday' => 'nullable|string',
-        ]);
-
         $event = Event::create([
+            'id_company' => Auth::user()->id_company,
             'title' => $request->title,
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
@@ -33,11 +24,11 @@ class EventController extends Controller
         return response()->json(['message' => 'Event created successfully', 'event' => $event], 201);
     }
 
-    public function index($userId)
+    public function index()
     {
         // $events = Event::where('id_user', 1)->get();
         // $today = now('Asia/Jakarta')->format('Y-m-d H:i:s');
-        $events = Event::where("status","aktif")->get()->map(function ($event) {
+        $events = Event::where("status","aktif")->where("id_company",Auth::user()->id_company)->get()->map(function ($event) {
             $event->end_time = \Carbon\Carbon::parse($event->end_time)->addDay()->format('Y-m-d');
             return $event;
         });
@@ -47,13 +38,6 @@ class EventController extends Controller
     public function destroy($id)
     {
         $event = Event::findOrFail($id);
-
-        // Memastikan hanya pengguna yang memiliki event yang bisa mengubah statusnya
-        // if ($event->user_id != auth()->id()) {
-        //     return response()->json(['message' => 'Unauthorized'], 403);
-        // }
-
-        // Ubah status menjadi 'tidak aktif' tanpa menghapus data dari database
         $event->status = 'tidak aktif';
         $event->save();
 

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 | Dashboard</title>
+    <title>AntTendance</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @yield('css')
     <!-- Axios -->
@@ -58,8 +58,8 @@
 
         <!-- Preloader -->
         <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake" src="{{asset('assets/dist/img/AdminLTELogo.png')}}" alt="AdminLTELogo"
-                height="60" width="60">
+            <img class="animation__shake" src="{{asset('assets/logo/logo.png')}}" alt="AdminLTELogo"
+                height="200" width="200">
         </div>
 
         <!-- Navbar -->
@@ -71,7 +71,7 @@
                             style="color:white"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="{{route('home')}}" class="nav-link" style="color:white">Admin Panel</a>
+                    <a href="{{route('home')}}" class="nav-link" style="color:white; text-transform: capitalize;">{{Auth::user()->role}} Panel</a>
                 </li>
             </ul>
 
@@ -120,7 +120,7 @@
             <!-- Sidebar -->
             <div class="sidebar">
                 <!-- Sidebar user panel (optional) -->
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex items-center space-x-3 ">
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex items-center space-x-3 " onclick="window.location.href='{{ route('employee.edit', Auth::user()->employee->id_employee) }}'" style="cursor: pointer;color:white">
                     <div class="row justify-content-center align-items-center">
                         <div class="col ">
                             @if(Auth::user()->employee->profile_picture)
@@ -131,7 +131,7 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="col" style="color:white">
+                        <div class="col">
                             <div class="text-base text-capitalize">{{ Auth::user()->employee->full_name }}</div>
                             <div class="text-sm text-capitalize">{{ Auth::user()->role }}</div>
                         </div>
@@ -159,39 +159,51 @@
                                 </p>
                             </a>
                         </li>
+                        @if(Auth::user()->role == "supervisor" || Auth::user()->role == "admin")
+                            <li class="nav-item">
+                                <a href="{{ route('employee.index') }}" class="nav-link">
+                                    <i class="nav-icon fas fa-users"></i>
+                                    <p>
+                                        Employe Data
+                                    </p>
+                                </a>
+                            </li>
+                        @endif
 
-                        <li class="nav-item">
-                            <a href="{{ route('employee.index') }}" class="nav-link">
-                                <i class="nav-icon fas fa-users"></i>
-                                <p>
-                                    Employe Data
-                                </p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-user-clock"></i>
-                                <p>
-                                    Attendance
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{route('attendance.index')}}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Attendance</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{route('attendance.data')}}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Attendance Data</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                        @if(Auth::user()->role == "supervisor" || Auth::user()->role == "employee")
+                            <li class="nav-item">
+                                <a href="{{route('attendance.data')}}" class="nav-link">
+                                    <i class="nav-icon fas fa-user-clock"></i>
+                                    <p>
+                                    Attendance Data
+                                    </p>
+                                </a>
+                            </li>
+                        @else
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-user-clock"></i>
+                                    <p>
+                                        Attendance
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{route('attendance.index')}}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Attendance</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('attendance.data')}}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Attendance Data</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endif
 
                         <li class="nav-item">
                             <a href="#" class="nav-link">
@@ -241,78 +253,83 @@
                             </ul>
                         </li>
 
-                        <li class="nav-item">
-                            <a href="pages/gallery.html" class="nav-link">
-                                <i class="nav-icon fas fa-file-invoice-dollar"></i>
-                                <p>
-                                    Invoices
-                                </p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-cog"></i>
-                                <p>
-                                    Settings
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('role.index') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Role Management</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{route('companies.index')}}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Company Profile</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('department.index') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Department/Division</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('shift.index') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Shift</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('leaves.index') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Leave Type</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{route('attendance.create')}}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Face Recognition Registration</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{route('attendance_policy.index')}}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Attendance Policy</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class="nav-item">
+                        @if(Auth::user()->role == "admin")
+                            <li class="nav-item">
+                                <a href="pages/gallery.html" class="nav-link">
+                                    <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                                    <p>
+                                        Invoices
+                                    </p>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-cog"></i>
+                                    <p>
+                                        Settings
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{ route('role.index') }}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Role Management</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('companies.index')}}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Company Profile</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('department.index') }}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Department/Division</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('shift.index') }}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Shift</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('leaves.index') }}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Leave Type</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('attendance.create')}}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Face Registration</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('attendance_policy.index')}}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Attendance Policy</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endif
+                        <!-- <li class="nav-item">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit" class="btn btn-flat nav-link float-left text-white">
                                     <i class="nav-icon fas fa-sign-out-alt"></i> Sign Out
                                 </button>
                             </form>
+                        </li> -->
+                        <li class="nav-item">
+                            <a href="javascript:void(0);" class="nav-link" id="logoutButton">
+                                <i class="nav-icon fas fa-sign-out-alt"></i> Sign Out
+                            </a>
                         </li>
-
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -432,6 +449,26 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 
     @yield("scripts")
+    <!-- logout -->
+    <script>
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            // Create a form dynamically
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '{{ route("logout") }}';
+
+            // Add CSRF token field to the form
+            var csrfToken = document.createElement('input');
+            csrfToken.type = 'hidden';
+            csrfToken.name = '_token';
+            csrfToken.value = '{{ csrf_token() }}';
+            form.appendChild(csrfToken);
+
+            // Append the form to the body and submit it
+            document.body.appendChild(form);
+            form.submit();
+        });
+    </script>
     <!-- Preview Image Company Profile -->
     <script>
         function previewImage(event) {

@@ -11,13 +11,8 @@ class Event extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id_user', 'title', 'description', 'start_time', 'end_time', 'background_color', 'border_color', 'text_color', 'status', 'holiday'
+        'id_company', 'title', 'description', 'start_time', 'end_time', 'background_color', 'border_color', 'text_color', 'status', 'holiday'
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 
     public function labels()
     {

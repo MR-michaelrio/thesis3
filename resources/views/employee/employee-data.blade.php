@@ -31,7 +31,7 @@
                     </thead>
                     <tbody>
                         @foreach($employees as $employee)
-                        <tr onclick="window.location.href='{{ route('employee.edit', $employee->id_employee) }}'" style="cursor: pointer;">
+                        <tr @if(Auth::user()->role == "admin") onclick="window.location.href='{{ route('employee.edit', $employee->id_employee) }}'" style="cursor: pointer;" @endif>
                             <td>{{ $employee->full_name }}</td>
                             <td>{{ $employee->id_employee }}</td>
                             <td>{{ $employee->user->department->department_name ?? '-' }}</td>

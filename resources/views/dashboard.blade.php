@@ -2,6 +2,76 @@
 @section('title','Dashboard')
 @section('content')
 <!-- Small boxes (Stat box) -->
+@if(Auth::user()->role != "admin")
+<div class="row">
+    <!-- Main Card -->
+    <div class="col-lg-8 col-md-12 d-flex">
+        <div class="card w-100">
+            <div class="card-body">
+                @php
+                    $currentTime = \Carbon\Carbon::now('Asia/Jakarta');
+                    $hour = $currentTime->hour;
+
+                    // Determine the appropriate greeting based on the hour
+                    if ($hour >= 5 && $hour < 12) {
+                        $greeting = "Good Morning";
+                    } elseif ($hour >= 12 && $hour < 18) {
+                        $greeting = "Good Afternoon";
+                    } else {
+                        $greeting = "Good Evening";
+                    }
+                @endphp
+                <h5 class="text-primary">{{ $greeting }}</h5>
+                <h2 class="fw-bold text-capitalize">{{Auth::user()->employee->full_name}}</h2>
+            </div>
+            <div class="card-footer text-white d-flex justify-content-between" style="background-color:#0798C1">
+                <span>{{ \Carbon\Carbon::now()->format('l, d F Y') }}</span>
+                <span>Shift Time:
+                    @if($assignshift && $assignshift->shift)
+                        {{$assignshift->shift->clock_in}} - {{$assignshift->shift->clock_out}}
+                    @else
+                        No shift assigned
+                    @endif
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clock In/Out -->
+    <div class="col-lg-4 col-md-12">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body text-center" style="font-size:20px;">
+                        Clock In
+                    </div>
+                    <div class="card-footer text-white text-center" style="background-color:#0798C1">
+                        @if($attendance && $attendance->clock_in)
+                            {{$attendance->clock_in}}
+                        @else
+                            No Attendance
+                        @endif
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body text-center" style="font-size:20px;">
+                        Clock Out
+                    </div>
+                    <div class="card-footer text-white text-center" style="background-color:#0798C1">
+                        @if($attendance && $attendance->clock_out)
+                            {{$attendance->clock_out}}
+                        @else
+                            No Attendance
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
 <div class="row">
     <div class="col-lg-3 col-6">
         <!-- small box -->
@@ -48,15 +118,17 @@
         </div>
     </div>
     <!-- ./col -->
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-success" style="height:142.52px">
-            <div class="inner" style="height: 112.24px; display: flex; align-items: center; justify-content: center;">
-                <img src="assets/img/mdi-face-recognition.png" alt="" srcset="" style="width: 45%; height: auto; max-height: 100%; max-width: 45%;">
+    @if(Auth::user()->role == "admin")
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success" style="height:142.52px">
+                <div class="inner" style="height: 112.24px; display: flex; align-items: center; justify-content: center;">
+                    <img src="assets/img/mdi-face-recognition.png" alt="" srcset="" style="width: 45%; height: auto; max-height: 100%; max-width: 45%;">
+                </div>
+                <a href="{{route('attendance.index')}}" class="small-box-footer">Attendance</a>
             </div>
-            <a href="#" class="small-box-footer">Attendance</a>
         </div>
-    </div>
+    @endif
     <!-- ./col -->
 </div>
 <!-- /.row -->
@@ -67,48 +139,48 @@
     <section class="col-lg-7 connectedSortable">
         <!-- solid sales graph -->
         <div class="card bg-gradient-info">
-    <div class="card-header border-0">
-        <h3 class="card-title">
-            <i class="fas fa-th mr-1"></i>
-            Attendance Graph
-        </h3>
+            <div class="card-header border-0">
+                <h3 class="card-title">
+                    <i class="fas fa-th mr-1"></i>
+                    Attendance Graph
+                </h3>
 
-        <div class="card-tools">
-            <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
-                <i class="fas fa-minus"></i>
-            </button>
-            <button type="button" class="btn bg-info btn-sm" data-card-widget="remove">
-                <i class="fas fa-times"></i>
-            </button>
+                <div class="card-tools">
+                    <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn bg-info btn-sm" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <canvas class="chart" id="attendance-chart"
+                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+            <div class="card-footer bg-transparent">
+                <div class="row">
+                    <div class="col-4 text-center">
+                        <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60"
+                            data-fgColor="#39CCCC">
+
+                        <div class="text-white">Present</div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"
+                            data-fgColor="#39CCCC">
+
+                        <div class="text-white">Absent</div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"
+                            data-fgColor="#39CCCC">
+
+                        <div class="text-white">On Leave</div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="card-body">
-        <canvas class="chart" id="attendance-chart"
-            style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-    </div>
-    <div class="card-footer bg-transparent">
-        <div class="row">
-            <div class="col-4 text-center">
-                <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60"
-                    data-fgColor="#39CCCC">
-
-                <div class="text-white">Present</div>
-            </div>
-            <div class="col-4 text-center">
-                <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"
-                    data-fgColor="#39CCCC">
-
-                <div class="text-white">Absent</div>
-            </div>
-            <div class="col-4 text-center">
-                <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"
-                    data-fgColor="#39CCCC">
-
-                <div class="text-white">On Leave</div>
-            </div>
-        </div>
-    </div>
-</div>
         <!-- /.card -->
          
         <!-- TO DO List -->
@@ -300,7 +372,7 @@
     });
 
     // Fetch data dari backend dan buat grafik setelah data diterima
-    fetch('/attendance-data')
+    fetch('{{route("attendance-data")}}')
         .then(response => response.json())
         .then(data => {
             const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];

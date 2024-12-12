@@ -77,7 +77,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="updateStatusForm" action="{{ route('requestleave.update') }}" method="post">
+                <form id="updateStatusForm" action="{{ route('requestleave.update') }}" style="text-transform: capitalize;" method="post">
                     @method('PUT')
                     @csrf
                     <!-- ID Request sebagai hidden input -->
@@ -93,7 +93,7 @@
                         <strong>Employee ID:</strong> <span id="modalEmployeeID"></span>
                     </div>
                     <div class="col-12">
-                        <strong>Leave Category:</strong> <span id="modalLeaveCategory"></span>
+                        <strong>Leave Status:</strong> <span id="modalLeaveStatus"></span>
                     </div>
                     <div class="col-12">
                         <strong>Leave Type:</strong> <span id="modalLeaveType"></span>
@@ -127,16 +127,18 @@
                         <strong>Approver Name:</strong> <span id="modalApproverName"></span>
                     </div>
                     <!-- Tombol Approve/Reject -->
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="col-6">
-                                <button type="button" class="btn btn-success btn-block" onclick="submitStatus('approve')">Approve</button>
-                            </div>
-                            <div class="col-6">
-                                <button type="button" class="btn btn-danger btn-block" onclick="submitStatus('reject')">Reject</button>
+                    @if(Auth::user()->role == "admin")
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-success btn-block" onclick="submitStatus('approve')">Approve</button>
+                                </div>
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-danger btn-block" onclick="submitStatus('reject')">Reject</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
                 </form>
             </div>
 
@@ -169,7 +171,7 @@
             $("#id_request_leave_hdrs").text($(this).data('id'));
             $("#modalEmployeeName").text($(this).data('name'));
             $("#modalEmployeeID").text($(this).data('employee'));
-            $("#modalLeaveCategory").text($(this).data('status'));
+            $("#modalLeaveStatus").text($(this).data('status'));
             $("#modalLeaveType").text($(this).data('leavetype'));
             $("#modalLeaveDates").text($(this).data('leavestart') + " - " + $(this).data('leaveend'));
             $("#modalQuota").text($(this).data('quota'));

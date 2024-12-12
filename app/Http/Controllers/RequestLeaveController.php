@@ -15,7 +15,19 @@ class RequestLeaveController extends Controller
     public function index()
     {
         //
-        $leave = RequestLeave::where("id_company",Auth::user()->id_company)->get();
+        if (Auth::user()->role == "supervisor") {
+            $leave = RequestLeave::where("id_company",Auth::user()->id_company)
+                                    ->whereHas('employee.user', function ($query) {
+                                        $query->where('id_department', Auth::user()->id_department);
+                                    })                                    
+                                    ->get();
+        } else if (Auth::user()->role == "employee") {
+            $leave = RequestLeave::where("id_company",Auth::user()->id_company)
+                                    ->where('id_employee', Auth::user()->employee->id_employee)                              
+                                    ->get();
+        }else{
+            $leave = RequestLeave::where("id_company",Auth::user()->id_company)->get();
+        }
         // dd($leave);
         return view("approval.leave-data",compact("leave"));
     }

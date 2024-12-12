@@ -15,6 +15,11 @@ class Department extends Model
         'department_name', 'department_code', 'id_parent', 'id_supervisor', 'description', 'id_company'
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_department', 'id_department');
+    }
+
     public function positions()
     {
         return $this->hasMany(DepartmentPosition::class, 'id_department');

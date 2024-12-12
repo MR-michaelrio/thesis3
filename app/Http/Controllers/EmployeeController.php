@@ -12,6 +12,7 @@ use App\Models\Leave;
 use App\Models\Department;
 use App\Models\DepartmentPosition;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Auth;
 use Carbon\Carbon;
@@ -20,11 +21,19 @@ class EmployeeController extends Controller
 {
     public function index()
     {
-        $employees = Employee::with(['user.department', 'user.position'])->where("id_company",Auth::user()->id_company)->get();
+        if(Auth::user()->role == "supervisor"){
+            $employees = Employee::with(['user.department', 'user.position'])
+                            ->whereHas('user', function($query) {
+                                $query->where('id_company', Auth::user()->id_company)
+                                    ->where('id_department', Auth::user()->id_department);
+                            })
+                            ->get();
+
+        }else{
+            $employees = Employee::with(['user.department', 'user.position'])->where("id_company",Auth::user()->id_company)->get();
+        }
         return view('employee.employee-data', compact('employees'));
     }
-
-
 
     public function create()
     {
@@ -145,6 +154,10 @@ class EmployeeController extends Controller
 
     public function edit($id)
     {
+        if (Auth::user()->role != "admin" && Auth::user()->employee->id_employee != $id) {
+            return redirect()->route('home');
+        }
+
         $employee = Employee::findOrFail($id);
         $assignShift = AssignShift::where('id_employee', $employee->id_employee)->get();
         $employeeLeaves = AssignLeave::where('id_employee', $employee->id_employee)->pluck('id_leave')->toArray();
@@ -196,61 +209,64 @@ class EmployeeController extends Controller
                 'full_address' => $request->input('full_address'),
             ]);
         
-            
-        
-            // Update email and password if provided
             $user = User::findOrFail($employee->id_users);
         
-            // Only update email if it's provided and not the same as the current one
-            if ($request->has('email') && $request->email != $user->email) {
-                $user->email = $request->input('email');
-            }
-        
-            // Only update password if provided
-            if ($request->has('password')) {
-                $user->password = Hash::make($request->input('password'));
+            if(Auth::user()->role == "admin"){
+                // Only update email if it's provided and not the same as the current one
+                if ($request->has('email') && $request->email != $user->email) {
+                    $user->email = $request->input('email');
+                }
+
+                // Only update password if provided
+                if ($request->has('password')) {
+                    $user->password = Hash::make($request->input('password'));
+                }
+            }else{
+                if (!Hash::check($request->old_password, $user->password)) {
+                    return redirect()->back()->with('error', 'Old password is incorrect.');
+                }
+                // Update password
+                $user->password = Hash::make($request->new_password);
+                $user->save();
             }
 
             $user->identification_number = $request->identification_number;
             // Save the user changes
             $user->save();
         
-            // Update assign_leave data (assuming employee leaves are passed in the form)
-            // First, delete all existing assign_leave records
-            AssignLeave::where('id_employee', $employee->id_employee)->delete();
+            if(Auth::user()->role == "admin"){
+                AssignLeave::where('id_employee', $employee->id_employee)->delete();
         
-            // Create new assign_leave records from the request
-            if ($request->has('leaves')) {
-                foreach ($request->input('leaves') as $leaveId) {
-                    AssignLeave::create([
-                        'id_employee' => $employee->id_employee,
-                        'id_leave' => $leaveId,
-                        'quota' => 0, // Set this to the appropriate value
-                        'remaining' => 0, // Set this to the appropriate value
-                        'id_company' => Auth::user()->id_company,
-                    ]);
+                if ($request->has('leaves')) {
+                    foreach ($request->input('leaves') as $leaveId) {
+                        AssignLeave::create([
+                            'id_employee' => $employee->id_employee,
+                            'id_leave' => $leaveId,
+                            'quota' => 0, 
+                            'remaining' => 0,
+                            'id_company' => Auth::user()->id_company,
+                        ]);
+                    }
+                }
+        
+                $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+                $dayMapping = [
+                    'monday' => 1,
+                    'tuesday' => 2,
+                    'wednesday' => 3,
+                    'thursday' => 4,
+                    'friday' => 5,
+                    'saturday' => 6,
+                    'sunday' => 7,
+                ];
+        
+                foreach ($days as $day) {
+                    AssignShift::updateOrCreate(
+                        ['id_employee' => $employee->id_employee, 'day' => $dayMapping[$day]],
+                        ['id_shift' => $request->$day ?? null]
+                    );
                 }
             }
-        
-            // Update assign_shift data (for each day of the week)
-            $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-            $dayMapping = [
-                'monday' => 1,
-                'tuesday' => 2,
-                'wednesday' => 3,
-                'thursday' => 4,
-                'friday' => 5,
-                'saturday' => 6,
-                'sunday' => 7,
-            ];
-        
-            foreach ($days as $day) {
-                AssignShift::updateOrCreate(
-                    ['id_employee' => $employee->id_employee, 'day' => $dayMapping[$day]],
-                    ['id_shift' => $request->$day ?? null]
-                );
-            }
-        
             // Return success response
             return redirect()->route('employee.index')->with('success', 'Employee updated successfully!');
         } catch (\Exception $e) {

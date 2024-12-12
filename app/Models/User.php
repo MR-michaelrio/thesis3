@@ -80,5 +80,11 @@ class User extends Authenticatable
     {
         return $this->belongsTo(DepartmentPosition::class, 'id_department_position', 'id_department_position');
     }
+
+    public function supervisior()
+    {
+        return $this->belongsTo(Employee::class, 'supervisor', 'id_users');
+    }
+
     
 }

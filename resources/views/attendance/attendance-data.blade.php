@@ -29,17 +29,17 @@
                     <tbody>
                         @foreach($attendance as $a)
                             <tr>
-                                <th>{{$a->employee->full_name}}</th>
-                                <th>{{$a->id_employee}}</th>
-                                <th>{{$a->employee->user->id_department}}</th>
-                                <th>{{$a->attendance_date}}</th>
-                                <th>{{$a->shift->shift_name}}</th>
-                                <th>{{$a->clock_in}}</th>
-                                <th>{{$a->clock_out}}</th>
-                                <th>{{$a->daily_total}}</th>
-                                <th>{{$a->shift->clock_in}} - {{$a->shift->clock_out}}</th>
-                                <th>{{$a->total_overtime}}</th>
-                                <th>{{$a->attendance_status}}</th>
+                                <td>{{$a->employee->full_name}}</td>
+                                <td>{{$a->id_employee}}</td>
+                                <td>{{$a->employee->user->id_department}}</td>
+                                <td>{{$a->attendance_date}}</td>
+                                <td>{{$a->shift->shift_name}}</td>
+                                <td>{{$a->clock_in}}</td>
+                                <td>{{$a->clock_out}}</td>
+                                <td>{{$a->daily_total}}</td>
+                                <td>{{$a->shift->clock_in}} - {{$a->shift->clock_out}}</td>
+                                <td>{{$a->total_overtime}}</td>
+                                <td>{{$a->attendance_status}}</td>
                             </tr>
                         @endforeach
                     </tbody>

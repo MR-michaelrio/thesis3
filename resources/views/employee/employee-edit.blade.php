@@ -1,5 +1,32 @@
 @extends('index')
 @section('title', 'Personal Information')
+@section('css')
+<style>
+input[type="checkbox"].disabled-checkbox:disabled:checked {
+    background-color: #007bff; /* Blue background */
+    border: 2px solid #007bff; /* Blue border */
+    color: white; /* Ensure contrast */
+    appearance: none; /* Remove default checkbox styles */
+    width: 15px; /* Adjust width */
+    height: 15px; /* Adjust height */
+    display: inline-block; /* Ensure block-level for styles */
+    border-radius: 4px; /* Optional: for rounded corners */
+    position: relative; /* Required for pseudo-element positioning */
+}
+
+input[type="checkbox"].disabled-checkbox:disabled:checked::after {
+    content: '';
+    position: absolute;
+    top: 1px; /* Adjust positioning */
+    left: 3.5px; /* Adjust positioning */
+    width: 4px; /* Adjust width of the checkmark */
+    height: 8px; /* Adjust height of the checkmark */
+    border: solid white; /* White checkmark */
+    border-width: 0 2px 2px 0; /* Thickness of the checkmark */
+    transform: rotate(45deg); /* Create the checkmark shape */
+}
+</style>
+@endsection
 @section('content')
 <form method="POST" action="{{ route('employee.update',$employee->id_employee) }}" enctype="multipart/form-data">
     @csrf
@@ -43,7 +70,7 @@
                             <!-- Identification Number -->
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="identification_number">Identification Number <span style="color:red">*</span></label>
+                                    <label for="identification_number">Identification Number </label>
                                     <input type="text" class="form-control" id="identification_number" name="identification_number"
                                         placeholder="Enter Identification Number" value="{{$employee->user->identification_number}}">
                                 </div>
@@ -54,7 +81,7 @@
                             <!-- First Name -->
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="firstName">First Name <span style="color:red">*</span></label>
+                                    <label for="firstName">First Name </label>
                                     <input type="text" class="form-control" id="firstName" name="first_name"
                                         placeholder="Enter first name" value="{{$employee->first_name}}">
                                 </div>
@@ -62,7 +89,7 @@
                             <!-- Last Name -->
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="lastName">Last Name <span style="color:red">*</span></label>
+                                    <label for="lastName">Last Name </label>
                                     <input type="text" class="form-control" id="lastName" name="last_name"
                                         placeholder="Enter last name" value="{{$employee->last_name}}">
                                 </div>
@@ -75,7 +102,7 @@
                             <!-- Gender -->
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="gender">Gender <span style="color:red">*</span></label>
+                                    <label for="gender">Gender </label>
                                     <select class="form-control" id="gender" name="gender">
                                         <option value="">Select a gender</option>
                                         <option value="Male" {{ old('gender', $employee->gender) == 'Male' ? 'selected' : '' }}>Male</option>
@@ -105,7 +132,7 @@
                             <!-- Religion -->
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="religion">Religion <span style="color:red">*</span></label>
+                                    <label for="religion">Religion </label>
                                     <select class="form-control" id="religion" name="religion">
                                         <option value="">Select a religion</option>
                                         <option value="Christianity" {{ old('religion', $employee->religion) == 'Christianity' ? 'selected' : '' }}>Christianity</option>
@@ -124,7 +151,7 @@
                             <!-- Place of Birth -->
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="placeOfBirth">Place of Birth <span style="color:red">*</span></label>
+                                    <label for="placeOfBirth">Place of Birth </label>
                                     <input type="text" class="form-control" id="placeOfBirth" name="place_of_birth"
                                         placeholder="Enter place of birth" value="{{$employee->place_of_birth}}">
                                 </div>
@@ -132,7 +159,7 @@
                             <!-- Date of Birth -->
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="dateOfBirth">Date of Birth <span style="color:red">*</span></label>
+                                    <label for="dateOfBirth">Date of Birth </label>
                                     <div class="input-group date" id="reservationdate1" data-target-input="nearest">
                                         <input type="text" 
                                             class="form-control datetimepicker-input" 
@@ -166,14 +193,14 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="fullAddress">Full Address <span style="color:red">*</span></label>
+                                    <label for="fullAddress">Full Address </label>
                                     <textarea class="form-control" id="fullAddress" name="full_address"
                                         placeholder="Enter full address">{{$employee->addressEmployee->full_address}}</textarea>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="country">Country <span style="color:red">*</span></label>
+                                    <label for="country">Country </label>
                                     <input type="text" class="form-control" id="country" name="country"
                                         placeholder="Enter country" value="{{$employee->addressEmployee->country}}">
                                 </div>
@@ -206,28 +233,28 @@
                     <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="phone">Phone <span style="color:red">*</span></label>
+                                    <label for="phone">Phone </label>
                                     <input type="text" class="form-control" id="phone" name="phone"
                                         placeholder="Enter phone" value="{{$employee->user->phone}}">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="emergency_name">Emergency Name <span style="color:red">*</span></label>
+                                    <label for="emergency_name">Emergency Name </label>
                                     <input type="text" class="form-control" id="emergency_name" name="emergency_name"
                                         placeholder="Enter Emergency Name" value="{{$employee->user->emergency_name}}">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="emergency_relation">Emergency Relation <span style="color:red">*</span></label>
+                                    <label for="emergency_relation">Emergency Relation </label>
                                     <input type="text" class="form-control" id="emergency_relation" name="emergency_relation"
                                         placeholder="Enter Emergency Relation" value="{{$employee->user->emergency_relation}}">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="emergency_phone">Emergency Phone <span style="color:red">*</span></label>
+                                    <label for="emergency_phone">Emergency Phone </label>
                                     <input type="text" class="form-control" id="emergency_phone" name="emergency_phone"
                                         placeholder="Enter Emergency Phone" value="{{$employee->user->emergency_phone}}">
                                 </div>
@@ -253,15 +280,31 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body" style="display: block;">
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Email address<span style="color:red">*</span></label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" name="email" placeholder="Enter email" value="{{$employee->user->email}}">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Password<span style="color:red">*</span></label>
-                            <input type="password" class="form-control" name="password" id="exampleInputPassword1"
-                                placeholder="Enter Password">
-                        </div>
+                        @if(Auth::user()->role == "admin")
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Email address</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" name="email" placeholder="Enter email" value="{{$employee->user->email}}">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Password</label>
+                                <input type="password" class="form-control" name="password" id="exampleInputPassword1"
+                                    placeholder="Enter Password">
+                            </div>
+                        @else
+                            <div class="form-group">
+                                <label for="oldPassword">Old Password</label>
+                                <input type="password" class="form-control" name="old_password" id="oldPassword" placeholder="Enter Old Password">
+                            </div>
+                            <div class="form-group">
+                                <label for="newPassword">New Password</label>
+                                <input type="password" class="form-control" name="new_password" id="newPassword" placeholder="Enter New Password">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm_password">Confirm New Password</label>
+                                <input type="password" class="form-control" name="confirm_password" id="confirmPassword"
+                                placeholder="Confirm New Password">
+                            </div>
+                        @endif
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -280,23 +323,28 @@
                     <!-- /.card-header -->
                     <div class="card-body" style="display: block;">
                         <!-- <div class="form-group">
-                            <label>Employee Id<span style="color:red">*</span></label>
+                            <label>Employee Id</label>
                             <input type="text" class="form-control" placeholder="Enter Employee Id">
                         </div> -->
                         <div class="form-group">
-                            <label for="gender">Department<span style="color:red">*</span></label>
-                            <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" name="id_department" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                <option>Select</option>    
-                                @foreach($department as $d)
-                                <option value="{{ $d->id_department }}" 
-                                        {{ old('id_department', $employee->user->id_department) == $d->id_department ? 'selected' : '' }}>
-                                    {{ $d->department_name }}
-                                </option>                                
-                                @endforeach
-                            </select>
+                            <label for="gender">Department</label>
+                            @if(Auth::user()->role == "admin")
+                                <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" name="id_department" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                    <option>Select</option>    
+                                    @foreach($department as $d)
+                                    <option value="{{ $d->id_department }}" 
+                                            {{ old('id_department', $employee->user->id_department) == $d->id_department ? 'selected' : '' }}>
+                                        {{ $d->department_name }}
+                                    </option>                                
+                                    @endforeach
+                                </select>
+                            @else
+                                <input type="text" class="form-control" value="{{ $employee->user->department->department_name }}" disabled>
+                            @endif
                         </div>
                         <div class="form-group">
-                            <label for="gender">Position Title<span style="color:red">*</span></label>
+                            <label for="gender">Position Title</label>
+                            @if(Auth::user()->role == "admin")
                             <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" name="id_department_position" data-select2-id="2" tabindex="-1" aria-hidden="true">
                                 <option>Select</option>    
                                 @foreach($departmentPosition as $d)
@@ -305,17 +353,24 @@
                                     </option>                               
                                 @endforeach
                             </select>
+                            @else
+                                <input type="text" class="form-control" value="{{ $employee->user->position->position_title }}" disabled>
+                            @endif
                         </div>
                         <div class="form-group">
-                            <label for="gender">Reports to<span style="color:red">*</span></label>
+                            <label for="gender">Reports to</label>
+                            @if(Auth::user()->role == "admin")
                             <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" name="supervisor" data-select2-id="3" tabindex="-1" aria-hidden="true">
                                 <option>Select</option>    
                                 @foreach($user as $d)
-                                    <option value="{{$d->id_user}}" {{ old('supervisor', $employee->user->supervisor) == $d->id_user   ? 'selected' : '' }}>
+                                    <option value="{{$d->id_user}}" {{ old('supervisor', $employee->user->supervisor) == $d->id_user ? 'selected' : '' }}>
                                         {{$d->name}}
                                     </option>
                                 @endforeach
                             </select>
+                            @else
+                                <input type="text" class="form-control" value="{{ $employee->user->supervisior->full_name }}" disabled>
+                            @endif
                         </div>
 
                         <hr style="border: '1px solid gray'">
@@ -323,10 +378,10 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="dateOfBirth">Start Date<span style="color:red">*</span></label>
+                                    <label for="dateOfBirth">Start Date</label>
                                     <div class="input-group date" id="reservationdate2" data-target-input="nearest">
                                         <input type="text" class="form-control datetimepicker-input"
-                                            placeholder="DD/MM/YYYY" name="start_work" data-target="#reservationdate2" value="{{ old('start_work', $employee->user->start_work) }}">
+                                            placeholder="DD/MM/YYYY" name="start_work" data-target="#reservationdate2" value="{{ old('start_work', $employee->user->start_work) }}" @if(Auth::user()->role != "admin") disabled @endif>
                                         <div class="input-group-append" data-target="#reservationdate2"
                                             data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -336,10 +391,10 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="dateOfBirth">Contract End Date<span style="color:red">*</span></label>
+                                    <label for="dateOfBirth">Contract End Date</label>
                                     <div class="input-group date" id="reservationdate3" data-target-input="nearest">
                                         <input type="text" class="form-control datetimepicker-input"
-                                            placeholder="DD/MM/YYYY" name="stop_work" data-target="#reservationdate3" value="{{ old('stop_work',$employee->user->stop_work) }}">
+                                            placeholder="DD/MM/YYYY" name="stop_work" data-target="#reservationdate3" value="{{ old('stop_work',$employee->user->stop_work) }}" @if(Auth::user()->role != "admin") disabled @endif>
                                         <div class="input-group-append" data-target="#reservationdate3"
                                             data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -470,23 +525,34 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="{{ $day }}">{{ ucfirst($day) }}</label>
-                                        <select class="form-control select2 {{ $day }} select2-hidden-accessible" style="width: 100%;" name="{{ $day }}" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                            <option value="">Select</option>
-                                            @foreach($shift as $d)
-                                                @php
-                                                    // Find the assigned shift for the current day
-                                                    $assignedShift = $assignShiftByDay->get($dayMapping[$day], collect())->first();
-                                                @endphp
-                                                <option value="{{ $d->id_shift }}"
-                                                    {{ old($day, $assignedShift->id_shift ?? '') == $d->id_shift ? 'selected' : '' }}>
-                                                    {{ $d->shift_name }} [{{ $d->clock_in }} - {{ $d->clock_out }}]
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                        @php
+                                            // Find the assigned shift for the current day
+                                            $assignedShift = $assignShiftByDay->get($dayMapping[$day], collect())->first();
+                                        @endphp
+                                        @if(Auth::user()->role != "admin")
+                                            <input type="text" class="form-control" 
+                                            value="{{ $assignedShift?->shift?->shift_name ?? 'No shift assigned' }} [{{$assignedShift?->shift?->clock_in ?? '--:--' }} - {{ $assignedShift?->shift?->clock_out ?? '--:--' }}]" disabled>
+                                        @else
+                                            <select class="form-control select2 {{ $day }} select2-hidden-accessible" 
+                                                    style="width: 100%;" 
+                                                    name="{{ $day }}" 
+                                                    data-select2-id="1" 
+                                                    tabindex="-1" 
+                                                    aria-hidden="true">
+                                                <option value="">Select</option>
+                                                @foreach($shift as $d)
+                                                    <option value="{{ $d->id_shift }}"
+                                                        {{ old($day, $assignedShift?->id_shift ?? '') == $d->id_shift ? 'selected' : '' }}>
+                                                        {{ $d->shift_name }} [{{ $d->clock_in }} - {{ $d->clock_out }}]
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
                         @endforeach
+
                     </div>
                 </div>
 
@@ -512,8 +578,10 @@
                                         id="leave_{{$l->id_leave}}" 
                                         name="leaves[]" 
                                         value="{{$l->id_leave}}" 
+                                        @if(Auth::user()->role != "admin") disabled class="disabled-checkbox" @endif
+
                                         {{ in_array($l->id_leave, $employeeLeaves) ? 'checked' : '' }}
-                                        style="transform: scale(1.5);">
+                                        style="transform: scale(1.5);" >
                                     </div>
                                     <div class="col-11">
                                         <div class="row" >

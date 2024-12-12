@@ -22,9 +22,9 @@
     display: inline-block; /* Show delete button on hover */
 }
 
-
 </style>
-<div class="row">
+<div class="row justify-content-center">
+    @if(Auth::user()->role == "admin")
     <div class="col-md-3">
         <div class="sticky-top mb-3">
             <div class="card">
@@ -61,7 +61,7 @@
                         <div class="form-group">
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="holiday" name="holiday" value="holiday">
-                                <label class="form-check-label" for="Holiday">Holiday</label>
+                                <label class="form-check-label" for="holiday">Holiday</label>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-block btn-primary">Create Event</button>
@@ -70,6 +70,7 @@
             </div>
         </div>
     </div>
+    @endif
 
     <!-- FullCalendar Section -->
     <div class="col-md-9">
@@ -80,9 +81,7 @@
         </div>
     </div>
 </div>
-
 @endsection
-
 
 @section('scripts')
 <script>
@@ -106,12 +105,12 @@
                 themeSystem: 'bootstrap',
                 events: function(fetchInfo, successCallback, failureCallback) {
                     $.ajax({
-                        url: '/events/1', // Ganti dengan user ID yang sesuai
+                        url: '{{route("calendar.get")}}', // Ganti dengan user ID yang sesuai
                         method: 'GET',
                         success: function (events) {
                             var calendarEvents = events.map(event => ({
                                 id: event.id,
-                                title: event.title,
+                                title: event.title + " " + (event.holiday ? event.holiday : ""),
                                 start: event.start_time,
                                 end: event.end_time,
                                 backgroundColor: event.background_color,
@@ -135,29 +134,41 @@
                     hour12: false // Menggunakan format 24 jam
                 },
                 eventDidMount: function(info) {
-                    let deleteButton = $('<button class="delete-btn" style="background-color:white;border-radius:5px"><i class="fas fa-trash" ></i></button>');
-                    if (info.event.backgroundColor === 'red' || info.event.backgroundColor === '#ff0000') {
-                        deleteButton.css('color', 'white'); // Ubah warna tombol menjadi putih
-                    }
-                    $(info.el).append(deleteButton);
-
-                    deleteButton.on('click', function(e) {
-                        e.stopPropagation();
-
-                        if (confirm("Are you sure you want to delete this event?")) {
-                            $.ajax({
-                                url: '/events/' + info.event.id,
-                                method: 'DELETE',
-                                success: function () {
-                                    info.event.remove();
-                                    alert('Event deleted successfully');
-                                },
-                                error: function () {
-                                    alert('Failed to delete event');
-                                }
-                            });
-                        }
+                    $(info.el).css({
+                        backgroundColor: info.event.backgroundColor, 
+                        borderColor: info.event.borderColor,
+                        color: info.event.textColor
                     });
+
+                    let isAdmin = @json(Auth::user()->role === 'admin');
+
+                    if (isAdmin) {
+                        let deleteButton = $('<button class="delete-btn" style="background-color:white;border-radius:5px"><i class="fas fa-trash"></i></button>');
+
+                        if (info.event.backgroundColor === 'red' || info.event.backgroundColor === '#ff0000') {
+                            deleteButton.css('color', 'white'); // Change button color to white
+                        }
+
+                        $(info.el).append(deleteButton);
+
+                        deleteButton.on('click', function(e) {
+                            e.stopPropagation();
+
+                            if (confirm("Are you sure you want to delete this event?")) {
+                                $.ajax({
+                                    url: '{{ route("calendar.delete", ":id") }}'.replace(':id', info.event.id),
+                                    method: 'DELETE',
+                                    success: function () {
+                                        info.event.remove();
+                                        alert('Event deleted successfully');
+                                    },
+                                    error: function () {
+                                        alert('Failed to delete event');
+                                    }
+                                });
+                            }
+                        });
+                    }
                 }
             });
 
@@ -175,11 +186,11 @@
                     background_color: $('#background_color').val(),
                     border_color: $('#border_color').val(),
                     text_color: $('#text_color').val(),
-                    holiday: $('#holiday').val(),
+                    holiday: $('#holiday').is(':checked') ? 'holiday' : null, // Periksa apakah checkbox dicentang
                 };
 
                 $.ajax({
-                    url: '/events',
+                    url: '{{route("calendar.store")}}',
                     method: 'POST',
                     data: formData,
                     success: function (response) {

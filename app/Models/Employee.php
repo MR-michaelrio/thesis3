@@ -71,4 +71,5 @@ class Employee extends Model
     {
         return $this->belongsTo(AddressEmployee::class, 'id_address_employee', 'id_address_employee');
     }
+    
 }

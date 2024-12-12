@@ -17,7 +17,7 @@
                                 <label>Start Date</label>
                                 <div class="input-group date" id="reservationdate1" data-target-input="nearest">
                                     <input type="text" class="form-control datetimepicker-input"
-                                        placeholder="DD/MM/YYYY" data-target="#reservationdate1">
+                                        placeholder="DD/MM/YYYY" data-target="#reservationdate1" name="overtime_date">
                                     <div class="input-group-append" data-target="#reservationdate1"
                                         data-toggle="datetimepicker">
                                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -28,7 +28,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Time</label>
-                                        <input type="text" class="form-control" placeholder="HH:MM - HH:MM" disabled="">
+                                        <input type="text" class="form-control" placeholder="HH:MM - HH:MM" disabled="" name="start">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -44,7 +44,7 @@
                                 <label>Requester</label>
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        <input type="text" class="form-control" placeholder="Requester ID" value="{{Auth::id()}}" disabled="">
+                                        <input type="text" class="form-control" placeholder="Requester ID" value="{{Auth::id()}}" name="id_employee" disabled="">
                                     </div>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" placeholder="Requester Name" 
@@ -56,15 +56,15 @@
                             <div class="form-group">
                                 <label>Request Description</label>
                                 <textarea class="form-control" rows="3"
-                                    placeholder="Enter leave Description"></textarea>
+                                    placeholder="Enter leave Description" name="request_description"></textarea>
                             </div>
 
                             <div class="form-group">
                                 <label for="exampleInputFile">Request Attachment</label>
                                 <div class="input-group">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="exampleInputFile">
-                                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                        <input type="file" class="custom-file-input" id="customFile" name="request_file">
+                                        <label class="custom-file-label" for="customFile" >Choose file</label>
                                     </div>
                                     <div class="input-group-append">
                                         <span class="input-group-text">Upload</span>
@@ -84,4 +84,14 @@
         </div>
     </div>
 </div>
+@endsection
+@section('scripts')
+<script>
+    $(document).ready(function() {
+        $('#customFile').on('change', function(e) {
+            var fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').html(fileName);
+        });
+    });
+</script>
 @endsection
