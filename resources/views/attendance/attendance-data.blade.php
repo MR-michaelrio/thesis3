@@ -15,7 +15,7 @@
                         <tr>
                             <th>Name</th>
                             <th>ID</th>
-                            <th>Department/Division Code</th>
+                            <th>Department Code</th>
                             <th>Date</th>
                             <th>Shift</th>
                             <th>Clock In</th>
@@ -30,16 +30,16 @@
                         @foreach($attendance as $a)
                             <tr>
                                 <td>{{$a->employee->full_name}}</td>
-                                <td>{{$a->id_employee}}</td>
-                                <td>{{$a->employee->user->id_department}}</td>
+                                <td>{{$a->employee->user->identification_number}}</td>
+                                <td>{{$a->employee->user->department->department_code}}</td>
                                 <td>{{$a->attendance_date}}</td>
                                 <td>{{$a->shift->shift_name}}</td>
                                 <td>{{$a->clock_in}}</td>
                                 <td>{{$a->clock_out}}</td>
-                                <td>{{ $a->daily_total ? \Carbon\Carbon::parse($a->daily_total)->format('H:i') . ' Hours' : '' }}</td>
+                                <td style="font-weight:bold">{{ $a->daily_total ? \Carbon\Carbon::parse($a->daily_total)->format('H:i') . ' Hours' : '' }}</td>
                                 <td>{{ \Carbon\Carbon::parse($a->shift->clock_in)->diff(\Carbon\Carbon::parse($a->shift->clock_out))->format('%H:%I') }} Hours</td>
-                                <td>{{$a->total_overtime}}</td>
-                                <td>{{$a->attendance_status}}</td>
+                                <td style="color:red">{{$a->total_overtime}}</td>
+                                <td style="text-transform:capitalize">{{$a->attendance_status}}</td>
                             </tr>
                         @endforeach
                     </tbody>

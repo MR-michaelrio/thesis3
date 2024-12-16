@@ -51,6 +51,43 @@ class EmployeeController extends Controller
         return view('employee.employee-add', compact('department', 'departmentPosition', 'user', 'shift', 'leave'));
     }
 
+    public function getDepartmentPositions($departmentId)
+    {
+        $positions = DepartmentPosition::where('id_department', $departmentId)
+                                       ->where('id_company', Auth::user()->id_company)
+                                       ->get();
+    
+        return response()->json($positions);
+    }
+    
+    public function getSupervisorsByDepartment($departmentId)
+    {
+        // Fetch the department's supervisor(s) based on the selected department
+        $department = Department::where("id_department",$departmentId)->first();
+        $user = Employee::where("id_employee",$department->id_supervisor)->first();
+        $supervisors = User::where("id_user",$user->id_users)->where(function($query) {
+                                $query->where('role', 'supervisor')
+                                    ->orWhere('role', 'admin');
+                        })
+                        ->where('id_company', Auth::user()->id_company)
+                        ->with('employee') 
+                        ->get();
+
+        $supervisorsall = User::where(function($query) {
+                            $query->where('role', 'supervisor')
+                                ->orWhere('role', 'admin');
+                    })
+                    ->where('id_company', Auth::user()->id_company)
+                    ->with('employee') 
+                    ->get();
+        
+        return response()->json([
+            'supervisors' => $supervisors,
+            'supervisorsall' => $supervisorsall
+        ]);
+    }
+
+
     public function store(Request $request)
     {
         try {
@@ -99,6 +136,7 @@ class EmployeeController extends Controller
                 'id_address_employee' => $address->id_address_employee,
                 'id_users' => $user->id_user,
                 'id_company' => Auth::user()->id_company,
+                'status' => 'active'
             ];
 
             if ($request->hasFile('profile_picture')) {
@@ -245,7 +283,9 @@ class EmployeeController extends Controller
                     $user->password = Hash::make($request->new_password);
                 }
             }
-        
+
+            $user->start_work = $request->start_work;
+            $user->stop_work = $request->stop_work;
             $user->identification_number = $request->identification_number;
             // Save the user changes
             $user->save();
@@ -291,11 +331,23 @@ class EmployeeController extends Controller
         
     }
 
-
     public function destroy($id)
     {
         $employee = Employee::findOrFail($id);
         $employee->delete();
         return redirect()->route('employee.index')->with('success', 'Employee deleted successfully!');
     }
+
+    public function statusupdate(Request $request, $id)
+    {
+        $employee = Employee::findOrFail($id);
+
+        // Update status employee
+        $employee->status = $request->status;
+        $employee->save();
+
+        // Return response for AJAX
+        return response()->json(['message' => 'Status updated successfully']);
+    }
+
 }

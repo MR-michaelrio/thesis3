@@ -39,7 +39,6 @@
                             <th>Category</th>
                             <th>Valid Date (From)</th>
                             <th>Valid Date (To)</th>
-                            <th>Allocation</th>
                             <th>Default Quota</th>
                             <th>Description</th>
                             <th>Action</th>
@@ -52,7 +51,6 @@
                             <td>{{ $leave->category }}</td>
                             <td>{{ $leave->valid_date_from }}</td>
                             <td>{{ $leave->valid_date_end }}</td>
-                            <td>{{ $leave->allocation }}</td>
                             <td>{{ $leave->default_quota }}</td>
                             <td>{{ $leave->description }}</td>
                             <td>
@@ -119,11 +117,11 @@
                     </div>
                     <div class="form-group">
                         <label>Valid Date From</label>
-                        <input type="date" class="form-control" name="valid_date_from" id="valid_date_from">
+                        <input type="date" class="form-control" name="valid_date_from" id="valid_date_from" disabled>
                     </div>
                     <div class="form-group">
                         <label>Valid Date End</label>
-                        <input type="date" class="form-control" name="valid_date_end" id="valid_date_end">
+                        <input type="date" class="form-control" name="valid_date_end" id="valid_date_end" disabled>
                     </div>
                 </div>
                 <div class="modal-footer" style="background-color:#E6FAFF;">
@@ -134,8 +132,51 @@
         </div>
     </div>
 </div>
-
+@endsection
+@section('scripts')
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Trigger when category changes
+        $('#category').on('change', function() {
+            var category = $(this).val();
+
+            // Enable/Disable the date fields based on the category selection
+            if (category === 'Fixed Duration') {
+                $('#valid_date_from').prop('required', true);
+                $('#valid_date_end').prop('required', true);
+                $('#valid_date_from').prop('disabled', false);
+                $('#valid_date_end').prop('disabled', false);
+            } else {
+                $('#valid_date_from').prop('required', false);
+                $('#valid_date_end').prop('required', false);
+                $('#valid_date_from').prop('disabled', true);
+                $('#valid_date_end').prop('disabled', true);
+            }
+        });
+
+        // Function to validate the date range
+        $('#leaveForm').on('submit', function(e) {
+            var validFrom = $('#valid_date_from').val();
+            var validEnd = $('#valid_date_end').val();
+
+            // Check if the 'Valid Date End' is later than 'Valid Date From'
+            if (validFrom && validEnd && validEnd < validFrom) {
+                e.preventDefault(); // Prevent form submission
+                alert('The "Valid Date End" must be later than "Valid Date From".');
+                return false;
+            }
+        });
+
+        // Initialize with the correct state based on the current category
+        var initialCategory = $('#category').val();
+        if (initialCategory === 'Fixed Duration') {
+            $('#valid_date_from').prop('required', true);
+            $('#valid_date_end').prop('required', true);
+            $('#valid_date_from').prop('disabled', false);
+            $('#valid_date_end').prop('disabled', false);
+        }
+    });
+
     function openAddModal() {
         document.getElementById("modal-title").innerText = "Add Leave Type";
         document.getElementById("leaveForm").action = "{{ route('leaves.store') }}";

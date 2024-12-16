@@ -24,6 +24,7 @@ class Employee extends Model
         'id_address_employee',
         'id_users',
         'id_company',
+        'status'
     ];
 
     // Relasi ke AddressEmployee

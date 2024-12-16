@@ -178,13 +178,13 @@ class AttendanceController extends Controller
     public function checkin(Request $request)
     {
         $currentTime = Carbon::now('Asia/Jakarta'); // Get the current time using Carbon
-
+        $dayOfWeek = $currentTime->dayOfWeekIso;
         // Get attendance date and clock-in time from the request or default to the current date/time
         $attendance_date = $request->attendance_date; // Format YYYY-MM-DD
         $attendance_clock = $request->clock; // Default to current time if not provided
         $id_employee = $request->id_employee;
         // Fetch the employee's shift assignment
-        $assignshift = AssignShift::where('id_employee', $id_employee)->first();
+        $assignshift = AssignShift::where('id_employee', $id_employee)->where('day', $dayOfWeek)->first();
 
         // If no shift assignment found, return an error response
         if (!$assignshift) {

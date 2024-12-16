@@ -34,7 +34,7 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
     <div class="row">
     <section class="col-12 mt-4 mb-4">
         <div class="text-center float-right">
-            <button type="reset" class="btn btn-default">Discard</button>
+            <a href="{{ route('employee.index') }}" class="btn btn-default" onclick="return confirm('Are you sure?');">Discard</a>
             <button type="submit" class="btn btn-primary mr-2">Update</button>
         </div>
     </section>

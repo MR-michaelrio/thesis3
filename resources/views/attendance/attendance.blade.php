@@ -16,18 +16,19 @@
                 <div class="card-body" style="height: calc(100% - 56px);">
                     <div class="form-group">
                         <label>Attendance</label>
-                        <select class="form-control">
+                        <input type="text" class="form-control" id="clock" placeholder="" disabled>
+                        <!-- <select class="form-control">
                             <option>Clock In</option>
                             <option>Clock Out</option>
-                        </select>
+                        </select> -->
                     </div>
                     <div class="form-group">
                         <label for="employeid">Employee ID</label>
-                        <input type="text" class="form-control" id="employeid" placeholder="Enter ID">
+                        <input type="text" class="form-control" id="employeid" placeholder="Enter ID" disabled>
                     </div>
                     <div class="form-group">
                         <label for="employename">Employee Name</label>
-                        <input type="text" class="form-control" id="employename" placeholder="Enter Name">
+                        <input type="text" class="form-control" id="employename" placeholder="Enter Name" disabled>
                     </div>
                     <div class="form-group">
                         <label>Clock</label>
@@ -37,9 +38,9 @@
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>
                         </div> -->
-                        <input type="text" class="form-control" id="time" placeholder="Enter Time">
+                        <input type="text" class="form-control" id="time" placeholder="Enter Time" disabled>
                     </div>
-                    <button type="submit" class="btn btn-block btn-primary btn-sm">Add Manually</button>
+                    <button type="button" class="btn btn-block btn-primary btn-sm">Add Manually</button>
                     <a href="{{route('attendance.create')}}" class="btn btn-block btn-sm" style="color:#007bff">Register Face Recognition here!</a>
                 </div>
             <!-- </form> -->
@@ -107,7 +108,6 @@
         popup.innerHTML = `
             <h4>Wajah Terdeteksi</h4>
             <p>${name} telah dikenali!</p>
-            <p>${confidence} akurasi!</p>
             <button id="confirmButton" style="margin-top: 10px; padding: 5px 10px; background: #007bff; color: white; border: none; border-radius: 5px;">Setuju</button>
         `;
 
@@ -115,7 +115,6 @@
         document.body.appendChild(popup);
 
         document.getElementById('confirmButton').addEventListener('click', () => {
-            console.log("Klik setuju:", name);
             const loadingMessage = document.createElement('div');
             loadingMessage.id = 'loadingMessage';
             loadingMessage.style.position = 'fixed';

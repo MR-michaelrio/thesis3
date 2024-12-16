@@ -48,10 +48,10 @@
                                 </td>
                                 <td>
                                     <div class="col">
-                                        {{$a->name}}
+                                        {{$a->employee->full_name}}
                                     </div>
                                     <div class="col text-primary">
-                                        {{$a->id_user}} | {{$a->email}}
+                                        {{$a->identification_number}} | {{$a->email}}
                                     </div>
                                 </td>
                                 <td>
@@ -126,10 +126,10 @@
                                 </td>
                                 <td>
                                     <div class="col">
-                                        {{$s->name}}
+                                        {{$s->employee->full_name}}
                                     </div>
                                     <div class="col text-primary">
-                                        {{$s->id_user}} | {{$s->email}}
+                                        {{$s->identification_number}} | {{$s->email}}
                                     </div>
                                 </td>
                                 <td>
@@ -206,10 +206,10 @@
                                 </td>
                                 <td>
                                     <div class="col">
-                                        {{$e->name}}
+                                        {{$e->employee->full_name}}
                                     </div>
                                     <div class="col text-primary">
-                                        {{$e->id_user}} | {{$e->email}}
+                                        {{$e->identification_number}} | {{$e->email}}
                                     </div>
                                 </td>
                                 <td>

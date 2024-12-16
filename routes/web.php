@@ -35,6 +35,10 @@ Route::middleware(['auth'])->group(function () {
         
     Route::resource('attendance', AttendanceController::class);
     Route::resource('employee', EmployeeController::class);
+    Route::post('/employee/statusupdate/{id}', [EmployeeController::class, 'statusupdate'])->name('employee.statusupdate');
+    Route::get('get-department-positions/{departmentId}', [EmployeeController::class, 'getDepartmentPositions'])->name('getDepartmentPositions');
+    Route::get('/getSupervisorsByDepartment/{departmentId}', [EmployeeController::class, 'getSupervisorsByDepartment'])->name('getSupervisorsByDepartment');
+
     Route::resource('role', RoleController::class);
 
     Route::post('/role/admin/{id}', [RoleController::class, 'roleadmin'])->name('role.admin');
