@@ -36,8 +36,8 @@
                                 <td>{{$a->shift->shift_name}}</td>
                                 <td>{{$a->clock_in}}</td>
                                 <td>{{$a->clock_out}}</td>
-                                <td>{{$a->daily_total}}</td>
-                                <td>{{$a->shift->clock_in}} - {{$a->shift->clock_out}}</td>
+                                <td>{{ $a->daily_total ? \Carbon\Carbon::parse($a->daily_total)->format('H:i') . ' Hours' : '' }}</td>
+                                <td>{{ \Carbon\Carbon::parse($a->shift->clock_in)->diff(\Carbon\Carbon::parse($a->shift->clock_out))->format('%H:%I') }} Hours</td>
                                 <td>{{$a->total_overtime}}</td>
                                 <td>{{$a->attendance_status}}</td>
                             </tr>

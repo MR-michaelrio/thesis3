@@ -42,7 +42,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/role/supervisor/{id}', [RoleController::class, 'rolesupervisor'])->name('role.supervisor');
 
     Route::resource('shift', ShiftController::class);
+
     Route::resource('overtimes', RequestOvertimeController::class);
+    Route::get('/overtime/clock/{date}', [RequestOvertimeController::class, 'getOvertimeData'])->name('overtime.clock');
+
     Route::resource('leaves', LeaveController::class);
     Route::resource('companies', CompanyController::class);
 

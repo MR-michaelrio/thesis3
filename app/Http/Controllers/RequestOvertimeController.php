@@ -4,7 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\RequestOvertime;
+use App\Models\Attendance;
+use App\Models\AttendancePolicy;
+use App\Models\AssignShift;
+
 use Auth;  
+use Carbon\Carbon;
+
 class RequestOvertimeController extends Controller
 {
     public function index()
@@ -33,8 +39,66 @@ class RequestOvertimeController extends Controller
 
     public function store(Request $request)
     {
-        $overtime = RequestOvertime::create($request->all());
+        $attendance = Attendance::where('id_employee', Auth::user()->employee->id_employee)
+                                ->where('attendance_date', $date)
+                                ->first();
+        $filePath = null;
+        if ($request->hasFile('request_file')) {
+            $filePath = $request->file('request_file')->store('overtime_requests', 'public'); // Save file
+        }
+
+        $overtime = RequestOvertime::create([
+            "overtime_date" => $request->overtime_date,
+            "start" => $request->mulai,
+            "end" => $request->akhir,
+            "id_employee" => Auth::user()->employee->id_employee,
+            "request_description" => $request->request_description,
+            "request_file" => $filePath,
+            "id_attendance" => $attendance->id_attendance,
+            "status" => "pending",
+            "id_company" => Auth::user()->id_company
+        ]);
 
         return view('request.overtime-request');
     }
+
+    public function getOvertimeData($date)
+    {
+        // Get attendance and overtime data for the selected date
+        $attendance = Attendance::where('id_employee', Auth::user()->employee->id_employee)
+                                ->where('attendance_date', $date)
+                                ->first();
+
+        if ($attendance) {
+            // Get overtime policy and shift data
+            $attendance_policy = AttendancePolicy::where('id_company', Auth::user()->id_company)->first();
+            $overtime_minutes_start = $attendance_policy->overtime_start;
+            $overtime_minutes_end = $attendance_policy->overtime_end;
+
+            $dayOfWeek = Carbon::now()->dayOfWeekIso;
+            $clock_out = AssignShift::where("id_employee", Auth::user()->employee->id_employee)
+                                    ->where('day', $dayOfWeek)
+                                    ->first();
+
+            $clock_out_time = Carbon::parse($clock_out->shift->clock_out);
+
+            // Add overtime minutes to the clock-out time to calculate overtime start
+            $overtime_start = $clock_out_time->copy()->addMinutes($overtime_minutes_start);
+
+            // Add overtime minutes to the overtime start to calculate overtime end
+            $overtime_end = $overtime_start->copy()->addMinutes($overtime_minutes_end);
+
+            // Format the times as 'H:i' before returning
+            return response()->json([
+                'start' => $overtime_start->format('H:i') . ' - ' . $overtime_end->format('H:i'),
+                'mulai' => $overtime_start->format('H:i'),
+                'akhir' => $overtime_end->format('H:i'),
+                'total_overtime' => $attendance_policy->overtime_start
+            ]);
+
+        }
+        return response()->json(['error' => 'No attendance data found for selected date',"date"=>$date], 404);
+    }
+
+
 }
