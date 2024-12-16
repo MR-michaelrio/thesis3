@@ -186,7 +186,7 @@
 
                 axios.post('{{route("recognize")}}', formData)
                     .then(response => {
-                        console.log("Hasil:", response.data.message);
+                        console.log("Hasil:", response.data);
                         const faceNames = response.data.face_names || [];
                         if(faceNames[0] === "Unknown"){
                             console.log("Wajah tidak dikenali, mencoba lagi...");
