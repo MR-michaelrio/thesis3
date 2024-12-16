@@ -220,14 +220,14 @@ class EmployeeController extends Controller
                 if ($request->has('email') && $request->email != $user->email) {
                     $user->email = $request->input('email');
                 }
-                if($request->password !== null){
+                if($request->new_password !== null){
                 // Only update password if provided
                     if ($request->has('password')) {
                         $user->password = Hash::make($request->input('password'));
                     }
                 }
             }else{
-                if($request->password !== null){
+                if($request->new_password !== null){
                     if (!Hash::check($request->old_password, $user->password)) {
                         return redirect()->back()->with('error', 'Old password is incorrect.');
                     }
