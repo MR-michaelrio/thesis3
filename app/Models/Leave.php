@@ -18,7 +18,6 @@ class Leave extends Model
     protected $fillable = [
         'leave_name',
         'category',
-        'allocation',
         'valid_date_from',
         'valid_date_end',
         'default_quota',
