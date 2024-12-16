@@ -14,6 +14,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Hash;
+
 use App\Http\Controllers\AttendanceController;
 Route::middleware(['auth'])->group(function () {
     Route::get('attendance_policy', [AttendancePolicyController::class, 'index'])->name('attendance_policy.index');
@@ -57,7 +59,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/calender', [HomeController::class, 'calender'])->name('calender');
 });
 Route::get('/test', function () {
-    return view('test');
+    return Hash::make("123123123");
 });
 Auth::routes();
 Route::post('logout', [HomeController::class, 'logout'])->name('logout');
