@@ -221,8 +221,12 @@ class EmployeeController extends Controller
                     $user->email = $request->input('email');
                 }
                 // Only update password if provided
-                if ($request->has('password')) {
-                    $user->password = Hash::make($request->input('password'));
+                if($request->has('new_password')){
+                    if (!Hash::check($request->old_password, $user->password)) {
+                        return redirect()->back()->with('error', 'Old password is incorrect.');
+                    }
+                    // Update password
+                    $user->password = Hash::make($request->new_password);
                 }
                 
             }else{
@@ -232,7 +236,6 @@ class EmployeeController extends Controller
                     }
                     // Update password
                     $user->password = Hash::make($request->new_password);
-                    $user->save();
                 }
             }
         
