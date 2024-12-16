@@ -9,6 +9,7 @@
     @yield('css')
     <!-- Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/logo/logo.png')}}">
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -170,7 +171,7 @@
                             </li>
                         @endif
 
-                        @if(Auth::user()->role == "supervisor" || Auth::user()->role == "employee")
+                        @if(Auth::user()->role == "supervisor1" || Auth::user()->role == "employee1")
                             <li class="nav-item">
                                 <a href="{{route('attendance.data')}}" class="nav-link">
                                     <i class="nav-icon fas fa-user-clock"></i>

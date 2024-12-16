@@ -56,9 +56,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/calender', [HomeController::class, 'calender'])->name('calender');
 });
-//Route::get('/test', function () {
-//     return view('test');
-// });
+Route::get('/test', function () {
+    return view('test');
+});
 Auth::routes();
 Route::post('logout', [HomeController::class, 'logout'])->name('logout');
 

@@ -1,5 +1,20 @@
 @extends('index')
 @section('title', 'Leave Type')
+@section('css')
+<style>
+    /* Normal button styles */
+    .custom-btn {
+        background-color: #007bff; /* Default button color */
+        border-radius:0px !important;
+    }
+
+    /* Hover effect */
+    .custom-btn:hover {
+        background-color: #DEE2E8; /* Change background on hover */
+        border-color: #DEE2E8; /* Optional: change border color on hover */
+    }
+</style>
+@endsection
 @section('content')
 <div class="row">
     <div class="col-12">
@@ -46,13 +61,13 @@
                                         <i class="fas fa-ellipsis-h"></i>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                        <button type="button" class="btn btn-block text-left" onclick="openEditModal({{ $leave }})" data-toggle="modal" data-target="#modal-default">
+                                        <button type="button" class="btn btn-block text-left custom-btn" onclick="openEditModal({{ $leave }})" data-toggle="modal" data-target="#modal-default">
                                             <i class="fas fa-edit"></i> Edit
                                         </button>
                                         <form action="{{ route('leaves.destroy', $leave->id_leave) }}" method="POST" style="display: inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-block text-left" onclick="return confirm('Are you sure you want to delete this data?');">
+                                            <button type="submit" class="btn btn-block text-left custom-btn" onclick="return confirm('Are you sure you want to delete this data?');">
                                                 <i class="fas fa-trash mr-2"></i>Delete Data
                                             </button>
                                         </form>

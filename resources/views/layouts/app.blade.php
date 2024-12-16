@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdminLTE 3 | Dashboard</title>
+    <title>AntTendance</title>
     @yield('css')
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/logo/logo.png')}}">
+
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">

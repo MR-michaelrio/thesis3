@@ -8,7 +8,7 @@
         /* Container for the iframe with clipping */
         .iframe-container {
             width: 450px;  /* Set the width to match the desired size */
-            height: 790px; /* Set the height to match the desired size */
+            height: 850px;
             overflow: hidden; /* Hide content outside the iframe container */
             position: relative; /* Ensures content inside iframe is positioned correctly */
         }
@@ -19,7 +19,7 @@
             height: 100%;
             border: none; /* Remove border */
             position: absolute; /* Position content inside iframe */
-            top: -190px; /* Adjust this value to crop content vertically */
+            top: -80px;
         }
     </style>
 </head>
