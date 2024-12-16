@@ -72,7 +72,7 @@
                             style="color:white"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="{{route('home')}}" class="nav-link" style="color:white; text-transform: capitalize;">{{Auth::user()->role}} Panel</a>
+                    <a href="{{route('home')}}" class="nav-link" style="color:white; text-transform: capitalize;">{{Auth::user()->role}} Panel | SIMULASI</a>
                 </li>
             </ul>
 
