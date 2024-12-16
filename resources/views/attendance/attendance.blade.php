@@ -190,6 +190,7 @@
                         console.log("Hasil:", response.data.detections[0].confidence);
                         const faceNames = response.data.face_names || [];
                         const faceConfidence = response.data.detections[0].confidence || [];
+                        console.log("hasil:",faceConfidence);
                         if(faceNames[0] === "Unknown"){
                             console.log("Wajah tidak dikenali, mencoba lagi...");
                             return;
