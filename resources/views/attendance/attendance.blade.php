@@ -30,17 +30,14 @@
                         <input type="text" class="form-control" id="employename" placeholder="Enter Name">
                     </div>
                     <div class="form-group">
-                        <label for="employeemail">Employee Email</label>
-                        <input type="email" class="form-control" id="employeemail" placeholder="Enter email">
-                    </div>
-                    <div class="form-group">
-                    <label>Clock</label>
-                        <div class="input-group date" id="reservationdatetime" data-target-input="nearest">
+                        <label>Clock</label>
+                        <!-- <div class="input-group date" id="reservationdatetime" data-target-input="nearest">
                             <input type="text" class="form-control datetimepicker-input" data-target="#reservationdatetime">
                             <div class="input-group-append" data-target="#reservationdatetime" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>
-                        </div>
+                        </div> -->
+                        <input type="text" class="form-control" id="time" placeholder="Enter Time">
                     </div>
                     <button type="submit" class="btn btn-block btn-primary btn-sm">Add Manually</button>
                     <a href="{{route('attendance.create')}}" class="btn btn-block btn-sm" style="color:#007bff">Register Face Recognition here!</a>
@@ -184,7 +181,6 @@
             canvas.toBlob((blob) => {
                 const formData = new FormData();
                 formData.append('image', blob, 'frame.jpg');
-
                 axios.post('{{route("recognize")}}', formData)
                     .then(response => {
                         console.log("Hasil:", response.data.detections[0].confidence);
