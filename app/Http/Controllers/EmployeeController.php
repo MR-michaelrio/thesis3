@@ -215,26 +215,28 @@ class EmployeeController extends Controller
             ]);
         
             $user = User::findOrFail($employee->id_users);
-        
             if(Auth::user()->role == "admin"){
                 // Only update email if it's provided and not the same as the current one
                 if ($request->has('email') && $request->email != $user->email) {
                     $user->email = $request->input('email');
                 }
-
+                if($request->password !== null){
                 // Only update password if provided
-                if ($request->has('password')) {
-                    $user->password = Hash::make($request->input('password'));
+                    if ($request->has('password')) {
+                        $user->password = Hash::make($request->input('password'));
+                    }
                 }
             }else{
-                if (!Hash::check($request->old_password, $user->password)) {
-                    return redirect()->back()->with('error', 'Old password is incorrect.');
+                if($request->password !== null){
+                    if (!Hash::check($request->old_password, $user->password)) {
+                        return redirect()->back()->with('error', 'Old password is incorrect.');
+                    }
+                    // Update password
+                    $user->password = Hash::make($request->new_password);
+                    $user->save();
                 }
-                // Update password
-                $user->password = Hash::make($request->new_password);
-                $user->save();
             }
-
+        
             $user->identification_number = $request->identification_number;
             // Save the user changes
             $user->save();
