@@ -80,7 +80,7 @@
 
     startCamera();
 
-    function showPopup(name) {
+    function showPopup(name,confidence) {
         if (isPopupDisplayed) return; // Prevent multiple popups
         isPopupDisplayed = true; // Set flag
         stopCamera(); // Stop camera
@@ -110,6 +110,7 @@
         popup.innerHTML = `
             <h4>Wajah Terdeteksi</h4>
             <p>${name} telah dikenali!</p>
+            <p>${confidence} akurasi!</p>
             <button id="confirmButton" style="margin-top: 10px; padding: 5px 10px; background: #007bff; color: white; border: none; border-radius: 5px;">Setuju</button>
         `;
 
@@ -186,14 +187,15 @@
 
                 axios.post('{{route("recognize")}}', formData)
                     .then(response => {
-                        console.log("Hasil:", response.data);
+                        console.log("Hasil:", response.data.detections[0].confidence);
                         const faceNames = response.data.face_names || [];
+                        const faceConfidence = response.data.detections[0].confidence || [];
                         if(faceNames[0] === "Unknown"){
                             console.log("Wajah tidak dikenali, mencoba lagi...");
                             return;
                         }else{
                             if (faceNames.length > 0) {
-                                showPopup(faceNames[0]); // Show popup with the first detected name
+                                showPopup(faceNames[0],faceConfidence); // Show popup with the first detected name
                             }
                         }
                     })
