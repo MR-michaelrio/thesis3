@@ -27,10 +27,10 @@ class RequestOvertime extends Model
     ];
 
     // Add relationships if needed
-    // public function employee()
-    // {
-    //     return $this->belongsTo(Employee::class, 'id_employee');
-    // }
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'id_employee', 'id_employee');
+    }
 
     // public function approver()
     // {
