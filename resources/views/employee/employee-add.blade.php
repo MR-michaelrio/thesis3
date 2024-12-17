@@ -1,13 +1,13 @@
 @extends('index')
 @section('title', 'Personal Information')
 @section('content')
-<form method="POST" action="{{ route('employee.store') }}" enctype="multipart/form-data">
+<form method="POST" action="{{ route('employee.store') }}" enctype="multipart/form-data" id="employeeForm">
     @csrf
     <div class="row">
         <section class="col-12 mt-4 mb-4">
             <div class="text-center float-right">
                 <a href="{{ route('employee.index') }}" class="btn btn-default" onclick="return confirm('Are you sure?');">Discard</a>
-                <button type="submit" class="btn btn-primary mr-2">Add</button>
+                <button type="button" class="btn btn-primary mr-2" onclick="validatePasswordAndSubmit()">Add</button>
             </div>
         </section>
         <section class="col-lg-6 connectedSortable">
@@ -255,6 +255,7 @@
                             <label for="exampleInputPassword1">Password<span style="color:red"> *</span></label>
                             <input type="password" class="form-control" name="password" id="exampleInputPassword1"
                                 placeholder="Enter Password" required>
+                            <small id="passwordHelp" class="text-danger" style="display: none;">Password must be at least 8 characters long and include at least 1 number.</small>
                         </div>
                     </div>
                     <!-- /.card-body -->
@@ -278,34 +279,32 @@
                             <input type="text" class="form-control" placeholder="Enter Employee Id">
                         </div> -->
                         <div class="form-group">
-    <label for="department">Department<span style="color:red"> *</span></label>
-    <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" name="id_department" id="department" tabindex="-1" required>
-        <option disabled selected>Select</option>    
-        @foreach($department as $d)
-            <option value="{{$d->id_department}}">{{$d->department_name}}</option>
-        @endforeach
-    </select>
-</div>
+                            <label for="department">Department<span style="color:red"> *</span></label>
+                            <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" name="id_department" id="department" tabindex="-1" required>
+                                <option disabled selected>Select</option>    
+                                @foreach($department as $d)
+                                    <option value="{{$d->id_department}}">{{$d->department_name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
-<div class="form-group">
-    <label for="department_position">Position Title<span style="color:red"> *</span></label>
-    <select class="form-control select2" style="width: 100%;" name="id_department_position" id="department_position" tabindex="-1" required>
-        <option disabled selected>Select</option>  
-    </select>
-</div>
+                        <div class="form-group">
+                            <label for="department_position">Position Title<span style="color:red"> *</span></label>
+                            <select class="form-control select2" style="width: 100%;" name="id_department_position" id="department_position" tabindex="-1" required>
+                                <option disabled selected>Select</option>  
+                            </select>
+                        </div>
 
-<div class="form-group">
-    <label for="gender">Reports to</label>
-    <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" name="supervisor" data-select2-id="3" tabindex="-1" aria-hidden="true">
-        <option disabled selected>Select</option>    
-        <option value="NONE">NONE</option>
-        @foreach($user as $d)
-            <option value="{{$d->id_user}}">{{$d->name}}</option>
-        @endforeach
-    </select>
-</div>
-
-
+                        <div class="form-group">
+                            <label for="gender">Reports to</label>
+                            <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" name="supervisor" data-select2-id="3" tabindex="-1" aria-hidden="true">
+                                <option disabled selected>Select</option>    
+                                <option value="NONE">NONE</option>
+                                @foreach($user as $d)
+                                    <option value="{{$d->id_user}}">{{$d->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
                         <hr style="border: '1px solid gray'">
 
@@ -538,6 +537,23 @@
 @endsection
 
 @section('scripts')
+<script>
+    function validatePasswordAndSubmit() {
+        const password = document.getElementById('exampleInputPassword1').value;
+        const passwordHelp = document.getElementById('passwordHelp');
+        
+        // Regular Expression: At least 8 characters and at least 1 number
+        const passwordRegex = /^(?=.*\d).{8,}$/;
+
+        if (!passwordRegex.test(password)) {
+            passwordHelp.style.display = 'block'; // Show error message
+        } else {
+            passwordHelp.style.display = 'none'; // Hide error message
+            // Submit the form if password is valid
+            document.getElementById('employeeForm').submit();
+        }
+    }
+</script>
 <script>
 $(document).ready(function() {
     // Trigger when the department is changed
