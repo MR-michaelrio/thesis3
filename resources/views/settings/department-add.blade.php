@@ -113,7 +113,11 @@
             // Append to the position list
             let positionList = document.getElementById('position-list');
             let newPosition = document.createElement('li');
-            newPosition.innerHTML = `${title} - ${description}`;
+            newPosition.innerHTML = `${title} - ${description} 
+                                      <button type="button" class="btn btn-warning btn-sm edit-position">Edit</button>
+                                      <button type="button" class="btn btn-danger btn-sm delete-position">Delete</button>`;
+            
+            newPosition.style.paddingBottom = '5px';
             positionList.appendChild(newPosition);
 
             // Clear the input fields
@@ -121,6 +125,43 @@
             document.getElementById('position_description').value = '';
             
             // Update hidden input with JSON string of position data
+            document.getElementById('position-data').value = JSON.stringify(positionData);
+        }
+    });
+
+    // Function to delete position from the list
+    document.getElementById('position-list').addEventListener('click', function (e) {
+        if (e.target && e.target.classList.contains('delete-position')) {
+            // Find the position index
+            let positionItem = e.target.parentElement;
+            let positionIndex = Array.from(positionItem.parentElement.children).indexOf(positionItem);
+
+            // Remove from the position data array
+            positionData.splice(positionIndex, 1);
+
+            // Remove the position from the list
+            positionItem.remove();
+
+            // Update hidden input with the new position data
+            document.getElementById('position-data').value = JSON.stringify(positionData);
+        }
+        // Function to edit position
+        if (e.target && e.target.classList.contains('edit-position')) {
+            let positionItem = e.target.parentElement;
+            let positionIndex = Array.from(positionItem.parentElement.children).indexOf(positionItem);
+
+            // Populate input fields with the current position data
+            let position = positionData[positionIndex];
+            document.getElementById('position_title').value = position.title;
+            document.getElementById('position_description').value = position.description;
+
+            // Remove the position from the list
+            positionItem.remove();
+
+            // Remove from the position data array
+            positionData.splice(positionIndex, 1);
+
+            // Update hidden input with the new position data
             document.getElementById('position-data').value = JSON.stringify(positionData);
         }
     });

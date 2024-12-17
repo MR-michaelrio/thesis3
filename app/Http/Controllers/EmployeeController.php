@@ -196,8 +196,6 @@ class EmployeeController extends Controller
         }
     }
 
-
-
     public function edit($id)
     {
         if (Auth::user()->role != "admin" && Auth::user()->employee->id_employee != $id) {

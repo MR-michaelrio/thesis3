@@ -128,4 +128,44 @@ class DepartmentController extends Controller
         return response()->json(['message' => 'Position updated successfully', 'position' => $position,"success"=>200]);
     }
 
+    public function deleteposition(Request $request)
+    {
+
+        $position = DepartmentPosition::findOrFail($request->id);
+        if ($position) {
+            $position->delete();
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false]);
+    }
+
+    public function storePosition(Request $request)
+    {
+    
+        // Simpan posisi ke database
+        $position = DepartmentPosition::create([
+            'position_title' => $request->input('title'),
+            'position_description' => $request->input('description'),
+            'id_department' => $request->input('id_department'),  // Gantilah dengan ID departemen sesuai dengan kebutuhan Anda
+            'id_company' => Auth::user()->id_company, // Mengambil ID perusahaan dari user yang sedang login
+        ]);
+    
+        // Return response JSON
+        return response()->json([
+            'success' => true,
+            'position' => $position
+        ]);
+    }
+
+    public function getPositions($id_department)
+    {
+        $positions = DepartmentPosition::where("id_company", Auth::user()->id_company) // Correct the typo here
+                                    ->where("id_department", $id_department)
+                                    ->get();
+        return response()->json($positions);
+    }
+
+
+
 }

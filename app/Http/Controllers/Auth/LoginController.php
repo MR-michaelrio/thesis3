@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Models\Employee;
 
 class LoginController extends Controller
 {
@@ -36,5 +37,18 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
+    }
+
+
+    protected function authenticated($request, $user)
+    {
+        $employee = Employee::where('id_users', $user->id_user)->first();
+
+        if ($employee && $employee->status === 'inactive') {
+            auth()->logout();
+            return redirect()->route('login')->withErrors(['error' => 'Your account is not active.']);
+        }
+
+        return redirect()->intended($this->redirectTo);
     }
 }

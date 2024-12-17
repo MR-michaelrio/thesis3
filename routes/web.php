@@ -23,6 +23,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('department', DepartmentController::class);
     Route::post('/positions/update/', [DepartmentController::class, 'updateposition'])->name('updateposition');
+    Route::post('/position/delete/', [DepartmentController::class, 'deleteposition'])->name('deleteposition');
+    Route::post('/store-position', [DepartmentController::class, 'storePosition'])->name('storeposition');
+    Route::get('/positions/{id_department}', [DepartmentController::class, 'getPositions'])->name('getpositions');
 
     Route::resource('requestleave', RequestLeaveController::class);
     Route::put('/requestleave/update', [RequestLeaveController::class, 'update'])->name('requestleave.update');

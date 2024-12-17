@@ -49,16 +49,7 @@
 
                     <div class="mb-3">
                         <label for="position_list" class="form-label">Position Title List</label>
-                        <ul id="position-list">
-                            @foreach($position as $positions)
-                                <li class="m-2">
-                                    {{ $positions->position_title }} - {{ $positions->position_description }} - {{$positions->id_department_position}}
-                                    <button type="button" class="btn btn-warning btn-sm edit-position" data-id="{{ $positions->id_department_position }}" data-title="{{ $positions->position_title }}" data-description="{{ $positions->position_description }}">
-                                        Edit
-                                    </button>
-                                </li>
-                                
-                            @endforeach                        
+                        <ul id="position-list">                   
                         </ul>
                         <input type="hidden" id="position-data" name="positions">
                     </div>
@@ -95,8 +86,8 @@
                 <button type="button" class="btn btn-primary" id="add-position">
                     Add
                 </button>&nbsp;
-                <button type="button" class="btn btn-warning" id="update-position">
-                    Update Position 
+                <button type="button" class="btn bg-gradient-info" style="display:none" id="update-position">
+                    <i class="fas fa-sync"></i> Update
                 </button>
             </div>
         </div>
@@ -108,77 +99,141 @@
 
 @section('scripts')
 <script>
-    let positionData = @json($positions);
-    document.getElementById('add-position').addEventListener('click', function () {
-    const title = document.getElementById('position_title').value;
-    const description = document.getElementById('position_description').value;
-    const positionDataInput = document.getElementById('position-data');
-    const positionList = document.getElementById('position-list');
+    // Extract id_department from the URL
+    const urlPath = window.location.pathname;
+    const id_department = urlPath.split('/')[2]; 
 
-    if (title && description) {
-        // Tambahkan posisi baru ke daftar
-        const newPosition = { id_position: null, title, description };
-        const positions = JSON.parse(positionDataInput.value || '[]');
-        positions.push(newPosition);
+    // Fetch positions on page load
+    window.onload = fetchPositions;
 
-        // Perbarui hidden input
-        positionDataInput.value = JSON.stringify(positions);
-
-        // Tambahkan ke list
-        const li = document.createElement('li');
-        li.innerHTML = `
-            ${title} - ${description}
-            <button type="button" 
-                    class="btn btn-warning btn-sm edit-position" 
-                    data-id="${newPosition.id_position}" 
-                    data-title="${title}" 
-                    data-description="${description}">
-                Edit
-            </button>
-        `;
-        positionList.appendChild(li);
-
-        // Kosongkan input
-        document.getElementById('position_title').value = '';
-        document.getElementById('position_description').value = '';
-    }
-});
-
-    // Edit button functionality
     document.addEventListener('click', function(event) {
+        // Edit position functionality
         if (event.target.classList.contains('edit-position')) {
             const positionId = event.target.getAttribute('data-id');
             const positionTitle = event.target.getAttribute('data-title');
             const positionDescription = event.target.getAttribute('data-description');
 
-            // Populate form fields with the selected position data
+            // Populate form fields with selected position data
             document.getElementById('position_title').value = positionTitle;
             document.getElementById('position_description').value = positionDescription;
             document.getElementById('position_id').value = positionId;
 
-            // Update hidden input to include the edited position
-            let updatedPositions = JSON.parse(document.getElementById('position-data').value);
-            updatedPositions = updatedPositions.map(function(position) {
-                if (position.id_position == positionId) {
-                    position.position_title = positionTitle;
-                    position.position_description = positionDescription;
-                    position.id_position = positionId;
-                    
-                }
-                return position;
-            });
-
-            document.getElementById('position-data').value = JSON.stringify(updatedPositions);
+            // Show "Update Position" button and hide "Add" button
+            document.getElementById('update-position').style.display = 'inline-block';
+            document.getElementById('add-position').style.display = 'none';
         }
     });
 
+    // Fetch Positions function
+    function fetchPositions() {
+        fetch(`{{ route('getpositions', ['id_department' => ':id_department']) }}`.replace(':id_department', id_department))
+            .then(response => response.json())
+            .then(positions => {
+                const positionList = document.getElementById('position-list');
+                positionList.innerHTML = ''; // Clear the existing list
+                positions.forEach(position => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        ${position.position_title} - ${position.position_description}
+                        <button type="button" class="btn btn-warning btn-sm edit-position" data-id="${position.id_department_position}" data-title="${position.position_title}" data-description="${position.position_description}">
+                            Edit
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm delete-position" data-id="${position.id_department_position}">
+                            Delete
+                        </button>
+                    `;
+                    li.style.paddingBottom = '5px';
+                    positionList.appendChild(li);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error fetching positions.');
+            });
+    }
+
+    // Delete position functionality
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('delete-position')) {
+            const positionId = event.target.getAttribute('data-id');
+            
+            // Confirm deletion
+            if (confirm('Are you sure you want to delete this position?')) {
+                // Send AJAX request to delete position
+                fetch("{{ route('deleteposition') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}" // CSRF Token for protection
+                    },
+                    body: JSON.stringify({
+                        id: positionId
+                    })
+                })
+                .then(response => response.json())
+                .then(response => {
+                    if (response.success) {
+                        // On success, refresh the position list
+                        fetchPositions();
+                        alert('Position deleted successfully!');
+                    } else {
+                        alert('Failed to delete position.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error deleting the position.');
+                });
+            }
+        }
+    });
+
+    // Add position functionality
+    document.getElementById('add-position').addEventListener('click', function () {
+        const title = document.getElementById('position_title').value;
+        const description = document.getElementById('position_description').value;
+        
+        if (title && description) {
+            // Send new position data to backend to store in the database
+            fetch("{{ route('storeposition') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}" // CSRF Token for protection
+                },
+                body: JSON.stringify({
+                    title: title,
+                    description: description,
+                    id_department: id_department
+                })
+            })
+            .then(response => response.json())
+            .then(response => {
+                if (response.success) {
+                    // On success, refresh the position list
+                    fetchPositions();
+                    // Clear input fields
+                    document.getElementById('position_title').value = '';
+                    document.getElementById('position_description').value = '';
+                    alert('Position added successfully!');
+                } else {
+                    alert('Failed to add position.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error adding the position.');
+            });
+        } else {
+            alert('Please fill out both title and description!');
+        }
+    });
+
+    // Update position functionality
     document.getElementById('update-position').addEventListener('click', function() {
         const positionTitle = document.getElementById('position_title').value;
         const positionDescription = document.getElementById('position_description').value;
-        const positionId = document.getElementById('position_id').value; // Get the ID of the position being edited
-        console.log("positionTitle",positionTitle);
-        console.log("positionDescription",positionDescription);
-        console.log("positionId",positionId);
+        const positionId = document.getElementById('position_id').value;
 
         if (positionTitle && positionDescription && positionId) {
             // Prepare data to send in the request
@@ -188,6 +243,7 @@
                 description: positionDescription,
                 _token: "{{ csrf_token() }}" // CSRF Token for protection
             };
+
             // Send AJAX request to update position
             fetch("{{ route('updateposition') }}", {
                 method: 'POST',
@@ -199,8 +255,13 @@
             .then(response => response.json())
             .then(response => {
                 if (response.success) {
+                    fetchPositions(); // Refresh positions
                     alert('Position updated successfully!');
-                    location.reload(); // Refresh the page
+                    document.getElementById('position_title').value = '';
+                    document.getElementById('position_description').value = '';
+                    document.getElementById('position_id').value = '';
+                    document.getElementById('update-position').style.display = 'none';
+                    document.getElementById('add-position').style.display = 'inline-block';
                 } else {
                     alert('Failed to update position.');
                 }
@@ -213,6 +274,5 @@
             alert('Please fill out both fields to update the position.');
         }
     });
-
 </script>
 @endsection
