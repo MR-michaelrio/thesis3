@@ -1,25 +1,5 @@
 @extends('index')
 @section('title', 'Personal Information')
-@section('css')
-<style>
-    input:invalid {
-    border-color: red;
-}
-
-input:valid {
-    border-color: green;
-}
-
-input:required:invalid {
-    background-color: #fdd;
-}
-
-input:required:valid {
-    background-color: #c8e6c9;
-}
-
-</style>
-@endsection
 @section('content')
 <form method="POST" action="{{ route('employee.store') }}" enctype="multipart/form-data" id="employeeForm">
     @csrf
@@ -62,8 +42,13 @@ input:required:valid {
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="identification_number">Identification Number <span style="color:red"> *</span></label>
-                                    <input type="text" class="form-control" id="identification_number" name="identification_number"
+                                    <input type="text" class="form-control @error('identification_number') is-invalid @enderror" value="{{ old('identification_number') }}" id="identification_number" name="identification_number"
                                         placeholder="Enter Identification Number" required>
+                                    @error('identification_number')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
