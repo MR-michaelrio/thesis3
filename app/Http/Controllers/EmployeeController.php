@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class EmployeeController extends Controller
 {
@@ -88,18 +89,23 @@ class EmployeeController extends Controller
     }
 
 
+
     public function store(Request $request)
     {
+        DB::beginTransaction();
+
         try {
-            // Buat data di tabel employee_address
+            $validated = $request->validate([
+                'password' => 'required|string|min:8|regex:/[0-9]/',
+            ]);
+            // Buat data di tabel address_employee
             $address = AddressEmployee::create([
                 'country' => $request['country'],
                 'postal_code' => $request['postal_code'],
                 'full_address' => $request['full_address'],
                 'id_company' => Auth::user()->id_company,
             ]);
-            
-        
+
             // Buat data di tabel user
             $user = User::create([
                 'name' => $request->input('first_name') . ' ' . $request->input('last_name'),
@@ -118,10 +124,10 @@ class EmployeeController extends Controller
                 'id_company' => Auth::user()->id_company,
                 'identification_number' => $request->identification_number
             ]);
-        
+
             // Format tanggal lahir
             $dateOfBirth = Carbon::createFromFormat('d/m/Y', $request->date_of_birth)->format('Y-m-d');
-        
+
             // Persiapkan data untuk tabel employee
             $employeeData = [
                 'profile_picture' => null,
@@ -140,28 +146,22 @@ class EmployeeController extends Controller
             ];
 
             if ($request->hasFile('profile_picture')) {
-                // Get the file from the request
                 $profile_picture = $request->file('profile_picture');
-                
-                // Generate the file name (you can add a timestamp to avoid conflicts)
                 $profilePictureName = time() . '-' . $profile_picture->getClientOriginalName();
-                
-                // Move the file to the public/img directory
                 $profile_picture->move(public_path('profile_picture'), $profilePictureName);
-    
-                // Update the company's logo with the new file name
                 $employeeData['profile_picture'] = $profilePictureName;
             }
+
             // Buat data di tabel employee
             $employee = Employee::create($employeeData);
-            
+
             if ($request->has('leaves')) {
                 foreach ($request->input('leaves') as $leaveId) {
                     AssignLeave::create([
                         'id_employee' => $employee->id_employee,
                         'id_leave' => $leaveId,
-                        'quota' => 0, // Set this to the appropriate value
-                        'remaining' => 0, // Set this to the appropriate value
+                        'quota' => 0,
+                        'remaining' => 0,
                         'id_company' => Auth::user()->id_company,
                     ]);
                 }
@@ -181,18 +181,21 @@ class EmployeeController extends Controller
             foreach ($days as $day) {
                 AssignShift::create([
                     'id_employee' => $employee->id_employee,
-                    'id_shift' => $request->$day ?? null, // Jika kosong, biarkan null
+                    'id_shift' => $request->$day ?? null,
                     'day' => $dayMapping[$day],
                 ]);
             }
 
-            // Redirect ke route employee.index dengan pesan sukses
+            DB::commit();
             return redirect()->route('employee.index')->with('success', 'Employee created successfully!');
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to create employee: ' . $e->getMessage());
+            DB::rollBack();
+            // return back()->withInput()->withErrors($validator);
+
+            return back()->withInput()->with('error', $e->getMessage());
         }
-        
     }
+
 
 
     public function edit($id)

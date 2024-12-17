@@ -67,7 +67,7 @@
                             <!-- Password Input -->
                             <div class="form-group mb-4">
                                 <div class="input-group">
-                                    <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Password">
+                                    <input type="password" id="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Password">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
                                             <span class="fas fa-lock"></span>

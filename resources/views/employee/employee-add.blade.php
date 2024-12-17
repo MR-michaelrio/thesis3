@@ -1,13 +1,26 @@
 @extends('index')
 @section('title', 'Personal Information')
 @section('content')
-<form method="POST" action="{{ route('employee.store') }}" enctype="multipart/form-data" id="employeeForm">
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
+
+<form method="POST" action="{{ route('employee.store') }}" enctype="multipart/form-data" >
     @csrf
     <div class="row">
         <section class="col-12 mt-4 mb-4">
             <div class="text-center float-right">
                 <a href="{{ route('employee.index') }}" class="btn btn-default" onclick="return confirm('Are you sure?');">Discard</a>
-                <button type="button" class="btn btn-primary mr-2" onclick="validatePasswordAndSubmit()">Add</button>
+                <button type="submit" class="btn btn-primary mr-2">Add</button>
             </div>
         </section>
         <section class="col-lg-6 connectedSortable">
@@ -42,13 +55,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="identification_number">Identification Number <span style="color:red"> *</span></label>
-                                    <input type="text" class="form-control @error('identification_number') is-invalid @enderror" value="{{ old('identification_number') }}" id="identification_number" name="identification_number"
-                                        placeholder="Enter Identification Number" required>
-                                    @error('identification_number')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
+                                    <input type="text" class="form-control" value="{{ old('identification_number') }}" id="identification_number" name="identification_number" placeholder="Enter Identification Number" required>
                                 </div>
                             </div>
                         </div>
@@ -58,7 +65,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="firstName">First Name <span style="color:red"> *</span></label>
-                                    <input type="text" class="form-control" id="firstName" name="first_name"
+                                    <input type="text" class="form-control" value="{{ old('first_name') }}" id="firstName" name="first_name"
                                         placeholder="Enter first name" required>
                                 </div>
                             </div>
@@ -66,7 +73,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="lastName">Last Name <span style="color:red"> *</span></label>
-                                    <input type="text" class="form-control" id="lastName" name="last_name"
+                                    <input type="text" class="form-control" id="lastName" value="{{ old('last_name') }}" name="last_name"
                                         placeholder="Enter last name" required>
                                 </div>
                             </div>
@@ -126,7 +133,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="placeOfBirth">Place of Birth <span style="color:red"> *</span></label>
-                                    <input type="text" class="form-control" id="placeOfBirth" name="place_of_birth"
+                                    <input type="text" class="form-control" id="placeOfBirth" value="{{ old('place_of_birth') }}" name="place_of_birth"
                                         placeholder="Enter place of birth" required>
                                 </div>
                             </div>
@@ -167,21 +174,21 @@
                                 <div class="form-group">
                                     <label for="fullAddress">Full Address <span style="color:red"> *</span></label>
                                     <textarea class="form-control" id="fullAddress" name="full_address"
-                                        placeholder="Enter full address" required></textarea>
+                                        placeholder="Enter full address" required>{{ old('full_address') }}</textarea>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="country">Country <span style="color:red"> *</span></label>
                                     <input type="text" class="form-control" id="country" name="country"
-                                        placeholder="Enter country" required>
+                                        placeholder="Enter country" required value="{{ old('country') }}">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="postalCode">Postal Code</label>
                                     <input type="text" class="form-control" id="postalCode" name="postal_code"
-                                        placeholder="Enter postal code">
+                                        placeholder="Enter postal code" value="{{ old('postal_code') }}">
                                 </div>
                             </div>
                         </div>
@@ -207,28 +214,28 @@
                                 <div class="form-group">
                                     <label for="phone">Phone <span style="color:red"> *</span></label>
                                     <input type="text" class="form-control" id="phone" name="phone"
-                                        placeholder="Enter phone" required>
+                                        placeholder="Enter phone" required value="{{ old('phone') }}">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="emergency_name">Emergency Name <span style="color:red"> *</span></label>
                                     <input type="text" class="form-control" id="emergency_name" name="emergency_name"
-                                        placeholder="Enter Emergency Name" required>
+                                        placeholder="Enter Emergency Name" required value="{{ old('emergency_name') }}">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="emergency_relation">Emergency Relation <span style="color:red"> *</span></label>
                                     <input type="text" class="form-control" id="emergency_relation" name="emergency_relation"
-                                        placeholder="Enter Emergency Relation" required>
+                                        placeholder="Enter Emergency Relation" required value="{{ old('emergency_relation') }}">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="emergency_phone">Emergency Phone <span style="color:red"> *</span></label>
                                     <input type="text" class="form-control" id="emergency_phone" name="emergency_phone"
-                                        placeholder="Enter Emergency Phone" required>
+                                        placeholder="Enter Emergency Phone" required value="{{ old('emergency_phone') }}">
                                 </div>
                             </div>
                         </div>
@@ -254,13 +261,12 @@
                     <div class="card-body" style="display: block;">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email address<span style="color:red"> *</span></label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" name="email" placeholder="Enter email" required>
+                            <input type="email" class="form-control" value="{{ old('email') }}" id="exampleInputEmail1" name="email" placeholder="Enter email" required>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Password<span style="color:red"> *</span></label>
-                            <input type="password" class="form-control" name="password" id="exampleInputPassword1"
+                            <label for="password">Password<span style="color:red"> *</span></label>
+                            <input type="password" class="form-control" name="password" id="password"
                                 placeholder="Enter Password" required>
-                            <small id="passwordHelp" class="text-danger" style="display: none;">Password must be at least 8 characters long and include at least 1 number.</small>
                         </div>
                     </div>
                     <!-- /.card-body -->
@@ -319,7 +325,7 @@
                                     <label for="dateOfBirth">Start Date<span style="color:red"> *</span></label>
                                     <div class="input-group date" id="reservationdate2" data-target-input="nearest">
                                         <input type="text" class="form-control datetimepicker-input"
-                                            placeholder="DD/MM/YYYY" name="start_work" data-target="#reservationdate2" required>
+                                            placeholder="DD/MM/YYYY" name="start_work" data-target="#reservationdate2" value="{{ old('start_work') }}" required>
                                         <div class="input-group-append" data-target="#reservationdate2"
                                             data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -332,7 +338,7 @@
                                     <label for="dateOfBirth">Contract End Date</label>
                                     <div class="input-group date" id="reservationdate3" data-target-input="nearest">
                                         <input type="text" class="form-control datetimepicker-input"
-                                            placeholder="DD/MM/YYYY" name="stop_work" data-target="#reservationdate3">
+                                            placeholder="DD/MM/YYYY" name="stop_work" value="{{ old('stop_work') }}" data-target="#reservationdate3">
                                         <div class="input-group-append" data-target="#reservationdate3"
                                             data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -542,23 +548,6 @@
 @endsection
 
 @section('scripts')
-<script>
-    function validatePasswordAndSubmit() {
-        const password = document.getElementById('exampleInputPassword1').value;
-        const passwordHelp = document.getElementById('passwordHelp');
-        
-        // Regular Expression: At least 8 characters and at least 1 number
-        const passwordRegex = /^(?=.*\d).{8,}$/;
-
-        if (!passwordRegex.test(password)) {
-            passwordHelp.style.display = 'block'; // Show error message
-        } else {
-            passwordHelp.style.display = 'none'; // Hide error message
-            // Submit the form if password is valid
-            document.getElementById('employeeForm').submit();
-        }
-    }
-</script>
 <script>
 $(document).ready(function() {
     // Trigger when the department is changed
