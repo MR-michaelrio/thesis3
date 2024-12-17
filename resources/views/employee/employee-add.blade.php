@@ -1,5 +1,25 @@
 @extends('index')
 @section('title', 'Personal Information')
+@section('css')
+<style>
+    input:invalid {
+    border-color: red;
+}
+
+input:valid {
+    border-color: green;
+}
+
+input:required:invalid {
+    background-color: #fdd;
+}
+
+input:required:valid {
+    background-color: #c8e6c9;
+}
+
+</style>
+@endsection
 @section('content')
 <form method="POST" action="{{ route('employee.store') }}" enctype="multipart/form-data" id="employeeForm">
     @csrf
