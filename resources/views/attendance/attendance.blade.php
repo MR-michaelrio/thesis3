@@ -78,7 +78,7 @@
 
     startCamera();
 
-    function showPopup(name,confidence) {
+    function showPopup(name,faceid) {
         if (isPopupDisplayed) return; // Prevent multiple popups
         isPopupDisplayed = true; // Set flag
         stopCamera(); // Stop camera
@@ -159,7 +159,7 @@
             isPopupDisplayed = false; // Reset flag
 
                 axios.post("{{route('attendance.checkin')}}", {
-                    id_employee: name,
+                    id_employee: faceid,
                     attendance_date: attendanceDate,
                     clock: clock,
                 })
@@ -203,7 +203,7 @@
                 axios.post('{{route("recognize")}}', formData)
                     .then(response => {
                         console.log("Hasil:", response.data);
-                        const faceNames = response.data.face_names || [];
+                        const faceid = response.data.face_names;
                         const faceConfidence = response.data.detections[0].confidence || [];
                         if(faceNames[0] === "Unknown"){
                             return;
@@ -215,7 +215,7 @@
                                 document.getElementById('clock').value = new Date().toLocaleTimeString(); // Current time
                                 document.getElementById('time').value = new Date().toLocaleTimeString();
 
-                                showPopup(response.data.employees[0].full_name,faceConfidence); // Show popup with the first detected name
+                                showPopup(response.data.employees[0].full_name,faceid); // Show popup with the first detected name
                             }
                         }
                     })
