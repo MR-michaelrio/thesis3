@@ -215,7 +215,7 @@
                                 document.getElementById('clock').value = new Date().toLocaleTimeString(); // Current time
                                 document.getElementById('time').value = new Date().toLocaleTimeString();
 
-                                showPopup(response.data.employees[0].full_name,faceid); // Show popup with the first detected name
+                                showPopup(response.data.employees[0].full_name,response.data.face_names); // Show popup with the first detected name
                             }
                         }
                     })
