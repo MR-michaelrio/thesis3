@@ -41,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/employee/statusupdate/{id}', [EmployeeController::class, 'statusupdate'])->name('employee.statusupdate');
     Route::get('get-department-positions/{departmentId}', [EmployeeController::class, 'getDepartmentPositions'])->name('getDepartmentPositions');
     Route::get('/getSupervisorsByDepartment/{departmentId}', [EmployeeController::class, 'getSupervisorsByDepartment'])->name('getSupervisorsByDepartment');
+    Route::get('/get-department-details', [EmployeeController::class, 'getDepartmentDetails'])->name('getDepartmentDetails');
 
     Route::resource('role', RoleController::class);
 
@@ -66,7 +67,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/attendance-data', [AttendanceController::class, 'getAttendanceData'])->name('attendance-data');
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-    Route::get('/calender', [HomeController::class, 'calender'])->name('calender');
+    Route::get('/calendar', [HomeController::class, 'calendar'])->name('calendar');
 });
 Route::get('/test', function () {
     return Hash::make("123123123");

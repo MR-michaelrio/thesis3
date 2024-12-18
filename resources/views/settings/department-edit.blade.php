@@ -25,8 +25,11 @@
                         <label for="id_supervisor" class="form-label">Supervisor</label>
                         <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" name="id_supervisor" data-select2-id="2" tabindex="-1" aria-hidden="true">
                             <option disabled>Select</option>
+                            <option value="">NONE</option>    
                             @foreach($supervisors as $s)
-                                <option value="{{$s->id_employee}}">{{$s->full_name}}</option>
+                                <option value="{{$s->id_employee}}" {{ old('id_supervisor', $department->id_supervisor ?? null) == $s->id_employee ? 'selected' : '' }}>
+                                    {{$s->full_name}}
+                                </option>
                             @endforeach
                         </select>                
                     </div>
@@ -39,10 +42,13 @@
                         <div class="form-group">
                             <label for="department_parent" class="form-label">Department/Division Parent</label>
                             <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" name="id_parent" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                <option disabled>Select</option>    
-                                @foreach($departments as $d)
-                                    <option value="{{$d->id_department}}">{{$d->department_name}}</option>
-                                @endforeach
+                            <option disabled>Select</option>    
+                            <option value="">NONE</option>    
+                            @foreach($departments as $d)
+                                <option value="{{$d->id_department}}" {{ old('id_parent', $department->id_department ?? null) == $d->id_department ? 'selected' : '' }}>
+                                    {{$d->department_name}}
+                                </option>                            
+                            @endforeach
                             </select>
                         </div>
                     </div>
@@ -58,6 +64,7 @@
                 <button type="submit" class="btn bg-gradient-info">
                     <i class="fas fa-sync"></i> Update
                 </button>
+                <a href="{{ route('department.index') }}" class="btn btn-default ml-2" onclick="return confirm('Are you sure?');">Discard</a>
             </div>
             </form>
         </div>

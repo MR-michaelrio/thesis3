@@ -62,6 +62,7 @@
                 <button type="submit" class="btn bg-gradient-info">
                     <i class="fas fa-sync"></i> Update
                 </button>
+                <a href="{{ route('department.index') }}" class="btn btn-default ml-2" onclick="return confirm('Are you sure?');">Discard</a>
             </div>
             </form>
         </div>

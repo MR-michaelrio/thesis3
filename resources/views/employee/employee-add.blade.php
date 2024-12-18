@@ -1,11 +1,6 @@
 @extends('index')
 @section('title', 'Personal Information')
 @section('content')
-@if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
 
 @if(session('error'))
     <div class="alert alert-danger">
@@ -312,7 +307,7 @@
                                 <option disabled selected>Select</option>    
                                 <option value="NONE">NONE</option>
                                 @foreach($user as $d)
-                                    <option value="{{$d->id_user}}">{{$d->name}}</option>
+                                    <option value="{{$d->id_user}}">{{$d->employee->full_name}}</option>
                                 @endforeach
                             </select>
                         </div>

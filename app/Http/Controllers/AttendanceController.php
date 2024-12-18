@@ -30,26 +30,39 @@ class AttendanceController extends Controller
     public function data()
     {
         if (Auth::user()->role == "supervisor") {
-            $attendance = Attendance::with('employee.user', 'shift')
+            $overview = Attendance::with('employee.user', 'shift')
                 ->where('id_company', Auth::user()->id_company)
                 ->whereHas('employee.user', function($query) {
                     $query->where('id_department', Auth::user()->id_department);
                 })
                 ->orderBy('attendance_date', 'desc')
                 ->get();
+            
+            $summary = Attendance::with('employee.user', 'shift')
+                ->where('id_company', Auth::user()->id_company)
+                ->whereHas('employee.user', function($query) {
+                    $query->where('id_department', Auth::user()->id_department);
+                })
+                ->where('attendance_date', Carbon::now()->toDateString())
+                ->get();
         } else if (Auth::user()->role == "employee") {
-            $attendance = Attendance::with('employee.user', 'shift')
+            $overview = Attendance::with('employee.user', 'shift')
                 ->where('id_company', Auth::user()->id_company)
                 ->where('id_employee', Auth::user()->employee->id_employee)
                 ->orderBy('attendance_date', 'desc')
-                ->get();        
+                ->get();    
+            return view('attendance/attendance-data',compact("overview"));
         }else{
-            $attendance = Attendance::with('employee.user', 'shift')
+            $overview = Attendance::with('employee.user', 'shift')
                             ->where('id_company', Auth::user()->id_company)
                             ->orderBy('attendance_date', 'desc')  // Sort by 'attendance_date' in ascending order
                             ->get();
+            $summary = Attendance::with('employee.user', 'shift')
+                            ->where('id_company', Auth::user()->id_company)
+                            ->where('attendance_date', Carbon::now()->toDateString())
+                            ->get();
         }
-        return view('attendance/attendance-data',compact("attendance"));
+        return view('attendance/attendance-data',compact("overview","summary"));
     }
 
     /**
@@ -207,6 +220,7 @@ class AttendanceController extends Controller
         // Check if the current time is after the employee's clock-out time
         if ($currentTime->format('H:i:s') >= $assignshift->shift->clock_out) {
             if ($attendance) {
+                
                 $clockIn = Carbon::createFromFormat('H:i:s', $attendance->clock_in);
                 $clockOut = Carbon::createFromFormat('H:i:s', $attendance_clock);
                 $dailyTotal = $clockIn->diff($clockOut);

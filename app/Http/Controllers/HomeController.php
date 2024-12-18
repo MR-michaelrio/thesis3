@@ -81,9 +81,9 @@ class HomeController extends Controller
         return view('dashboard', compact('RequestLeave', 'RequestOvertime', 'Employee', 'assignshift', 'attendance'));
     }
 
-    public function calender()
+    public function calendar()
     {
-        return view('calender');
+        return view('calendar');
     }
 
     public function logout(Request $request)

@@ -153,10 +153,10 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ route('calender') }}" class="nav-link">
+                            <a href="{{ route('calendar') }}" class="nav-link">
                                 <i class="nav-icon far fa-calendar-alt"></i>
                                 <p>
-                                    Calender
+                                    Calendar
                                 </p>
                             </a>
                         </li>
@@ -489,13 +489,23 @@
                 "paging": true,
                 "searching": true,
                 "lengthChange": false,
-                "autoWidth": false,
                 "ordering": true,
                 "info": true,
-                "autoWidth": false,
+                "autoWidth": true,
                 "responsive": true,
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+                
+            $("#example2").DataTable({
+                "paging": true,
+                "searching": true,
+                "lengthChange": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true,
+                "responsive": true,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
 
             $("#AdminAccount").DataTable({
                 "paging": true,

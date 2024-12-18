@@ -27,7 +27,7 @@
                             <th>Date of Birth</th>
                             <th>Email</th>
                             <th>Position Title</th>
-                            <th>Status</th>
+                            @if(Auth::user()->role == "admin")<th>Status</th>@endif
                         </tr>
                     </thead>
                     <tbody>
@@ -40,6 +40,7 @@
                             <td @if(Auth::user()->role == "admin") onclick="window.location.href='{{ route('employee.edit', $employee->id_employee) }}'" style="cursor: pointer;" @endif>{{ $employee->date_of_birth }}</td>
                             <td @if(Auth::user()->role == "admin") onclick="window.location.href='{{ route('employee.edit', $employee->id_employee) }}'" style="cursor: pointer;" @endif>{{ optional($employee->user)->email ?? '-' }}</td>
                             <td @if(Auth::user()->role == "admin") onclick="window.location.href='{{ route('employee.edit', $employee->id_employee) }}'" style="cursor: pointer;" @endif>{{ $employee->user->position->position_title ?? '-' }}</td>
+                            @if(Auth::user()->role == "admin")
                             <td>
                                 <form action="{{ route('employee.statusupdate', $employee->id_employee) }}" method="post" id="statusForm{{ $employee->id_employee }}">
                                     @csrf
@@ -52,6 +53,7 @@
                                     </div>
                                 </form>
                             </td>
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>

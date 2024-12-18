@@ -66,6 +66,7 @@ class EmployeeController extends Controller
         // Fetch the department's supervisor(s) based on the selected department
         $department = Department::where("id_department",$departmentId)->first();
         $user = Employee::where("id_employee",$department->id_supervisor)->first();
+
         $supervisors = User::where("id_user",$user->id_users)->where(function($query) {
                                 $query->where('role', 'supervisor')
                                     ->orWhere('role', 'admin');
@@ -98,6 +99,10 @@ class EmployeeController extends Controller
             $validated = $request->validate([
                 'password' => 'required|string|min:8|regex:/[0-9]/',
             ]);
+            $existingUser = User::where('email', $request->email)->first();
+            if ($existingUser) {
+                return back()->with('error', 'The email address is already in use.');
+            }
             // Buat data di tabel address_employee
             $address = AddressEmployee::create([
                 'country' => $request['country'],
@@ -209,7 +214,12 @@ class EmployeeController extends Controller
         // Fetch other necessary data
         $department = Department::where("id_company", Auth::user()->id_company)->get();
         $departmentPosition = DepartmentPosition::where("id_company", Auth::user()->id_company)->get();
-        $user = User::where("role", "supervisor")->where("id_company", Auth::user()->id_company)->get();
+        $user = User::where(function($query) {
+            $query->where('role', 'supervisor')
+                  ->orWhere('role', 'admin');
+        })
+        ->where('id_company', Auth::user()->id_company)
+        ->get();
         $shift = Shift::where("id_company", Auth::user()->id_company)->get();
         $leave = Leave::where("id_company", Auth::user()->id_company)->get();
 
@@ -255,18 +265,30 @@ class EmployeeController extends Controller
         
             $user = User::findOrFail($employee->id_users);
             if(Auth::user()->role == "admin"){
+                
                 // Only update email if it's provided and not the same as the current one
                 if ($request->has('email') && $request->email != $user->email) {
+                    $existingUser = User::where('email', $request->email)->first();
+                    if ($existingUser) {
+                        return redirect()->back()->with('error', 'The email address is already in use by another user.');
+                    }
                     $user->email = $request->input('email');
                 }
                 // Only update password if provided
                 
                 if(Auth::user()->employee->id_employee != $employee->id_employee){
+                    
                     if ($request->password) {
+                        $validated = $request->validate([
+                            'password' => 'string|min:8|regex:/[0-9]/',
+                        ]);
                         $user->password = Hash::make($request->input('password'));
                     }
                 }else{
                     if ($request->new_password) {
+                        $validated = $request->validate([
+                            'new_password' => 'string|min:8|regex:/[0-9]/',
+                        ]);
                         if (!Hash::check($request->old_password, $user->password)) {
                             return redirect()->back()->with('error', 'Old password is incorrect.');
                         }
@@ -276,7 +298,12 @@ class EmployeeController extends Controller
                 }
                 
             }else{
+                
+
                 if($request->new_password){
+                    $validated = $request->validate([
+                        'new_password' => 'required|string|min:8|regex:/[0-9]/',
+                    ]);
                     if (!Hash::check($request->old_password, $user->password)) {
                         return redirect()->back()->with('error', 'Old password is incorrect.');
                     }
@@ -327,7 +354,7 @@ class EmployeeController extends Controller
             // Return success response
             return redirect()->route('employee.index')->with('success', 'Employee updated successfully!');
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to update employee: ' . $e->getMessage());
+            return back()->with('error', $e->getMessage());
         }
         
     }
@@ -350,5 +377,42 @@ class EmployeeController extends Controller
         // Return response for AJAX
         return response()->json(['message' => 'Status updated successfully']);
     }
+
+    public function getDepartmentDetails(Request $request)
+    {
+        $departmentId = $request->input('department_id');
+        
+        // Get department information
+        $department = Department::where('id_department', $departmentId)->first();
+    
+        // Get the supervisor for the department
+        $supervisor = Employee::where('id_employee', $department->id_supervisor)->first();
+        
+        // Fetch positions related to the selected department
+        $positions = DepartmentPosition::where('id_department', $departmentId)->get();
+    
+        // Fetch supervisors for the selected department
+        $supervisors = User::where('id_user', $supervisor->id_users)
+                            ->with('employee')
+                            ->get();
+    
+        // Fetch all supervisors in the company
+        $supervisorsall = User::where(function($query) {
+                                $query->where('role', 'supervisor')
+                                      ->orWhere('role', 'admin');
+                            })
+                            ->where('id_company', Auth::user()->id_company)
+                            ->with('employee')
+                            ->get();
+    
+        // Return the data as JSON
+        return response()->json([
+            'positions' => $positions,
+            'supervisors' => $supervisors,
+            'supervisorsall' => $supervisorsall,
+        ]);
+    }
+    
+
 
 }

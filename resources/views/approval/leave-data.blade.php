@@ -19,15 +19,14 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Name</th>
-                            <th>Employee ID</th>
+                            <th>Request ID</th>
                             <th>Leave Type</th>
                             <th>Leave Date</th>
-                            <th>Status</th>
-                            <th>Quota Requested</th>
                             <th>Leave Time</th>
+                            <th>Quota Requested</th>
                             <th>Approver ID</th>
-                            <th>Request ID</th>
+                            <th>Approver Name</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -48,15 +47,14 @@
                             data-description="{{ $r->request_description }}" 
                             data-upload="{{ $r->request_file }}">
                             <td>{{ $no++ }}</td>
-                            <td>{{ $r->employee->full_name }}</td>
                             <td>{{ $r->id_employee }}</td>
                             <td>{{ $r->leavetype->leave_name }}</td>
                             <td>{{ \Carbon\Carbon::parse($r->leave_start_date)->format('d/m/Y H:i') }} - {{ \Carbon\Carbon::parse($r->leave_end_date)->format('d/m/Y H:i') }}</td>
-                            <td>{{ $r->status }}</td>
-                            <td>{{ $r->requested_quota }}</td>
                             <td>{{ $r->leave_time }}</td>
+                            <td>{{ $r->requested_quota }}</td>
                             <td>{{ $r->id_approver }}</td>
-                            <td>{{ $r->id_employee }}</td>
+                            <td>{{ $r->approver->full_name }}</td>
+                            <td>{{ $r->status }}</td>
                         </tr>
                         @endforeach
                     </tbody>

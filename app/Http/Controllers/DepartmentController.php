@@ -23,7 +23,7 @@ class DepartmentController extends Controller
     {
         $departments = Department::all();
         // Assuming Employee has a relationship with User
-        $supervisors = DB::select("SELECT * FROM employee e JOIN users u ON e.id_users = u.id_user WHERE u.role = 'supervisor'");        
+        $supervisors = DB::select("SELECT * FROM employee e JOIN users u ON e.id_users = u.id_user WHERE u.role IN ('supervisor', 'admin')");
         
         return view('settings.department-add', compact('departments', 'supervisors'));
     }
@@ -41,14 +41,22 @@ class DepartmentController extends Controller
         ]);
     
         // Decode the positions JSON and store them
-        $positions = json_decode($request->positions, true);
-        foreach ($positions as $positionData) {
-            $department->positions()->create([
-                'position_title' => $positionData['title'],
-                'position_description' => $positionData['description'],
-                'id_department' => $department->id_department, // Ensure this is populated
-                'id_company' => auth()->user()->id_company,    // Ensure this is populated
-            ]);
+        
+        if ($request->has('positions') && !empty($request->positions)) {
+            $positions = json_decode($request->positions, true);
+            
+            if (is_array($positions)) {
+                foreach ($positions as $positionData) {
+                    if (!empty($positionData['title'])) { // Ensure title is provided
+                        $department->positions()->create([
+                            'position_title' => $positionData['title'],
+                            'position_description' => $positionData['description'] ?? null,
+                            'id_department' => $department->id_department, // Ensure this is populated
+                            'id_company' => auth()->user()->id_company,    // Ensure this is populated
+                        ]);
+                    }
+                }
+            }
         }
     
         return redirect()->route('department.index')->with('success', 'Department and positions created successfully!');
@@ -64,7 +72,7 @@ class DepartmentController extends Controller
         $position = DepartmentPosition::where("id_department", $department->id_department)->get();
 
         $supervisors = Employee::whereHas('user', function($query) {
-            $query->where('role', 'supervisor');
+            $query->whereIn('role', ['supervisor', 'admin']);
         })->get();
         
         return view('settings.department-edit', compact('department','supervisors','departments',"position"));
@@ -79,12 +87,12 @@ class DepartmentController extends Controller
             'department_code' => $request->department_code,
             'id_supervisor' => $request->id_supervisor,
             'description' => $request->description,
-            'id_company' => 1, // Example company ID
+            'id_company' => Auth::user()->id_company, 
         ]);
 
         // Ambil posisi yang ada untuk departemen ini
         $existingPositions = DepartmentPosition::where('id_department', $department->id)
-        ->pluck('position_title', 'id_department_position') // Gunakan 'id_department_position'
+        ->pluck('position_title', 'id_department_position')
         ->toArray();
         $positions = json_decode($request->positions, true);
 
@@ -97,7 +105,7 @@ class DepartmentController extends Controller
                         'position_title' => $position['title'],
                         'position_description' => $position['description'],
                         'id_department' => $id,
-                        'id_company' => Auth::user()->id_company, // Example company ID
+                        'id_company' => Auth::user()->id_company,
                     ]);
                 }
             }

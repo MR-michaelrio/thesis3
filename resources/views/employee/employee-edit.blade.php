@@ -28,6 +28,11 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
 </style>
 @endsection
 @section('content')
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
 <form method="POST" action="{{ route('employee.update',$employee->id_employee) }}" enctype="multipart/form-data">
     @csrf
     @method("PUT")
@@ -70,8 +75,8 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                             <!-- Identification Number -->
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="identification_number">Identification Number </label>
-                                    <input type="text" class="form-control" id="identification_number" name="identification_number"
+                                    <label for="identification_number">Identification Number <span style="color:red"> *</span></label>
+                                    <input type="text" class="form-control" id="identification_number" required name="identification_number"
                                         placeholder="Enter Identification Number" value="{{$employee->user->identification_number}}">
                                 </div>
                             </div>
@@ -81,16 +86,16 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                             <!-- First Name -->
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="firstName">First Name </label>
-                                    <input type="text" class="form-control" id="firstName" name="first_name"
+                                    <label for="firstName">First Name <span style="color:red"> *</span></label>
+                                    <input type="text" class="form-control" id="firstName" required name="first_name"
                                         placeholder="Enter first name" value="{{$employee->first_name}}">
                                 </div>
                             </div>
                             <!-- Last Name -->
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="lastName">Last Name </label>
-                                    <input type="text" class="form-control" id="lastName" name="last_name"
+                                    <label for="lastName">Last Name <span style="color:red"> *</span></label>
+                                    <input type="text" class="form-control" id="lastName" required name="last_name"
                                         placeholder="Enter last name" value="{{$employee->last_name}}">
                                 </div>
                             </div>
@@ -102,8 +107,8 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                             <!-- Gender -->
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="gender">Gender </label>
-                                    <select class="form-control" id="gender" name="gender">
+                                    <label for="gender">Gender <span style="color:red"> *</span></label>
+                                    <select class="form-control" id="gender" name="gender" required>
                                         <option value="">Select a gender</option>
                                         <option value="Male" {{ old('gender', $employee->gender) == 'Male' ? 'selected' : '' }}>Male</option>
                                         <option value="Female" {{ old('gender', $employee->gender) == 'Female' ? 'selected' : '' }}>Female</option>
@@ -115,7 +120,7 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="maritalStatus">Marital Status</label>
-                                    <select class="form-control" id="maritalStatus" name="marital">
+                                    <select class="form-control" id="maritalStatus" name="marital" required>
                                         <option value="">Select a status</option>
                                         <option value="Married" {{ old('marital', $employee->marital) == 'Married' ? 'selected' : '' }}>Married</option>
                                         <option value="Widowed" {{ old('marital', $employee->marital) == 'Widowed' ? 'selected' : '' }}>Widowed</option>
@@ -132,8 +137,8 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                             <!-- Religion -->
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="religion">Religion </label>
-                                    <select class="form-control" id="religion" name="religion">
+                                    <label for="religion">Religion <span style="color:red"> *</span></label>
+                                    <select class="form-control" id="religion" name="religion" required>
                                         <option value="">Select a religion</option>
                                         <option value="Christianity" {{ old('religion', $employee->religion) == 'Christianity' ? 'selected' : '' }}>Christianity</option>
                                         <option value="Islam" {{ old('religion', $employee->religion) == 'Islam' ? 'selected' : '' }}>Islam</option>
@@ -151,21 +156,22 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                             <!-- Place of Birth -->
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="placeOfBirth">Place of Birth </label>
-                                    <input type="text" class="form-control" id="placeOfBirth" name="place_of_birth"
+                                    <label for="placeOfBirth">Place of Birth <span style="color:red"> *</span></label>
+                                    <input type="text" class="form-control" id="placeOfBirth" required name="place_of_birth"
                                         placeholder="Enter place of birth" value="{{$employee->place_of_birth}}">
                                 </div>
                             </div>
                             <!-- Date of Birth -->
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="dateOfBirth">Date of Birth </label>
+                                    <label for="dateOfBirth">Date of Birth <span style="color:red"> *</span></label>
                                     <div class="input-group date" id="reservationdate1" data-target-input="nearest">
                                         <input type="text" 
                                             class="form-control datetimepicker-input" 
                                             name="date_of_birth" 
                                             placeholder="DD/MM/YYYY" 
                                             data-target="#reservationdate1" 
+                                            required
                                             value="{{ old('date_of_birth', \Carbon\Carbon::parse($employee->date_of_birth)->format('d/m/Y')) }}">
                                         <div class="input-group-append" data-target="#reservationdate1" data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -193,22 +199,22 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="fullAddress">Full Address </label>
-                                    <textarea class="form-control" id="fullAddress" name="full_address"
+                                    <label for="fullAddress">Full Address <span style="color:red"> *</span></label>
+                                    <textarea class="form-control" id="fullAddress" required name="full_address"
                                         placeholder="Enter full address">{{$employee->addressEmployee->full_address}}</textarea>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="country">Country </label>
-                                    <input type="text" class="form-control" id="country" name="country"
+                                    <label for="country">Country <span style="color:red"> *</span></label>
+                                    <input type="text" class="form-control" required id="country" name="country"
                                         placeholder="Enter country" value="{{$employee->addressEmployee->country}}">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="postalCode">Postal Code</label>
-                                    <input type="text" class="form-control" id="postalCode" name="postal_code"
+                                    <input type="text" class="form-control" required id="postalCode" name="postal_code"
                                         placeholder="Enter postal code" value="{{$employee->addressEmployee->postal_code}}">
                                 </div>
                             </div>
@@ -233,29 +239,29 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                     <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="phone">Phone </label>
-                                    <input type="text" class="form-control" id="phone" name="phone"
+                                    <label for="phone">Phone <span style="color:red"> *</span></label>
+                                    <input type="text" class="form-control" required id="phone" name="phone"
                                         placeholder="Enter phone" value="{{$employee->user->phone}}">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="emergency_name">Emergency Name </label>
-                                    <input type="text" class="form-control" id="emergency_name" name="emergency_name"
+                                    <label for="emergency_name">Emergency Name <span style="color:red"> *</span></label>
+                                    <input type="text" class="form-control" required id="emergency_name" name="emergency_name"
                                         placeholder="Enter Emergency Name" value="{{$employee->user->emergency_name}}">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="emergency_relation">Emergency Relation </label>
-                                    <input type="text" class="form-control" id="emergency_relation" name="emergency_relation"
+                                    <label for="emergency_relation">Emergency Relation <span style="color:red"> *</span></label>
+                                    <input type="text" class="form-control" required id="emergency_relation" name="emergency_relation"
                                         placeholder="Enter Emergency Relation" value="{{$employee->user->emergency_relation}}">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="emergency_phone">Emergency Phone </label>
-                                    <input type="text" class="form-control" id="emergency_phone" name="emergency_phone"
+                                    <label for="emergency_phone">Emergency Phone <span style="color:red"> *</span></label>
+                                    <input type="text" class="form-control" required id="emergency_phone" name="emergency_phone"
                                         placeholder="Enter Emergency Phone" value="{{$employee->user->emergency_phone}}">
                                 </div>
                             </div>
@@ -282,8 +288,8 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                     <div class="card-body" style="display: block;">
                         @if(Auth::user()->role == "admin" && Auth::user()->employee->id_employee != $employee->id_employee)
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Email address</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" name="email" placeholder="Enter email" value="{{$employee->user->email}}">
+                                <label for="exampleInputEmail1">Email address <span style="color:red"> *</span></label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" required name="email" placeholder="Enter email" value="{{$employee->user->email}}">
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Password</label>
@@ -326,11 +332,11 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                             <label>Employee Id</label>
                             <input type="text" class="form-control" placeholder="Enter Employee Id">
                         </div> -->
-                        <div class="form-group">
-                            <label for="gender">Department</label>
-                            @if(Auth::user()->role == "admin")
-                                <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" name="id_department" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                    <option>Select</option>    
+                        <!-- <div class="form-group">
+                            <label for="gender">Department <span style="color:red"> *</span></label>
+                            @if(Auth::user()->role == "admin" )
+                                <select class="form-control select2 select2-hidden-accessible" required style="width: 100%;" name="id_department" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                    <option disabled>Select</option>    
                                     @foreach($department as $d)
                                     <option value="{{ $d->id_department }}" 
                                             {{ old('id_department', $employee->user->id_department) == $d->id_department ? 'selected' : '' }}>
@@ -343,10 +349,10 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                             @endif
                         </div>
                         <div class="form-group">
-                            <label for="gender">Position Title</label>
+                            <label for="gender">Position Title <span style="color:red"> *</span></label>
                             @if(Auth::user()->role == "admin")
-                            <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" name="id_department_position" data-select2-id="2" tabindex="-1" aria-hidden="true">
-                                <option>Select</option>    
+                            <select class="form-control select2 select2-hidden-accessible" required style="width: 100%;" name="id_department_position" data-select2-id="2" tabindex="-1" aria-hidden="true">
+                                <option disabled>Select</option>    
                                 @foreach($departmentPosition as $d)
                                     <option value="{{$d->id_department_position}}" {{ old('id_department_position', $employee->user->id_department_position) == $d->id_department_position   ? 'selected' : '' }}>
                                         {{$d->position_title}}
@@ -358,30 +364,82 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                             @endif
                         </div>
                         <div class="form-group">
-                            <label for="gender">Reports to</label>
+                            <label for="gender">Reports to <span style="color:red"> *</span></label>
                             @if(Auth::user()->role == "admin")
-                            <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" name="supervisor" data-select2-id="3" tabindex="-1" aria-hidden="true">
-                                <option>Select</option>    
+                            <select class="form-control select2 select2-hidden-accessible" required style="width: 100%;" name="supervisor" data-select2-id="3" tabindex="-1" aria-hidden="true">
+                                <option disabled>Select</option>    
+                                <option value="NONE">NONE</option>
                                 @foreach($user as $d)
                                     <option value="{{$d->id_user}}" {{ old('supervisor', $employee->user->supervisor) == $d->id_user ? 'selected' : '' }}>
-                                        {{$d->name}}
+                                        {{$d->employee->full_name}}
                                     </option>
                                 @endforeach
                             </select>
                             @else
                                 <input type="text" class="form-control" value="{{ $employee->user->supervisior->full_name }}" disabled>
                             @endif
-                        </div>
+                        </div> -->
 
+                        <div class="form-group">
+    <label for="gender">Department <span style="color:red"> *</span></label>
+    @if(Auth::user()->role == "admin" )
+        <select class="form-control select2 select2-hidden-accessible" required style="width: 100%;" name="id_department" id="department-select" data-select2-id="1" tabindex="-1" aria-hidden="true">
+            <option disabled>Select</option>    
+            @foreach($department as $d)
+                <option value="{{ $d->id_department }}" 
+                        {{ old('id_department', $employee->user->id_department) == $d->id_department ? 'selected' : '' }}>
+                    {{ $d->department_name }}
+                </option>                                
+            @endforeach
+        </select>
+    @else
+        <input type="text" class="form-control" value="{{ $employee->user->department->department_name }}" disabled>
+    @endif
+</div>
+
+<div class="form-group">
+    <label for="gender">Position Title <span style="color:red"> *</span></label>
+    @if(Auth::user()->role == "admin")
+        <select class="form-control select2 select2-hidden-accessible" required style="width: 100%;" name="id_department_position" id="position-select" data-select2-id="2" tabindex="-1" aria-hidden="true">
+            <option disabled>Select</option>    
+            @foreach($departmentPosition as $d)
+                <option value="{{$d->id_department_position}}" {{ old('id_department_position', $employee->user->id_department_position) == $d->id_department_position   ? 'selected' : '' }}>
+                    {{$d->position_title}}
+                </option>                               
+            @endforeach
+        </select>
+    @else
+        <input type="text" class="form-control" value="{{ $employee->user->position->position_title }}" disabled>
+    @endif
+</div>
+
+<div class="form-group">
+    <label for="gender">Reports to <span style="color:red"> *</span></label>
+    @if(Auth::user()->role == "admin")
+        <select class="form-control select2 select2-hidden-accessible" required style="width: 100%;" name="supervisor" id="supervisor-select" data-select2-id="3" tabindex="-1" aria-hidden="true">
+            <option disabled>Select</option>    
+            <option value="NONE">NONE</option>
+            @foreach($user as $d)
+                <option value="{{$d->id_user}}" {{ old('supervisor', $employee->user->supervisor) == $d->id_user ? 'selected' : '' }}>
+                    {{$d->employee->full_name}}
+                </option>
+            @endforeach
+        </select>
+    @else
+        <input type="text" class="form-control" value="{{ $employee->user->supervisior->full_name }}" disabled>
+    @endif
+</div>
+
+                        
                         <hr style="border: '1px solid gray'">
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="dateOfBirth">Start Date</label>
+                                    <label for="dateOfBirth">Start Date <span style="color:red"> *</span></label>
                                     <div class="input-group date" id="reservationdate2" data-target-input="nearest">
                                         <input type="text" class="form-control datetimepicker-input"
-                                            placeholder="DD/MM/YYYY" name="start_work" data-target="#reservationdate2" value="{{ old('start_work', $employee->user->start_work) }}" @if(Auth::user()->role != "admin") disabled @endif>
+                                            placeholder="DD/MM/YYYY" name="start_work" required data-target="#reservationdate2" value="{{ old('start_work', $employee->user->start_work) }}" @if(Auth::user()->role != "admin") disabled @endif>
                                         <div class="input-group-append" data-target="#reservationdate2"
                                             data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -625,9 +683,42 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
 @section('scripts')
 
 <script>
-    $('.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday').select2({
-    theme: "bootstrap4" // Optional theme, use "default" or customize as needed
+    $(document).ready(function() {
+    // Update position and supervisor based on department selection
+    $('#department-select').on('change', function() {
+        var departmentId = $(this).val();
+
+        // Make an AJAX request to get positions and supervisors based on department
+        $.ajax({
+            url: '/get-department-details', // Create a route to handle this request
+            method: 'GET',
+            data: { department_id: departmentId },
+            success: function(response) {
+                // Update the position select options
+                $('#position-select').empty(); // Clear existing options
+                $('#position-select').append('<option disabled>Select</option>');
+                response.positions.forEach(function(position) {
+                    $('#position-select').append('<option value="' + position.id_department_position + '">' + position.position_title + '</option>');
+                });
+
+                // Update the supervisor select options
+                $('#supervisor-select').empty(); // Clear existing options
+                $('#supervisor-select').append('<option disabled>Select</option><option value="NONE">NONE</option>');
+                console.log("supervisor",response);
+                response.supervisors.forEach(function(supervisor) {  
+                    $('#supervisor-select').append('<option value="' + supervisor.id_user + '" selected>' + supervisor.employee.full_name + '</option>');
+                });
+                response.supervisorsall.forEach(function(supervisor) {
+                    $('#supervisor-select').append('<option value="' + supervisor.id_user + '">' + supervisor.employee.full_name + '</option>');
+                });
+            }
+        });
+    });
 });
+
+    $('.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday').select2({
+        theme: "bootstrap4" // Optional theme, use "default" or customize as needed
+    });
     function loadProfileImage(event) {
         var reader = new FileReader();
         reader.onload = function () {
