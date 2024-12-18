@@ -187,12 +187,12 @@
                         }else{
                             if (faceNames.length > 0) {
 
-                                document.getElementById('employeid').value = response.data.full_name || ''; // Example key from response
-                                document.getElementById('employename').value = faceNames[0] || '';
+                                document.getElementById('employeid').value = response.data.employees[0].id_employee || ''; // Example key from response
+                                document.getElementById('employename').value = response.data.employees[0].full_name || '';
                                 document.getElementById('clock').value = new Date().toLocaleTimeString(); // Current time
                                 document.getElementById('time').value = new Date().toLocaleTimeString();
 
-                                showPopup(faceNames[0],faceConfidence); // Show popup with the first detected name
+                                showPopup(response.data.employees[0].full_name,faceConfidence); // Show popup with the first detected name
                             }
                         }
                     })
