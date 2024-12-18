@@ -203,7 +203,7 @@ class AttendanceController extends Controller
         // If no shift assignment found, return an error response
         if (!$assignshift) {
             return response()->json([
-                'message' => 'No shift assignment found for the employee.',
+                'message' => 'No shift assignment found for the employee.' . $assignshift,
             ], 201); // Not Found
         }
 
