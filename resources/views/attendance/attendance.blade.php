@@ -112,7 +112,7 @@
                 </svg>
             </div>
             <h2 style="color: #333; margin: 0 0 10px;">Absensi Berhasil</h2>
-            <p style="color: #A1A1A1; margin: 0;">${name}</p>
+            <p style="color: #A1A1A1; margin: 0;font-size:10px">${name}</p>
             <button id="confirmButton" 
                 style="
                     margin-top: 20px; 
