@@ -206,7 +206,7 @@
                         if(faceid[0] === "Unknown"){
                             return;
                         }else{
-                            if (faceid[0].length > 0) {
+                            if (faceid.length > 0) {
                                 console.log(response.data.face_names[0]);
                                 document.getElementById('employeid').value = response.data.employees[0].identification_number; // Example key from response
                                 document.getElementById('employename').value = response.data.employees[0].full_name;
