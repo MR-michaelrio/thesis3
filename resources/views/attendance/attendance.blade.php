@@ -205,10 +205,10 @@
                         console.log("Hasil:", response.data);
                         const faceid = response.data.face_names;
                         const faceConfidence = response.data.detections[0].confidence || [];
-                        if(faceNames[0] === "Unknown"){
+                        if(faceid[0] === "Unknown"){
                             return;
                         }else{
-                            if (faceNames.length > 0) {
+                            if (faceid.length > 0) {
 
                                 document.getElementById('employeid').value = response.data.employees[0].identification_number; // Example key from response
                                 document.getElementById('employename').value = response.data.employees[0].full_name;
