@@ -183,6 +183,7 @@
                     // console.error("Error Absen:", error.response ? error.response.data : error.message);
                     document.body.removeChild(overlay);
                     document.body.removeChild(popup);
+                    isPopupDisplayed = false; // Reset flag
 
                     startCamera(); // Restart camera
                     startFrameCapture(); // Restart frame capture
