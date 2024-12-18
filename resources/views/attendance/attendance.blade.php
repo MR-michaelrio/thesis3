@@ -99,7 +99,7 @@
         popup.style.top = '50%';
         popup.style.left = '50%';
         popup.style.transform = 'translate(-50%, -50%)';
-        popup.style.padding = '30px 50px';
+        popup.style.padding = '55px 40px';
         popup.style.background = '#fff';
         popup.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.25)';
         popup.style.borderRadius = '10px';
