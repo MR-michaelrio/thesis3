@@ -135,30 +135,27 @@
             const attendanceDate = currentDate.toISOString().split('T')[0]; // YYYY-MM-DD
             const clock = currentDate.toTimeString().split(' ')[0]; // HH:mm:ss
 
-            document.body.removeChild(popup);
 
             isPopupDisplayed = false; // Reset flag
 
-            axios.post("{{route('attendance.checkin')}}", {
-                id_employee: name,
-                attendance_date: attendanceDate,
-                clock: clock,
-            })
+                axios.post("{{route('attendance.checkin')}}", {
+                    id_employee: name,
+                    attendance_date: attendanceDate,
+                    clock: clock,
+                })
                 .then(response => {
-                    console.log("Hasil Absen:", response.data);
-                    alert(response.data.message);
-
                     // Ambil data absensi dari respons server
                     const attendance = response.data.attendance;
+
+                    document.body.removeChild(loadingMessage);
+                    document.body.removeChild(overlay);
 
                     // Tampilkan data ke dalam form
                     document.getElementById('employeid').value = attendance.id_employee || '';
                     document.getElementById('employename').value = name || '';
                     document.getElementById('clock').value = attendance.clock_in || clock;
                     document.getElementById('time').value = new Date().toLocaleTimeString();
-
-                    document.body.removeChild(loadingMessage);
-                    document.body.removeChild(overlay);
+                    document.body.removeChild(popup);
 
                     startCamera(); // Restart camera
                     startFrameCapture(); // Restart frame capture
