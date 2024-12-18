@@ -106,8 +106,7 @@
         popup.style.borderRadius = '10px';
         popup.style.zIndex = '1000';
         popup.innerHTML = `
-            <h4>Wajah Terdeteksi</h4>
-            <p>${name} telah dikenali!</p>
+            <h4>Absensi Berhasil</h4>
             <button id="confirmButton" style="margin-top: 10px; padding: 5px 10px; background: #007bff; color: white; border: none; border-radius: 5px;">Setuju</button>
         `;
 
@@ -149,8 +148,18 @@
                     console.log("Hasil Absen:", response.data);
                     alert(response.data.message);
 
+                    // Ambil data absensi dari respons server
+                    const attendance = response.data.attendance;
+
+                    // Tampilkan data ke dalam form
+                    document.getElementById('employeid').value = attendance.id_employee || '';
+                    document.getElementById('employename').value = name || '';
+                    document.getElementById('clock').value = attendance.clock_in || clock;
+                    document.getElementById('time').value = new Date().toLocaleTimeString();
+
                     document.body.removeChild(loadingMessage);
                     document.body.removeChild(overlay);
+
                     startCamera(); // Restart camera
                     startFrameCapture(); // Restart frame capture
                 })
@@ -161,10 +170,10 @@
                     document.body.removeChild(popup);
 
                     isPopupDisplayed = false; // Reset flag
-                    startCamera(); // Restart camera
-                    startFrameCapture(); // Restart frame capture
                     document.body.removeChild(loadingMessage);
 
+                    startCamera(); // Restart camera
+                    startFrameCapture(); // Restart frame capture
                 });
 
             
@@ -185,9 +194,7 @@
                         console.log("Hasil:", response.data.detections[0].confidence);
                         const faceNames = response.data.face_names || [];
                         const faceConfidence = response.data.detections[0].confidence || [];
-                        console.log("hasil:",faceConfidence);
                         if(faceNames[0] === "Unknown"){
-                            console.log("Wajah tidak dikenali, mencoba lagi...");
                             return;
                         }else{
                             if (faceNames.length > 0) {
