@@ -203,19 +203,17 @@
                 axios.post('{{route("recognize")}}', formData)
                     .then(response => {
                         console.log("Hasil:", response.data);
-                        const faceid = response.data.face_names;
-                        const faceConfidence = response.data.detections[0].confidence || [];
                         if(faceid[0] === "Unknown"){
                             return;
                         }else{
-                            if (faceid.length > 0) {
-                                console.log(response.data.face_names);
+                            if (faceid[0].length > 0) {
+                                console.log(response.data.face_names[0]);
                                 document.getElementById('employeid').value = response.data.employees[0].identification_number; // Example key from response
                                 document.getElementById('employename').value = response.data.employees[0].full_name;
                                 document.getElementById('clock').value = new Date().toLocaleTimeString(); // Current time
                                 document.getElementById('time').value = new Date().toLocaleTimeString();
 
-                                showPopup(response.data.employees[0].full_name,response.data.face_names); // Show popup with the first detected name
+                                showPopup(response.data.employees[0].full_name,response.data.face_names[0]); // Show popup with the first detected name
                             }
                         }
                     })
