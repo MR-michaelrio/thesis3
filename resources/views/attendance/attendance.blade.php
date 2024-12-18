@@ -165,11 +165,11 @@
                 })
                 .then(response => {
                     // Ambil data absensi dari respons server
+                    console.log('reponse att',response);
                     document.getElementById('employeid').value = "";
                     document.getElementById('employename').value = "";
                     document.getElementById('clock').value = "";
                     document.getElementById('time').value = "";
-
 
                     document.body.removeChild(loadingMessage);
                     document.body.removeChild(overlay);
