@@ -313,6 +313,7 @@ class AttendanceController extends Controller
             return response()->json([
                 'message' => 'Attendance successfully stored!',
                 'attendance' => $attendance,
+                
             ], 201); // Created
         }
     }

@@ -151,12 +151,6 @@
                     document.body.removeChild(loadingMessage);
                     document.body.removeChild(overlay);
 
-                    // Tampilkan data ke dalam form
-                    document.getElementById('employeid').value = attendance.id_employee || '';
-                    document.getElementById('employename').value = name || '';
-                    document.getElementById('clock').value = attendance.clock_in || clock;
-                    document.getElementById('time').value = new Date().toLocaleTimeString();
-
                     startCamera(); // Restart camera
                     startFrameCapture(); // Restart frame capture
                 })
@@ -194,6 +188,11 @@
                             return;
                         }else{
                             if (faceNames.length > 0) {
+                                document.getElementById('employeid').value = response.data.id_employee || ''; // Example key from response
+                                document.getElementById('employename').value = faceNames[0] || '';
+                                document.getElementById('clock').value = new Date().toLocaleTimeString(); // Current time
+                                document.getElementById('time').value = new Date().toLocaleTimeString();
+
                                 showPopup(faceNames[0],faceConfidence); // Show popup with the first detected name
                             }
                         }
