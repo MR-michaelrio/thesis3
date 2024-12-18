@@ -113,20 +113,6 @@
             </div>
             <h2 style="color: #333; margin: 0 0 10px;">Absensi Berhasil</h2>
             <p style="color: #A1A1A1; margin: 0;font-size:20px;font-transform:capitalize">${name}</p>
-            <button id="confirmButton" 
-                style="
-                    margin-top: 20px; 
-                    padding: 10px 20px; 
-                    background: #007bff; 
-                    color: white; 
-                    border: none; 
-                    border-radius: 5px; 
-                    font-size: 18px; 
-                    cursor: pointer;
-                    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-                ">
-                Continue
-            </button>
             <button id="cancelButton" 
                 style="
                     margin-top: 10px; 
@@ -141,6 +127,21 @@
                 ">
                 Cancel
             </button>
+            <button id="confirmButton" 
+                style="
+                    margin-top: 20px; 
+                    padding: 10px 20px; 
+                    background: #007bff; 
+                    color: white; 
+                    border: none; 
+                    border-radius: 5px; 
+                    font-size: 18px; 
+                    cursor: pointer;
+                    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+                ">
+                Continue
+            </button>
+            
         `;
 
         document.body.appendChild(overlay);
@@ -193,8 +194,6 @@
         document.getElementById('cancelButton').addEventListener('click', () => {
             document.body.removeChild(overlay);
             document.body.removeChild(popup);
-            startCamera(); // Restart camera
-            startFrameCapture(); // Restart frame capture
         });
     }
 
