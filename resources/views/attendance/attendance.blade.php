@@ -164,21 +164,26 @@
                     clock: clock,
                 })
                 .then(response => {
-                    // Ambil data absensi dari respons server
-                    console.log('reponse att',response);
-                    document.getElementById('employeid').value = "";
-                    document.getElementById('employename').value = "";
-                    document.getElementById('clock').value = "";
-                    document.getElementById('time').value = "";
+                    if (response.data.message === "Already clocked in!") {
+                        showAlreadyAbsence("clockin"); // Show Already Clocked In popup
+                    } else if (response.data.message === "Attendance clock-out updated!") {
+                        showAlreadyAbsence("clockout"); // Show Attendance Clock-out updated popup
+                    } else {
+                        // Handle normal attendance response
+                        document.getElementById('employeid').value = "";
+                        document.getElementById('employename').value = "";
+                        document.getElementById('clock').value = "";
+                        document.getElementById('time').value = "";
 
-                    document.body.removeChild(loadingMessage);
-                    document.body.removeChild(overlay);
-                    
-                    startCamera(); // Restart camera
-                    startFrameCapture(); // Restart frame capture
+                        document.body.removeChild(loadingMessage);
+                        document.body.removeChild(overlay);
+
+                        startCamera(); // Restart camera
+                        startFrameCapture(); // Restart frame capture
+                    }
                 })
                 .catch(error => {
-                    console.error("Error Absen:", error.response ? error.response.data : error.message);
+                    // console.error("Error Absen:", error.response ? error.response.data : error.message);
                     document.body.removeChild(overlay);
                     document.body.removeChild(popup);
                     document.body.removeChild(loadingMessage);
@@ -189,6 +194,72 @@
 
             
         }, { once: true });
+    }
+
+    function showAlreadyAbsence(category) {
+        const overlay = document.createElement('div');
+        overlay.id = 'popup-overlay';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100vw';
+        overlay.style.height = '100vh';
+        overlay.style.zIndex = '999';
+
+        const popup = document.createElement('div');
+        popup.style.position = 'fixed';
+        popup.style.top = '50%';
+        popup.style.left = '50%';
+        popup.style.transform = 'translate(-50%, -50%)';
+        popup.style.padding = '30px 70px';
+        popup.style.background = '#fff';
+        popup.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.25)';
+        popup.style.borderRadius = '10px';
+        popup.style.textAlign = 'center';
+        popup.style.zIndex = '1000';
+        let title = "";
+        let message = "";
+
+        if (category === "clockin") {
+            title = "Already Clocked In!";
+            message = "You are already clocked in for today.";
+        } else {
+            title = "Attendance Clock-out Updated!";
+            message = "Your clock-out time has been updated.";
+        }
+        popup.innerHTML = `
+            <div style="margin-bottom: 15px;">
+                <svg width="100" height="100" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#FF3B30" d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14C4.69 14 2 11.31 2 8s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/>
+                </svg>
+            </div>
+            <h2 style="color: #333; margin: 0 0 10px;">${title}</h2>
+            <p style="color: #A1A1A1; margin: 0; font-size: 20px;">${message}</p>
+            <button id="closeButton" 
+                style="
+                    margin-top: 20px; 
+                    padding: 10px 20px; 
+                    background: #FF3B30; 
+                    color: white; 
+                    border: none; 
+                    border-radius: 5px; 
+                    font-size: 18px; 
+                    cursor: pointer;
+                    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+                ">
+                Close
+            </button>
+        `;
+
+        document.body.appendChild(overlay);
+        document.body.appendChild(popup);
+
+        document.getElementById('closeButton').addEventListener('click', () => {
+            document.body.removeChild(overlay);
+            document.body.removeChild(popup);
+            startCamera(); // Restart camera
+            startFrameCapture(); // Restart frame capture
+        });
     }
 
     function startFrameCapture() {
