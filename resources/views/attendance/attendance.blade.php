@@ -194,6 +194,8 @@
         document.getElementById('cancelButton').addEventListener('click', () => {
             document.body.removeChild(overlay);
             document.body.removeChild(popup);
+            startCamera(); // Restart camera
+                        startFrameCapture(); // Restart frame capture
         });
     }
 
