@@ -29,8 +29,8 @@
                                     <div class="form-group">
                                         <label>Time</label>
                                         <input type="text" class="form-control" placeholder="HH:MM - HH:MM" disabled="" id="start" name="start">
-                                        <input type="hidden" class="form-control" disabled="" id="mulai" name="mulai">
-                                        <input type="hidden" class="form-control" disabled="" id="akhir" name="akhir">
+                                        <input type="hidden" class="form-control" id="mulai" name="mulai">
+                                        <input type="hidden" class="form-control" id="akhir" name="akhir">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">

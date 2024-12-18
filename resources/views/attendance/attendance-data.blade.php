@@ -63,7 +63,9 @@
                                         <td style="font-weight:bold">{{ $a->daily_total ? \Carbon\Carbon::parse($a->daily_total)->format('H:i') . ' Hours' : '' }}</td>
                                         <td>{{ \Carbon\Carbon::parse($a->shift->clock_in)->diff(\Carbon\Carbon::parse($a->shift->clock_out))->format('%H:%I') }} Hours</td>
                                         <td style="color:red">{{$a->total_overtime}}</td>
-                                        <td style="text-transform:capitalize">{{$a->attendance_status}}</td>
+                                        <td style="text-transform:capitalize; font-weight:bold;{{ $a->attendance_status == 'late' ? 'color:red;' : '' }}">
+                                            {{$a->attendance_status}}
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -101,7 +103,9 @@
                                         <td style="font-weight:bold">{{ $a->daily_total ? \Carbon\Carbon::parse($a->daily_total)->format('H:i') . ' Hours' : '' }}</td>
                                         <td>{{ \Carbon\Carbon::parse($a->shift->clock_in)->diff(\Carbon\Carbon::parse($a->shift->clock_out))->format('%H:%I') }} Hours</td>
                                         <td style="color:red">{{$a->total_overtime}}</td>
-                                        <td style="text-transform:capitalize">{{$a->attendance_status}}</td>
+                                        <td style="text-transform:capitalize; font-weight:bold;{{ $a->attendance_status == 'late' ? 'color:red;' : '' }}">
+                                            {{$a->attendance_status}}
+                                        </td>                                    
                                     </tr>
                                 @endforeach
                             </tbody>

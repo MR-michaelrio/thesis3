@@ -32,10 +32,10 @@ class RequestOvertime extends Model
         return $this->belongsTo(Employee::class, 'id_employee', 'id_employee');
     }
 
-    // public function approver()
-    // {
-    //     return $this->belongsTo(Employee::class, 'id_approver');
-    // }
+    public function approver()
+    {
+        return $this->belongsTo(Employee::class, 'id_approver', 'id_employee');
+    }
 
     // public function attendance()
     // {

@@ -35,8 +35,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/attendance/checkin', [AttendanceController::class, 'checkin'])->name('attendance.checkin');
     Route::post('/recognize', [AttendanceController::class, 'recognize'])->name('recognize');
     Route::post('/recognize2', [AttendanceController::class, 'processFrame']);
-        
     Route::resource('attendance', AttendanceController::class);
+
     Route::resource('employee', EmployeeController::class);
     Route::post('/employee/statusupdate/{id}', [EmployeeController::class, 'statusupdate'])->name('employee.statusupdate');
     Route::get('get-department-positions/{departmentId}', [EmployeeController::class, 'getDepartmentPositions'])->name('getDepartmentPositions');
@@ -44,7 +44,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/get-department-details', [EmployeeController::class, 'getDepartmentDetails'])->name('getDepartmentDetails');
 
     Route::resource('role', RoleController::class);
-
     Route::post('/role/admin/{id}', [RoleController::class, 'roleadmin'])->name('role.admin');
     Route::post('/role/employee/{id}', [RoleController::class, 'roleemployee'])->name('role.employee');
     Route::post('/role/supervisor/{id}', [RoleController::class, 'rolesupervisor'])->name('role.supervisor');
@@ -53,6 +52,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('overtimes', RequestOvertimeController::class);
     Route::get('/overtime/clock/{date}', [RequestOvertimeController::class, 'getOvertimeData'])->name('overtime.clock');
+    Route::put('/requestovertime/update', [RequestOvertimeController::class, 'update'])->name('requestovertime.update');
 
     Route::resource('leaves', LeaveController::class);
     Route::resource('companies', CompanyController::class);

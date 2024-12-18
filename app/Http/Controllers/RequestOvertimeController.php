@@ -39,6 +39,8 @@ class RequestOvertimeController extends Controller
 
     public function store(Request $request)
     {
+        $date = Carbon::createFromFormat('d/m/Y', $request->overtime_date)->format('Y-m-d');
+
         $attendance = Attendance::where('id_employee', Auth::user()->employee->id_employee)
                                 ->where('attendance_date', $date)
                                 ->first();
@@ -48,7 +50,7 @@ class RequestOvertimeController extends Controller
         }
 
         $overtime = RequestOvertime::create([
-            "overtime_date" => $request->overtime_date,
+            "overtime_date" => $date,
             "start" => $request->mulai,
             "end" => $request->akhir,
             "id_employee" => Auth::user()->employee->id_employee,
@@ -59,7 +61,7 @@ class RequestOvertimeController extends Controller
             "id_company" => Auth::user()->id_company
         ]);
 
-        return view('request.overtime-request');
+        return redirect()->route('overtimes.index');
     }
 
     public function getOvertimeData($date)
@@ -100,5 +102,23 @@ class RequestOvertimeController extends Controller
         return response()->json(['error' => 'No attendance data found for selected date',"date"=>$date], 404);
     }
 
+    public function update(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'id_overtime' => 'required|exists:request_overtime,id_overtime',
+            'status' => 'required|in:approve,reject',
+        ]);
 
+        // Cari request berdasarkan ID
+        $overtimeRequest = RequestOvertime::findOrFail($request->id_overtime);
+
+        // Update status
+        $overtimeRequest->status = $request->status;
+        $overtimeRequest->id_approver = Auth::user()->employee->id_employee;
+        $overtimeRequest->save();
+
+        // Redirect dengan pesan sukses
+        return redirect()->back()->with('success', 'Leave request status updated successfully!');
+    }
 }

@@ -9,6 +9,7 @@ use App\Models\Shift;
 use App\Models\Attendance;
 use App\Models\AttendancePolicy;
 use App\Models\AssignShift;
+use App\Models\RequestOvertime;
 
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
@@ -220,24 +221,48 @@ class AttendanceController extends Controller
         // Check if the current time is after the employee's clock-out time
         if ($currentTime->format('H:i:s') >= $assignshift->shift->clock_out) {
             if ($attendance) {
-                
                 $clockIn = Carbon::createFromFormat('H:i:s', $attendance->clock_in);
                 $clockOut = Carbon::createFromFormat('H:i:s', $attendance_clock);
+            
+                // Check for a related RequestOvertime
+                $requestOvertime = RequestOvertime::where('id_employee', $attendance->id_employee)
+                                                  ->where('overtime_date', $attendance->attendance_date)
+                                                  ->first();
+            
+                // Handle clock-out based on RequestOvertime
+                if ($requestOvertime) {
+                    $overtimeEnd = Carbon::createFromFormat('H:i:s', $requestOvertime->end);
+                    $overtimeStart = Carbon::createFromFormat('H:i:s', $requestOvertime->start);
+            
+                    if ($clockOut->greaterThan($overtimeEnd)) {
+                        $clockOut = $overtimeEnd;
+                    }
+            
+                    // Calculate overtime if clock-out is after the start of overtime
+                    if ($clockOut->greaterThanOrEqualTo($overtimeStart)) {
+                        $attendance->overtime = $clockOut->diffInMinutes($overtimeStart);
+                    } else {
+                        $attendance->overtime = null; // No overtime if clock-out is before overtime start
+                    }
+                } else {
+                    $attendance->overtime = null; // No RequestOvertime means no overtime
+                }
+            
+                // Update clock-out and calculate total hours worked
+                $attendance->clock_out = $clockOut->format('H:i:s');
                 $dailyTotal = $clockIn->diff($clockOut);
-
-                // Update the attendance record with the clock-out time
-                $attendance->clock_out = $attendance_clock;
-                // Calculate daily total hours worked
                 $attendance->daily_total = sprintf('%02d:%02d', $dailyTotal->h, $dailyTotal->i);
-                $attendance->attendance_status = 'present'; // You can set this as 'completed' for clock-out
+            
+                // Update attendance status and save
+                $attendance->attendance_status = 'present';
                 $attendance->save();
-
-                // Return a response that the attendance was updated
+            
+                // Return a response indicating success
                 return response()->json([
                     'message' => 'Attendance clock-out updated!',
                     'attendance' => $attendance,
                 ], 200); // OK
-            } else {
+            }else {
                 // If no attendance record is found to update
                 return response()->json([
                     'message' => 'No attendance record found to update.',
