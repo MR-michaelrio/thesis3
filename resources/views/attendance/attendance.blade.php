@@ -169,7 +169,10 @@
 
                     document.body.removeChild(loadingMessage);
                     document.body.removeChild(overlay);
-
+                    document.getElementById('employeid').reset(); // Example key from response
+                    document.getElementById('employename').reset();
+                    document.getElementById('clock').reset(); // Current time
+                    document.getElementById('time').reset();
                     startCamera(); // Restart camera
                     startFrameCapture(); // Restart frame capture
                 })
