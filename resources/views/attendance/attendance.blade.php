@@ -230,7 +230,7 @@
         popup.innerHTML = `
             <div style="margin-bottom: 15px;">
                 <svg width="100" height="100" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill="#FF3B30" d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14C4.69 14 2 11.31 2 8s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/>
+                    <path fill="#34C759" d="M6.75 10.25L4.5 8l-.75.75 3 3 6-6-.75-.75-5.25 5.25z"/>
                 </svg>
             </div>
             <h2 style="color: #333; margin: 0 0 10px;">${title}</h2>
