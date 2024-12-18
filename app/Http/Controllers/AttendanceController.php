@@ -250,9 +250,11 @@ class AttendanceController extends Controller
 
                     } else {
                         $attendance->total_overtime = null; // No overtime if clock-out is before overtime start
+                        $attendance->attendance_status = 'present';
                     }
                 } else {
                     $attendance->total_overtime = null; // No RequestOvertime means no overtime
+                    $attendance->attendance_status = 'present';
                 }
             
                 // Update clock-out and calculate total hours worked
@@ -261,7 +263,6 @@ class AttendanceController extends Controller
                 $attendance->daily_total = sprintf('%02d:%02d', $dailyTotal->h, $dailyTotal->i);
             
                 // Update attendance status and save
-                $attendance->attendance_status = 'present';
                 $attendance->save();
             
                 // Return a response indicating success
