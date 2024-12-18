@@ -133,22 +133,6 @@
         document.body.appendChild(popup);
 
         document.getElementById('confirmButton').addEventListener('click', () => {
-            const loadingMessage = document.createElement('div');
-            loadingMessage.id = 'loadingMessage';
-            loadingMessage.style.position = 'fixed';
-            loadingMessage.style.top = '50%';
-            loadingMessage.style.left = '50%';
-            loadingMessage.style.transform = 'translate(-50%, -50%)';
-            loadingMessage.style.padding = '20px';
-            loadingMessage.style.background = 'rgba(0, 0, 0, 0.7)';
-            loadingMessage.style.color = 'white';
-            loadingMessage.style.borderRadius = '10px';
-            loadingMessage.style.fontSize = '16px';
-            loadingMessage.innerHTML = 'Processing attendance, please wait...';
-
-            document.body.appendChild(loadingMessage);
-
-
             // Send attendance data
             const currentDate = new Date();
             const attendanceDate = currentDate.toISOString().split('T')[0]; // YYYY-MM-DD
@@ -174,8 +158,6 @@
                         document.getElementById('employename').value = "";
                         document.getElementById('clock').value = "";
                         document.getElementById('time').value = "";
-
-                        document.body.removeChild(loadingMessage);
                         document.body.removeChild(overlay);
 
                         startCamera(); // Restart camera
@@ -186,7 +168,6 @@
                     // console.error("Error Absen:", error.response ? error.response.data : error.message);
                     document.body.removeChild(overlay);
                     document.body.removeChild(popup);
-                    document.body.removeChild(loadingMessage);
 
                     startCamera(); // Restart camera
                     startFrameCapture(); // Restart frame capture
