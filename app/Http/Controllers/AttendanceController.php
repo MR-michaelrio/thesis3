@@ -240,12 +240,12 @@ class AttendanceController extends Controller
             
                     // Calculate overtime if clock-out is after the start of overtime
                     if ($clockOut->greaterThanOrEqualTo($overtimeStart)) {
-                        $attendance->overtime = $clockOut->diffInMinutes($overtimeStart);
+                        $attendance->total_overtime = $clockOut->diffInMinutes($overtimeStart);
                     } else {
-                        $attendance->overtime = null; // No overtime if clock-out is before overtime start
+                        $attendance->total_overtime = null; // No overtime if clock-out is before overtime start
                     }
                 } else {
-                    $attendance->overtime = null; // No RequestOvertime means no overtime
+                    $attendance->total_overtime = null; // No RequestOvertime means no overtime
                 }
             
                 // Update clock-out and calculate total hours worked
