@@ -106,13 +106,13 @@
         popup.style.textAlign = 'center';
         popup.style.zIndex = '1000';
         popup.innerHTML = `
-            <div style="margin-bottom: 20px;">
-                <svg width="80" height="80" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div style="margin-bottom: 15px;">
+                <svg width="100" height="100" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill="#34C759" d="M6.75 10.25L4.5 8l-.75.75 3 3 6-6-.75-.75-5.25 5.25z"/>
                 </svg>
             </div>
             <h2 style="color: #333; margin: 0 0 10px;">Absensi Berhasil</h2>
-            <p style="color: #A1A1A1; margin: 0;font-size:25px;font-transform:capitalize">${name}</p>
+            <p style="color: #A1A1A1; margin: 0;font-size:20px;font-transform:capitalize">${name}</p>
             <button id="confirmButton" 
                 style="
                     margin-top: 20px; 
