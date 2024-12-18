@@ -127,6 +127,20 @@
                 ">
                 Continue
             </button>
+            <button id="cancelButton" 
+                style="
+                    margin-top: 10px; 
+                    padding: 10px 20px; 
+                    background: #FF3B30; 
+                    color: white; 
+                    border: none; 
+                    border-radius: 5px; 
+                    font-size: 18px; 
+                    cursor: pointer;
+                    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+                ">
+                Cancel
+            </button>
         `;
 
         document.body.appendChild(overlay);
@@ -175,6 +189,13 @@
 
             
         }, { once: true });
+
+        document.getElementById('cancelButton').addEventListener('click', () => {
+            document.body.removeChild(overlay);
+            document.body.removeChild(popup);
+            startCamera(); // Restart camera
+            startFrameCapture(); // Restart frame capture
+        });
     }
 
     function showAlreadyAbsence(category) {
