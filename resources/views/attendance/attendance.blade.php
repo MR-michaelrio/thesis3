@@ -84,15 +84,15 @@
         stopCamera(); // Stop camera
         clearInterval(captureInterval); // Stop capturing frames
 
-        const overlay = document.createElement('div');
-        overlay.id = 'popup-overlay';
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100vw';
-        overlay.style.height = '100vh';
-        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-        overlay.style.zIndex = '999';
+        // const overlay = document.createElement('div');
+        // overlay.id = 'popup-overlay';
+        // overlay.style.position = 'fixed';
+        // overlay.style.top = '0';
+        // overlay.style.left = '0';
+        // overlay.style.width = '100vw';
+        // overlay.style.height = '100vh';
+        // overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+        // overlay.style.zIndex = '999';
 
         const popup = document.createElement('div');
         popup.id = 'popup';
@@ -149,17 +149,15 @@
                     const attendance = response.data.attendance;
 
                     document.body.removeChild(loadingMessage);
-                    document.body.removeChild(overlay);
+                    // document.body.removeChild(overlay);
 
                     startCamera(); // Restart camera
                     startFrameCapture(); // Restart frame capture
                 })
                 .catch(error => {
                     console.error("Error Absen:", error.response ? error.response.data : error.message);
-                    document.body.removeChild(overlay);
+                    // document.body.removeChild(overlay);
                     document.body.removeChild(popup);
-
-                    isPopupDisplayed = false; // Reset flag
                     document.body.removeChild(loadingMessage);
 
                     startCamera(); // Restart camera
