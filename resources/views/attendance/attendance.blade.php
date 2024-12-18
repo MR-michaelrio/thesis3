@@ -179,19 +179,20 @@
                 formData.append('image', blob, 'frame.jpg');
                 axios.post('{{route("recognize")}}', formData)
                     .then(response => {
-                        console.log("Hasil:", response.data.detections[0].confidence);
+                        console.log("Hasil:", response.data);
                         const faceNames = response.data.face_names || [];
                         const faceConfidence = response.data.detections[0].confidence || [];
                         if(faceNames[0] === "Unknown"){
                             return;
                         }else{
                             if (faceNames.length > 0) {
+
                                 document.getElementById('employeid').value = response.data.full_name || ''; // Example key from response
                                 document.getElementById('employename').value = faceNames[0] || '';
                                 document.getElementById('clock').value = new Date().toLocaleTimeString(); // Current time
                                 document.getElementById('time').value = new Date().toLocaleTimeString();
 
-                                showPopup(esponse.data.full_name,faceConfidence); // Show popup with the first detected name
+                                showPopup(faceNames[0],faceConfidence); // Show popup with the first detected name
                             }
                         }
                     })
