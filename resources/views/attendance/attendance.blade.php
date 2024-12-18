@@ -209,7 +209,7 @@
                             return;
                         }else{
                             if (faceid.length > 0) {
-
+                                console.log(response.data.face_names);
                                 document.getElementById('employeid').value = response.data.employees[0].identification_number; // Example key from response
                                 document.getElementById('employename').value = response.data.employees[0].full_name;
                                 document.getElementById('clock').value = new Date().toLocaleTimeString(); // Current time
