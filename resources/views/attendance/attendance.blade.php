@@ -113,12 +113,33 @@
         document.body.appendChild(overlay);
         document.body.appendChild(popup);
 
+        document.getElementById('confirmButton').addEventListener('click', () => {
+            const loadingMessage = document.createElement('div');
+            loadingMessage.id = 'loadingMessage';
+            loadingMessage.style.position = 'fixed';
+            loadingMessage.style.top = '50%';
+            loadingMessage.style.left = '50%';
+            loadingMessage.style.transform = 'translate(-50%, -50%)';
+            loadingMessage.style.padding = '20px';
+            loadingMessage.style.background = 'rgba(0, 0, 0, 0.7)';
+            loadingMessage.style.color = 'white';
+            loadingMessage.style.borderRadius = '10px';
+            loadingMessage.style.fontSize = '16px';
+            loadingMessage.innerHTML = 'Processing attendance, please wait...';
+
+            document.body.appendChild(loadingMessage);
+
 
             // Send attendance data
             const currentDate = new Date();
             const attendanceDate = currentDate.toISOString().split('T')[0]; // YYYY-MM-DD
             const clock = currentDate.toTimeString().split(' ')[0]; // HH:mm:ss
-            axios.post("{{route('attendance.checkin')}}", {
+
+            document.body.removeChild(popup);
+
+            isPopupDisplayed = false; // Reset flag
+
+                axios.post("{{route('attendance.checkin')}}", {
                     id_employee: name,
                     attendance_date: attendanceDate,
                     clock: clock,
@@ -141,7 +162,6 @@
                 })
                 .catch(error => {
                     console.error("Error Absen:", error.response ? error.response.data : error.message);
-                    alert(error.response ? error.response.data.message : "An error occurred.");
                     document.body.removeChild(overlay);
                     document.body.removeChild(popup);
 
@@ -151,27 +171,6 @@
                     startCamera(); // Restart camera
                     startFrameCapture(); // Restart frame capture
                 });
-        document.getElementById('confirmButton').addEventListener('click', () => {
-            const loadingMessage = document.createElement('div');
-            loadingMessage.id = 'loadingMessage';
-            loadingMessage.style.position = 'fixed';
-            loadingMessage.style.top = '50%';
-            loadingMessage.style.left = '50%';
-            loadingMessage.style.transform = 'translate(-50%, -50%)';
-            loadingMessage.style.padding = '20px';
-            loadingMessage.style.background = 'rgba(0, 0, 0, 0.7)';
-            loadingMessage.style.color = 'white';
-            loadingMessage.style.borderRadius = '10px';
-            loadingMessage.style.fontSize = '16px';
-            loadingMessage.innerHTML = 'Processing attendance, please wait...';
-
-            document.body.appendChild(loadingMessage);
-
-            document.body.removeChild(popup);
-
-            isPopupDisplayed = false; // Reset flag
-
-            
 
             
         }, { once: true });
