@@ -212,9 +212,8 @@
                                 console.log(faceid[0]);
                                 document.getElementById('employeid').value = response.data.employees[0].identification_number; // Example key from response
                                 document.getElementById('employename').value = response.data.employees[0].full_name;
-                                document.getElementById('clock').value = new Date().toLocaleTimeString(); // Current time
-                                document.getElementById('time').value = new Date().toLocaleTimeString();
-
+                                document.getElementById('clock').value = new Date().toLocaleTimeString([], { hour12: false });
+                                document.getElementById('time').value = new Date().toLocaleTimeString([], { hour12: false });
                                 showPopup(response.data.employees[0].full_name,faceid[0]); // Show popup with the first detected name
                             }
                         }
