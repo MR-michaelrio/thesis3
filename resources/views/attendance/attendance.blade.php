@@ -99,7 +99,7 @@
         popup.style.top = '50%';
         popup.style.left = '50%';
         popup.style.transform = 'translate(-50%, -50%)';
-        popup.style.padding = '30px 40px';
+        popup.style.padding = '30px 50px';
         popup.style.background = '#fff';
         popup.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.25)';
         popup.style.borderRadius = '10px';
@@ -107,12 +107,12 @@
         popup.style.zIndex = '1000';
         popup.innerHTML = `
             <div style="margin-bottom: 20px;">
-                <svg width="50" height="50" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="80" height="80" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill="#34C759" d="M6.75 10.25L4.5 8l-.75.75 3 3 6-6-.75-.75-5.25 5.25z"/>
                 </svg>
             </div>
             <h2 style="color: #333; margin: 0 0 10px;">Absensi Berhasil</h2>
-            <p style="color: #A1A1A1; margin: 0;">Name</p>
+            <p style="color: #A1A1A1; margin: 0;">${name}</p>
             <button id="confirmButton" 
                 style="
                     margin-top: 20px; 
@@ -121,7 +121,7 @@
                     color: white; 
                     border: none; 
                     border-radius: 5px; 
-                    font-size: 16px; 
+                    font-size: 18px; 
                     cursor: pointer;
                     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
                 ">
