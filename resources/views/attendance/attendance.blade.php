@@ -177,7 +177,7 @@
         overlay.style.width = '100vw';
         overlay.style.height = '100vh';
         // overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-        overlay.style.zIndex = '999';
+        overlay.style.zIndex = '3';
 
         const popup = document.createElement('div');
         popup.style.position = 'fixed';
@@ -189,7 +189,7 @@
         popup.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.25)';
         popup.style.borderRadius = '10px';
         popup.style.textAlign = 'center';
-        popup.style.zIndex = '1000';
+        popup.style.zIndex = '4';
         popup.innerHTML = `
             <div style="margin-bottom: 15px;">
                 <svg width="100" height="100" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -289,13 +289,13 @@
 
     function showAlreadyAbsence(category) {
         const overlay = document.createElement('div');
-        overlay.id = 'popup-overlay';
+        overlay.id = 'popup-overlay2';
         overlay.style.position = 'fixed';
         overlay.style.top = '0';
         overlay.style.left = '0';
         overlay.style.width = '100vw';
         overlay.style.height = '100vh';
-        overlay.style.zIndex = '999';
+        overlay.style.zIndex = '3';
 
         const popup = document.createElement('div');
         popup.style.position = 'fixed';
@@ -307,7 +307,7 @@
         popup.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.25)';
         popup.style.borderRadius = '10px';
         popup.style.textAlign = 'center';
-        popup.style.zIndex = '1000';
+        popup.style.zIndex = '4';
         let title = "";
         let message = "";
 
@@ -348,11 +348,13 @@
         document.getElementById('closeButton').addEventListener('click', () => {
             document.body.removeChild(overlay);
             document.body.removeChild(popup);
+
             document.getElementById('employeid').value = "";
             document.getElementById('employename').value = "";
             document.getElementById('clock').value = "";
             document.getElementById('time').value = "";
             document.getElementById('id_employee').value = "";
+            
             startCamera(); // Restart camera
             startFrameCapture(); // Restart frame capture
         });
