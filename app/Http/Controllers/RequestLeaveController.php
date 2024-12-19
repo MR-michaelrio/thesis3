@@ -142,6 +142,7 @@ class RequestLeaveController extends Controller
         $leaveRequest = RequestLeave::findOrFail($request->id_request_leave_hdrs);
 
         // Update status
+        $leaveRequest->leave_time = $request->leave_time;
         $leaveRequest->status = $request->status;
         $leaveRequest->id_approver = Auth::user()->employee->id_employee;
         $leaveRequest->save();

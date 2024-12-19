@@ -31,11 +31,12 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/requestleave/update', [RequestLeaveController::class, 'update'])->name('requestleave.update');
     Route::get('/leave/remaining-quota', [RequestLeaveController::class, 'getRemainingQuota'])->name('leave.remainingQuota');
 
+    Route::resource('attendance', AttendanceController::class);
     Route::get('/attendance/data', [AttendanceController::class, 'data'])->name('attendance.data');
     Route::post('/attendance/checkin', [AttendanceController::class, 'checkin'])->name('attendance.checkin');
     Route::post('/recognize', [AttendanceController::class, 'recognize'])->name('recognize');
-    Route::post('/recognize2', [AttendanceController::class, 'processFrame']);
-    Route::resource('attendance', AttendanceController::class);
+    Route::get('/attendance-data', [AttendanceController::class, 'getAttendanceData'])->name('attendance-data');
+    Route::post('/attendance-manual', [AttendanceController::class, 'manualattendance'])->name('attendance-manual');
 
     Route::resource('employee', EmployeeController::class);
     Route::post('/employee/statusupdate/{id}', [EmployeeController::class, 'statusupdate'])->name('employee.statusupdate');
@@ -54,6 +55,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/overtime/clock/{date}', [RequestOvertimeController::class, 'getOvertimeData'])->name('overtime.clock');
     Route::put('/requestovertime/update', [RequestOvertimeController::class, 'update'])->name('requestovertime.update');
 
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/calendar', [HomeController::class, 'calendar'])->name('calendar');
     Route::resource('leaves', LeaveController::class);
     Route::resource('companies', CompanyController::class);
 
@@ -62,16 +65,15 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/events/{id}', [EventController::class, 'destroy'])->name('calendar.delete');
 
     Route::get('/', function () {
-            return redirect()->route('home');
-        });
-    Route::get('/attendance-data', [AttendanceController::class, 'getAttendanceData'])->name('attendance-data');
-
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
-    Route::get('/calendar', [HomeController::class, 'calendar'])->name('calendar');
+        return redirect()->route('home');
+    });
 });
+
 Route::get('/test', function () {
     return Hash::make("123123123");
 });
+
 Auth::routes();
+
 Route::post('logout', [HomeController::class, 'logout'])->name('logout');
 

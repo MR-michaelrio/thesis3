@@ -40,17 +40,102 @@
                         </div> -->
                         <input type="text" class="form-control" id="time" placeholder="Enter Time" disabled>
                     </div>
-                    <button type="button" class="btn btn-block btn-primary btn-sm">Add Manually</button>
+                    <button type="button" class="btn btn-block btn-primary btn-sm" data-toggle="modal" data-target="#addmanualmodal">Add Manually</button>
                     <a href="{{route('attendance.create')}}" class="btn btn-block btn-sm" style="color:#007bff">Register Face Recognition here!</a>
                 </div>
             <!-- </form> -->
         </div>
     </div>
 </div>
+<!-- Modal for Manual Attendance Detail -->
+<div class="modal fade" id="addmanualmodal" tabindex="-1" role="dialog" aria-labelledby="addmanualmodal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#0FBEF2;color:white">
+                <h5 class="modal-title" id="addmanualmodal">Manual Attendance</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="addmanualform" style="text-transform: capitalize;" method="post">
+                @csrf
+                <div class="modal-body">
+                    <div class="col-12">
+                        <strong>Employee ID:</strong></span>
+                    </div>
+                    <div class="col-12">
+                        <input type="text" id="id_employee" name="id_employee" class="form-control" placeholder="ID Employee">
+                    </div>
+                    <div id="loadingSpinner" class="text-center mt-3" style="display: none;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <p>Please wait...</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Back</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
+    document.getElementById('addmanualform').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Get form data
+        const idEmployee = document.getElementById('id_employee').value;
+        console.log("idEmployee",idEmployee);
+        // Ensure the employee ID is not empty
+        if (!idEmployee) {
+            alert('Employee ID cannot be empty');
+            return;
+        }
+        document.getElementById('loadingSpinner').style.display = 'block';
+
+        // Prepare the form data to be sent
+        const formData = new FormData();
+        formData.append('id_employee', idEmployee);
+        formData.append('_token', document.querySelector('input[name="_token"]').value);
+
+        // Send the request via Fetch API
+        fetch('{{ route('attendance-manual') }}', {
+            method: 'POST',
+            body: formData, // Send the FormData
+        })
+        .then(response => response.json()) // Parse the JSON response
+        .then(data => {
+            // Handle the response
+            console.log("Response Data:", data);
+            document.getElementById('loadingSpinner').style.display = 'none';
+            if (data) {
+                console.log('Form data:', formData);
+                console.log('Response data:', data);
+                $('#addmanualmodal').modal('hide');
+                showAlreadyAbsence("clockin");
+                startCamera();
+                startFrameCapture();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            // Handle error
+            document.getElementById('loadingSpinner').style.display = 'none';
+
+            console.error('Error:', error);
+            alert('There was an error with the submission.');
+        });
+    });
+
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
     const context = canvas.getContext('2d');
@@ -301,6 +386,10 @@
             }, 'image/jpeg');
         }, 500);
     }
+
+    document.querySelector('[data-toggle="modal"][data-target="#addmanualmodal"]').addEventListener('click', () => {
+        stopCamera(); // Stop camera when the modal is shown
+    });
 
     startFrameCapture(); // Start capturing frames
 </script>

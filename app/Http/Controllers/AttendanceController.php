@@ -149,46 +149,6 @@ class AttendanceController extends Controller
         }
     }
 
-    public function processFrame(Request $request)
-    {
-        // Validate the incoming frame (optional)
-        $request->validate([
-            'image' => 'required|image', // Ensure image is sent
-        ]);
-
-        // Get the uploaded image
-        $image = $request->file('image');
-
-        // Prepare the image data to send to the Python service
-        $imagePath = $image->getRealPath();
-        $imageName = $image->getClientOriginalName();
-
-        // Send the image to the Flask service
-        $client = new Client();
-        try {
-            $response = $client->post('http://127.0.0.1:6002/process_frame', [
-                'multipart' => [
-                    [
-                        'name'     => 'image',
-                        'contents' => fopen($imagePath, 'r'),
-                        'filename' => $imageName
-                    ]
-                ]
-            ]);
-
-            // Handle the response from the Python service
-            $data = json_decode($response->getBody()->getContents(), true);
-
-            // Return the processed data (e.g., detected faces, labels, etc.)
-            return response()->json($data);
-
-        } catch (\Exception $e) {
-            // Log and return error if something goes wrong
-            Log::error('Error processing frame: ' . $e->getMessage());
-            return response()->json(['error' => 'Error processing frame'], 500);
-        }
-    }
-    
     public function checkin(Request $request)
     {
         $currentTime = Carbon::now('Asia/Jakarta'); // Get the current time using Carbon
@@ -350,5 +310,134 @@ class AttendanceController extends Controller
         }
         
         return response()->json($attendanceData);
+    }
+
+    public function manualattendance(Request $request)
+    {
+        $currentTime = Carbon::now('Asia/Jakarta'); // Get the current time using Carbon
+        $dayOfWeek = $currentTime->dayOfWeekIso;
+        // Get attendance date and clock-in time from the request or default to the current date/time
+        $attendance_date = $currentTime->format("Y-m-d"); // Format YYYY-MM-DD
+        $attendance_clock = $currentTime->format('H:i:s'); // Default to current time if not provided
+        $id_employee = $request->id_employee;
+        // Fetch the employee's shift assignment
+        $assignshift = AssignShift::where('id_employee', $id_employee)->where('day', $dayOfWeek)->first();
+
+        // If no shift assignment found, return an error response
+        if (!$assignshift) {
+            return response()->json([
+                'message' => 'No shift assignment found for the employee.',
+            ], 201); // Not Found
+        }
+
+        $attendance = Attendance::where('id_employee', $id_employee)
+                            ->where('attendance_date', $attendance_date)
+                            ->first();
+
+        // If attendance exists and clock-out is already recorded, return message
+        if ($attendance && $attendance->clock_out) {
+            return response()->json([
+                'message' => 'Already clocked out!',
+            ], 201); // OK
+        }
+
+        // Check if the current time is after the employee's clock-out time
+        if ($currentTime->format('H:i:s') >= $assignshift->shift->clock_out) {
+            if ($attendance) {
+                $clockIn = Carbon::createFromFormat('H:i:s', $attendance->clock_in);
+                $clockOut = Carbon::createFromFormat('H:i:s', $attendance_clock);
+            
+                // Check for a related RequestOvertime
+                $requestOvertime = RequestOvertime::where('id_employee', $attendance->id_employee)
+                                                  ->where('overtime_date', $attendance->attendance_date)
+                                                  ->first();
+            
+                // Handle clock-out based on RequestOvertime
+                if ($requestOvertime) {
+                    $overtimeEnd = Carbon::createFromFormat('H:i:s', $requestOvertime->end);
+                    $overtimeStart = Carbon::createFromFormat('H:i:s', $requestOvertime->start);
+            
+                    if ($clockOut->greaterThan($overtimeEnd)) {
+                        $clockOut = $overtimeEnd;
+                    }
+            
+                    // Calculate overtime if clock-out is after the start of overtime
+                    if ($clockOut->greaterThanOrEqualTo($overtimeStart)) {
+                        $overtimeMinutes = $overtimeStart->diffInMinutes($clockOut);
+                        
+                        $overtimeHours = floor($overtimeMinutes / 60);
+                        $overtimeRemainingMinutes = $overtimeMinutes % 60;
+
+                        $attendance->total_overtime = sprintf('%02d:%02d', $overtimeHours, $overtimeRemainingMinutes);
+                        $attendance->attendance_status = 'overtime';
+
+                    } else {
+                        $attendance->total_overtime = null; // No overtime if clock-out is before overtime start
+                        $attendance->attendance_status = 'present';
+                    }
+                } else {
+                    $attendance->total_overtime = null; // No RequestOvertime means no overtime
+                    $attendance->attendance_status = 'present';
+                }
+            
+                // Update clock-out and calculate total hours worked
+                $attendance->clock_out = $clockOut->format('H:i:s');
+                $dailyTotal = $clockIn->diff($clockOut);
+                $attendance->daily_total = sprintf('%02d:%02d', $dailyTotal->h, $dailyTotal->i);
+            
+                // Update attendance status and save
+                $attendance->save();
+            
+                // Return a response indicating success
+                return response()->json([
+                    'message' => 'Attendance clock-out updated!',
+                    'attendance' => $attendance,
+                ], 200); // OK
+            }else {
+                // If no attendance record is found to update
+                return response()->json([
+                    'message' => 'No attendance record found to update.',
+                ], 201); // Not Found
+            }
+        } else {
+            // If attendance exists and clock-in is already recorded, return message
+            if ($attendance && $attendance->clock_in) {
+                return response()->json([
+                    'message' => 'Already clocked in!',
+                ], 201); // OK
+            }
+            // Get the clock-in time assigned to the shift
+            $clock_in_assign = $assignshift->shift->clock_in;
+            $attendance_policy = AttendancePolicy::where("id_company",Auth::user()->id_company)->first();
+            $late_tolerance = $attendance_policy->late_tolerance;
+
+            $clock_in_assign_minutes = (int)date('H', strtotime($clock_in_assign)) * 60 + (int)date('i', strtotime($clock_in_assign));
+            $allowed_latest_time = $clock_in_assign_minutes + $late_tolerance;
+
+            $attendance_clock_minutes = (int)date('H', strtotime($attendance_clock)) * 60 + (int)date('i', strtotime($attendance_clock));
+
+            $attendance_status = ($attendance_clock_minutes > $allowed_latest_time) ? 'late' : 'present';
+
+            
+            // Determine the attendance status based on whether the employee is late or on time
+            // $attendance_status = (($clock_in_assign + $late_tolerance) < $attendance_clock) ? 'late' : 'present';
+
+            // Create a new attendance record for the employee
+            $attendance = Attendance::create([
+                'id_employee' => $request->id_employee, // Ensure the employee ID is passed correctly
+                'attendance_date' => $attendance_date,
+                'shift_id' => $assignshift->id_shift,
+                'clock_in' => $attendance_clock,
+                'attendance_status' => $attendance_status,
+                'id_company' => Auth::user()->id_company,
+            ]);
+
+            // Return a success response after storing the attendance
+            return response()->json([
+                'message' => 'Attendance successfully stored!',
+                'attendance' => $attendance,
+                
+            ], 201); // Created
+        }
     }
 }
