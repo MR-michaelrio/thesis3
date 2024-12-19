@@ -348,6 +348,11 @@
         document.getElementById('closeButton').addEventListener('click', () => {
             document.body.removeChild(overlay);
             document.body.removeChild(popup);
+            document.getElementById('employeid').value = "";
+            document.getElementById('employename').value = "";
+            document.getElementById('clock').value = "";
+            document.getElementById('time').value = "";
+            document.getElementById('id_employee').value = "";
             startCamera(); // Restart camera
             startFrameCapture(); // Restart frame capture
         });
