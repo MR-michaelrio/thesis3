@@ -40,7 +40,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 text-danger">
+                            <div class="col-12 text-danger" style="border: 1px solid red; padding: 1rem;">
                                 <span id="error"></span>
                             </div>
                         </div>
