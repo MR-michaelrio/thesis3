@@ -56,7 +56,7 @@
                                 </td>
                                 <td>
                                     <div style="width:50px;height:50px; display: flex; justify-content: center; align-items: center;">
-                                        {{$a->department->department_code}}
+                                        {{$a->department?->department_code}}
                                     </div>
                                 </td>
                                 <td>
@@ -134,7 +134,7 @@
                                 </td>
                                 <td>
                                     <div style="width:50px;height:50px; display: flex; justify-content: center; align-items: center;">
-                                        {{$s->department->department_code}}
+                                        {{$s->department?->department_code}}
                                     </div>
                                 </td>
                                 <td>
@@ -214,7 +214,7 @@
                                 </td>
                                 <td>
                                     <div style="width:50px;height:50px; display: flex; justify-content: center; align-items: center;">
-                                        {{$e->department->department_code}}
+                                        {{$e->department?->department_code}}
                                     </div>
                                 </td>
                                 <td>
