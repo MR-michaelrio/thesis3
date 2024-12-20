@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Leave;
+use App\Models\AssignLeave;
 use App\Models\RequestLeave;
 use Auth;
 
@@ -26,7 +27,7 @@ class RequestLeaveController extends Controller
                                     ->where('id_employee', Auth::user()->employee->id_employee)                              
                                     ->get();
         }else{
-            $leave = RequestLeave::where("id_company",Auth::user()->id_company)->get();
+            $leave = RequestLeave::where("id_company",Auth::user()->id_company)->with('leaeveremaining')->get();
         }
         // dd($leave);
         return view("approval.leave-data",compact("leave"));
@@ -84,31 +85,41 @@ class RequestLeaveController extends Controller
      */
     public function store(Request $request)
     {
-        // Convert dates from 'DD/MM/YYYY' to 'YYYY-MM-DD'
-        $leaveStartDate = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $request->leave_start_date)->format('Y-m-d H:i');
-        $leaveEndDate = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $request->leave_end_date)->format('Y-m-d H:i');
+        $assignleave = AssignLeave::where('id_leave',$request->leave_type)->where('id_employee',Auth::user()->employee->id_employee)->first();
+        if ($assignleave && $assignleave->remaining >= $request->leave_quota_requested) {
+            // Convert dates from 'DD/MM/YYYY' to 'YYYY-MM-DD'
+            $leaveStartDate = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $request->leave_start_date)->format('Y-m-d H:i');
+            $leaveEndDate = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $request->leave_end_date)->format('Y-m-d H:i');
 
-        // Handle file upload if there is a file
-        $filePath = null;
-        if ($request->hasFile('request_file')) {
-            $filePath = $request->file('request_file')->store('leave_requests', 'public'); // Save file
-        }
-        // Create a new leave request
-        $leaveRequest = RequestLeave::create([
-            'leave_type' => $request->leave_type,
-            'leave_time' => $request->leave_time,
-            'leave_start_date' => $leaveStartDate,  // Save formatted date
-            'leave_end_date' => $leaveEndDate,      // Save formatted date
-            'request_description' => $request->request_description,
-            'request_file' => $filePath,            // Save file path
-            'id_employee' => Auth::user()->employee->id_employee,            // Employee ID from authenticated user
-            'status' => 'Pending',                  // Initial status
-            'id_company' => Auth::user()->id_company,
-            'requested_quota' => $request->leave_quota_requested    // Use calculated quota
-        ]);
+            // Handle file upload if there is a file
+            $filePath = null;
+            if ($request->hasFile('request_file')) {
+                $filePath = $request->file('request_file')->store('leave_requests', 'public'); // Save file
+            }
+            // Create a new leave request
+            $leaveRequest = RequestLeave::create([
+                'leave_type' => $request->leave_type,
+                'leave_time' => $request->leave_time,
+                'leave_start_date' => $leaveStartDate,  // Save formatted date
+                'leave_end_date' => $leaveEndDate,      // Save formatted date
+                'request_description' => $request->request_description,
+                'request_file' => $filePath,            // Save file path
+                'id_employee' => Auth::user()->employee->id_employee,            // Employee ID from authenticated user
+                'status' => 'Pending',                  // Initial status
+                'id_company' => Auth::user()->id_company,
+                'requested_quota' => $request->leave_quota_requested    // Use calculated quota
+            ]);
 
-        // Redirect back with success message
-        return redirect()->route('requestleave.index')->with('success', 'Leave request submitted successfully!');
+            $assignleave->update([
+                "remaining" => $assignleave->remaining - $request->leave_quota_requested
+            ]);
+
+            // Redirect back with success message
+            return redirect()->route('requestleave.index')->with('success', 'Leave request submitted successfully!');
+        } else {
+            // Handle case when remaining quota is insufficient
+            return redirect()->route('requestleave.index')->with('error', 'Insufficient leave quota available.');
+        }    
     }
 
     /**
@@ -142,10 +153,36 @@ class RequestLeaveController extends Controller
         $leaveRequest = RequestLeave::findOrFail($request->id_request_leave_hdrs);
 
         // Update status
-        $leaveRequest->leave_time = $request->leave_time;
         $leaveRequest->status = $request->status;
         $leaveRequest->id_approver = Auth::user()->employee->id_employee;
         $leaveRequest->save();
+
+        if($request->status == "reject")
+        {
+            $assignleave = AssignLeave::where('id_leave', $leaveRequest->leave_type)
+                        ->where('id_employee', Auth::user()->employee->id_employee)
+                        ->first();
+            $newRemaining = $assignleave->remaining + $leaveRequest->requested_quota;
+
+            // Jika newRemaining melebihi quota, batasi menjadi quota
+            if ($newRemaining > $assignleave->quota) {
+                $newRemaining = $assignleave->quota;
+            }
+
+            // Update dengan nilai yang sudah dibatasi
+            $assignleave->update([
+                "remaining" => $newRemaining
+            ]);
+        }else{
+            $assignleave = AssignLeave::where('id_leave', $leaveRequest->leave_type)
+                        ->where('id_employee', Auth::user()->employee->id_employee)
+                        ->first();
+            $newRemaining = $assignleave->remaining - $leaveRequest->requested_quota;
+
+            $assignleave->update([
+                "remaining" => $newRemaining
+            ]);
+        }
 
         // Redirect dengan pesan sukses
         return redirect()->back()->with('success', 'Leave request status updated successfully!');

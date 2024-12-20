@@ -44,9 +44,13 @@ class RequestLeave extends Model
         return $this->belongsTo(Employee::class, 'id_approver', 'id_employee');
     }
 
-
     public function leavetype()
     {
         return $this->belongsTo(Leave::class, 'leave_type', 'id_leave');
+    }
+
+    public function leaeveremaining()
+    {
+        return $this->belongsTo(AssignLeave::class, 'leave_type', 'id_leave');
     }
 }

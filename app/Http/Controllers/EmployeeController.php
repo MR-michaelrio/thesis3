@@ -162,11 +162,12 @@ class EmployeeController extends Controller
 
             if ($request->has('leaves')) {
                 foreach ($request->input('leaves') as $leaveId) {
+                    $leave = Leave::where("id_leave",$leaveId)->first();
                     AssignLeave::create([
                         'id_employee' => $employee->id_employee,
                         'id_leave' => $leaveId,
-                        'quota' => 0,
-                        'remaining' => 0,
+                        'quota' => $leave->default_quota, 
+                        'remaining' => $leave->default_quota,
                         'id_company' => Auth::user()->id_company,
                     ]);
                 }
@@ -323,11 +324,12 @@ class EmployeeController extends Controller
         
                 if ($request->has('leaves')) {
                     foreach ($request->input('leaves') as $leaveId) {
+                        $leave = Leave::where("id_leave",$leaveId)->first();
                         AssignLeave::create([
                             'id_employee' => $employee->id_employee,
                             'id_leave' => $leaveId,
-                            'quota' => 0, 
-                            'remaining' => 0,
+                            'quota' => $leave->default_quota, 
+                            'remaining' => $leave->default_quota,
                             'id_company' => Auth::user()->id_company,
                         ]);
                     }

@@ -24,6 +24,7 @@
                             <th>Leave Date</th>
                             <th>Leave Time</th>
                             <th>Quota Requested</th>
+                            <th>Quota Remaining</th>
                             <th>Approver ID</th>
                             <th>Approver Name</th>
                             <th>Status</th>
@@ -41,6 +42,7 @@
                             data-leaveend="{{ \Carbon\Carbon::parse($r->leave_end_date)->format('d/m/Y H:i') }}" 
                             data-status="{{ $r->status }}" 
                             data-quota="{{ $r->requested_quota }}" 
+                            data-remaining="{{ $r->leaeveremaining->remaining }}" 
                             data-leavetime="{{ $r->leave_time }}" 
                             data-approver="{{ $r->id_approver ?? 'N/A' }}"
                             data-approver-name="{{ $r->approver ? $r->approver->full_name : 'N/A' }}"
@@ -52,8 +54,9 @@
                             <td>{{ \Carbon\Carbon::parse($r->leave_start_date)->format('d/m/Y H:i') }} - {{ \Carbon\Carbon::parse($r->leave_end_date)->format('d/m/Y H:i') }}</td>
                             <td>{{ $r->leave_time }}</td>
                             <td>{{ $r->requested_quota }}</td>
+                            <td>{{ $r->leaeveremaining->remaining }}</td>
                             <td>{{ $r->id_approver }}</td>
-                            <td>{{ $r->approver->full_name }}</td>
+                            <td>{{ $r->approver?->full_name }}</td>
                             <td>{{ $r->status }}</td>
                         </tr>
                         @endforeach
@@ -94,13 +97,15 @@
                         <strong>Leave Status:</strong> <span id="modalLeaveStatus"></span>
                     </div>
                     <div class="col-12">
-                        <div class="col-6"><strong>Leave Date:</strong> <span id="modalLeaveDates"></span></div>
-                        <div class="col-6"><strong>Half Day/Full Day:</strong> <span id="modalLeaveTime"></span></div>
+                        <div class="row">
+                            <div class="col-6"><strong>Leave Date:</strong> <span id="modalLeaveDates"></span></div>
+                            <div class="col-6"><strong>Half Day/Full Day:</strong> <span id="modalLeaveTime"></span></div>
+                        </div>
                     </div>
                     <div class="col-12">
                         <div class="row">
                             <div class="col-6"><strong>Quota Requested:</strong> <span id="modalQuota"></span></div>
-                            <div class="col-6"><strong>Quota Remaining:</strong> <span id="modalRemainingQuota"></span></div>
+                            <div class="col-6"><strong>Quota Remaining:</strong> <span id="modalRemaining"></span></div>
                         </div>
                     </div>
                     <div class="col-12">
@@ -168,6 +173,7 @@
             $("#modalLeaveType").text($(this).data('leavetype'));
             $("#modalLeaveDates").text($(this).data('leavestart') + " - " + $(this).data('leaveend'));
             $("#modalQuota").text($(this).data('quota'));
+            $("#modalRemaining").text($(this).data('remaining'));
             $("#modalLeaveTime").text($(this).data('leavetime'));
             $("#modalApproverID").text($(this).data('approver'));
             $("#modalApproverName").text($(this).data('approver-name'));
