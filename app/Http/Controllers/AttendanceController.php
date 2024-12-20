@@ -321,7 +321,7 @@ class AttendanceController extends Controller
         $attendance_date = $currentTime->format("Y-m-d"); // Format YYYY-MM-DD
         $attendance_clock = $currentTime->format('H:i:s'); // Default to current time if not provided
 
-        $id_employee = User::where('identification_number',$id_identification)->with('employee')->first();
+        $id_employee = User::where('identification_number',$request->id_identification)->with('employee')->first();
         $id_employee = $id_employee->employee->id_employee;
         // Fetch the employee's shift assignment
         $assignshift = AssignShift::where('id_employee', $id_employee)->where('day', $dayOfWeek)->first();
