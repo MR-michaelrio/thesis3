@@ -119,7 +119,8 @@
                 $('#error').html(xhr.responseJSON.error);
                 $('#error').css({
                     "border": "1px solid red",
-                    "padding": "1rem"
+                    "padding": "1rem",
+                    "margin-top": "3px"
                 });                
                 $('#error').show();
                 
