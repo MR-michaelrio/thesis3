@@ -111,7 +111,7 @@
                 //     alert('An error occurred while fetching data: ' + error);
                 // }
                 
-                $('input[name="reservationdate1"]').val('');
+                $('input[name="overtime_date"]').val('');
                 $('input[name="start"]').val('');
                 $('input[name="mulai"]').val('');
                 $('input[name="akhir"]').val('');
