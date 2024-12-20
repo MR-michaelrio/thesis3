@@ -39,8 +39,8 @@ class RequestLeaveController extends Controller
     public function create()
     {
         //
-        $leave = Leave::where("id_company",Auth::user()->id_company)->get();
-        
+        $leave = AssignLeave::where("id_employee",Auth::user()->employee->id_employee)->get();
+        // return $leave;
         // dd($leave);
         return view("request.leave-request",compact("leave"));
     }

@@ -33,6 +33,6 @@ class AssignLeave extends Model
     // Each AssignLeave belongs to one Leave
     public function leave()
     {
-        return $this->belongsTo(Leave::class, 'id_leave');
+        return $this->belongsTo(Leave::class, 'id_leave', 'id_leave');
     }
 }

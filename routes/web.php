@@ -67,6 +67,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', function () {
         return redirect()->route('home');
     });
+
+    Route::get('/invoice', function () {
+        return view('invoice');
+    });
 });
 
 Route::get('/test', function () {

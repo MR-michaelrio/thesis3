@@ -18,7 +18,7 @@
                                 <select class="form-control select2 select2-hidden-accessible" name="leave_type" style="width: 100%;" tabindex="-1" aria-hidden="true">
                                     <option disabled selected>Select Leave Type</option>
                                     @foreach($leave as $d)
-                                        <option value="{{$d->id_leave}}">{{$d->leave_name}}</option>
+                                        <option value="{{$d->id_leave}}">{{$d->leave->leave_name}}</option>
                                     @endforeach
                                 </select>
                             </div>
