@@ -88,6 +88,12 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+    const overlay = document.getElementById('popup-overlay');
+if (overlay) {
+    document.body.removeChild(overlay);
+} else {
+    console.error('Overlay tidak ditemukan di DOM.');
+}
     document.getElementById('addmanualform').addEventListener('submit', function (event) {
         event.preventDefault(); // Prevent the default form submission
 
@@ -239,6 +245,7 @@
             const clock = currentDate.toTimeString().split(' ')[0]; // HH:mm:ss
 
             document.body.removeChild(popup);
+            document.body.removeChild(overlay);
 
             isPopupDisplayed = false; // Reset flag
 
