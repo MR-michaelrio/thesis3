@@ -410,11 +410,6 @@
         clearInterval(captureInterval);
         stopCamera();
     });
-    $('#addmanualmodal').on('hide.bs.modal', function () {
-        // Restart frame capture saat modal ditutup
-        startCamera();
-        startFrameCapture();
-    });
     startFrameCapture(); // Start capturing frames
 </script>
 @endsection
