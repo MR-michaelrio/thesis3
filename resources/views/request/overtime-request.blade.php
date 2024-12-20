@@ -40,7 +40,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 text-danger">
+                            <div class="col-12 text-danger mt-2">
                                 <span id="error"></span>
                             </div>
                         </div>
@@ -120,7 +120,6 @@
                 $('#error').css({
                     "border": "1px solid red",
                     "padding": "1rem",
-                    "margin-top": "3px"
                 });                
                 $('#error').show();
                 
