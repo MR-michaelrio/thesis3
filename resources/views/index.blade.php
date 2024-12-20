@@ -450,6 +450,77 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 
     @yield("scripts")
+
+    <!-- popup success -->
+    <script>
+        const overlay = document.getElementById('popup-overlay');
+        if (overlay) {
+            document.body.removeChild(overlay);
+        } else {
+            console.error('Overlay tidak ditemukan di DOM.');
+        }
+        function showSuccesPopup(message) {
+            const overlay = document.createElement('div');
+            overlay.id = 'popup-overlay2';
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100vw';
+            overlay.style.height = '100vh';
+            overlay.style.zIndex = '3';
+
+            const popup = document.createElement('div');
+            popup.style.position = 'fixed';
+            popup.style.top = '50%';
+            popup.style.left = '50%';
+            popup.style.transform = 'translate(-50%, -50%)';
+            popup.style.padding = '30px 70px';
+            popup.style.background = '#fff';
+            popup.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.25)';
+            popup.style.borderRadius = '10px';
+            popup.style.textAlign = 'center';
+            popup.style.zIndex = '4';
+            popup.innerHTML = `
+                <div style="margin-bottom: 15px;">
+                    <svg width="100" height="100" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#34C759" d="M6.75 10.25L4.5 8l-.75.75 3 3 6-6-.75-.75-5.25 5.25z"/>
+                    </svg>
+                </div>
+                <h2 style="color: #333; margin: 0 0 10px;">${message}</h2>
+                <button id="closeButton" 
+                    style="
+                        margin-top: 20px; 
+                        padding: 10px 20px; 
+                        background: #FF3B30; 
+                        color: white; 
+                        border: none; 
+                        border-radius: 5px; 
+                        font-size: 18px; 
+                        cursor: pointer;
+                        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+                    ">
+                    Close
+                </button>
+            `;
+
+            document.body.appendChild(overlay);
+            document.body.appendChild(popup);
+
+            document.getElementById('closeButton').addEventListener('click', () => {
+                document.body.removeChild(overlay);
+                document.body.removeChild(popup);
+
+                document.getElementById('employeid').value = "";
+                document.getElementById('employename').value = "";
+                document.getElementById('clock').value = "";
+                document.getElementById('time').value = "";
+                document.getElementById('id_identification').value = "";
+                
+                startCamera(); // Restart camera
+                startFrameCapture(); // Restart frame capture
+            });
+        }
+    </script>
     <!-- logout -->
     <script>
         document.getElementById('logoutButton').addEventListener('click', function() {
