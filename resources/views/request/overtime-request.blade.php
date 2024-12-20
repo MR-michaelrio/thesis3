@@ -40,7 +40,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 text-danger mt-2">
+                            <div class="form-group text-danger mt-2">
                                 <span id="error"></span>
                             </div>
                         </div>
