@@ -40,7 +40,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 text-danger" style="border: 1px solid red; padding: 1rem;">
+                            <div class="col-12 text-danger">
                                 <span id="error"></span>
                             </div>
                         </div>
@@ -117,6 +117,10 @@
                 $('input[name="akhir"]').val('');
                 $('input[name="total_overtime"]').val('');
                 $('#error').html(xhr.responseJSON.error);
+                $('#error').css({
+                    "border": "1px solid red",
+                    "padding": "1rem"
+                });                
                 $('#error').show();
                 
                 console.error('Error details:', error);
