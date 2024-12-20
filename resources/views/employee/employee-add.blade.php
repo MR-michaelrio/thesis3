@@ -33,9 +33,9 @@
                         <!-- Profile Image Section -->
                         <div class="text-center mb-4">
                             <div style="position: relative; display: inline-block;">
-                                    <div style="background-color:#CED4DA; border-radius:50%; width:120px; height:120px; display: flex; justify-content: center; align-items: center;" id="profileImagePreview" alt="Profile Image">
-                                            <i class="far fa-user fa-2x"></i>
-                                        </div>
+                            <img src="https://media.istockphoto.com/id/1128826884/vector/no-image-vector-symbol-missing-available-icon-no-gallery-for-this-moment.jpg?s=612x612&w=0&k=20&c=390e76zN_TJ7HZHJpnI7jNl7UBpO3UP7hpR2meE1Qd4=" 
+                            id="profileImagePreview" alt="Profile Image" class="rounded-circle" width="120"
+                                    height="120" style="border: 2px solid #ccc;">
                                 <label for="profileImageInput"
                                     style="position: absolute; bottom: 0; right: 0; background-color: white; border-radius: 50%; padding: 5px; cursor: pointer;">
                                     <i class="fas fa-search" style="font-size: 18px; color: gray;"></i>
