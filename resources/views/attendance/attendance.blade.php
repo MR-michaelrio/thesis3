@@ -64,7 +64,7 @@
                         <strong>Employee ID:</strong></span>
                     </div>
                     <div class="col-12">
-                        <input type="text" id="id_employee" name="id_employee" class="form-control" placeholder="ID Employee">
+                        <input type="text" id="id_identification" name="id_identification" class="form-control" placeholder="ID Employee">
                     </div>
                     <div id="loadingSpinner" class="text-center mt-3" style="display: none;">
                         <div class="spinner-border text-primary" role="status">
@@ -89,19 +89,19 @@
 
 <script>
     const overlay = document.getElementById('popup-overlay');
-if (overlay) {
-    document.body.removeChild(overlay);
-} else {
-    console.error('Overlay tidak ditemukan di DOM.');
-}
+    if (overlay) {
+        document.body.removeChild(overlay);
+    } else {
+        console.error('Overlay tidak ditemukan di DOM.');
+    }
     document.getElementById('addmanualform').addEventListener('submit', function (event) {
         event.preventDefault(); // Prevent the default form submission
 
         // Get form data
-        const idEmployee = document.getElementById('id_employee').value;
-        console.log("idEmployee",idEmployee);
+        const idIdentification = document.getElementById('id_identification').value;
+        console.log("idEmployee",idIdentification);
         // Ensure the employee ID is not empty
-        if (!idEmployee) {
+        if (!idIdentification) {
             alert('Employee ID cannot be empty');
             return;
         }
@@ -109,7 +109,7 @@ if (overlay) {
 
         // Prepare the form data to be sent
         const formData = new FormData();
-        formData.append('id_employee', idEmployee);
+        formData.append('id_identification', idIdentification);
         formData.append('_token', document.querySelector('input[name="_token"]').value);
 
         // Send the request via Fetch API
@@ -360,7 +360,7 @@ if (overlay) {
             document.getElementById('employename').value = "";
             document.getElementById('clock').value = "";
             document.getElementById('time').value = "";
-            document.getElementById('id_employee').value = "";
+            document.getElementById('id_identification').value = "";
             
             startCamera(); // Restart camera
             startFrameCapture(); // Restart frame capture

@@ -10,6 +10,7 @@ use App\Models\Attendance;
 use App\Models\AttendancePolicy;
 use App\Models\AssignShift;
 use App\Models\RequestOvertime;
+use App\Models\User;
 
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
@@ -319,7 +320,8 @@ class AttendanceController extends Controller
         // Get attendance date and clock-in time from the request or default to the current date/time
         $attendance_date = $currentTime->format("Y-m-d"); // Format YYYY-MM-DD
         $attendance_clock = $currentTime->format('H:i:s'); // Default to current time if not provided
-        $id_employee = $request->id_employee;
+
+        $id_employee = User::where('identification_number',$request->id_identification)->value('id_employee');
         // Fetch the employee's shift assignment
         $assignshift = AssignShift::where('id_employee', $id_employee)->where('day', $dayOfWeek)->first();
 
