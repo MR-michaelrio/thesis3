@@ -127,7 +127,7 @@
                 console.log('Form data:', formData);
                 console.log('Response data:', data);
                 $('#addmanualmodal').modal('hide');
-                showAlreadyAbsence("clockin");
+                showAlreadyAbsence(data.message);
             } else {
                 alert('Error: ' + data.message);
             }
@@ -293,7 +293,7 @@
         });
     }
 
-    function showAlreadyAbsence(category) {
+    function showAlreadyAbsence(message) {
         const overlay = document.createElement('div');
         overlay.id = 'popup-overlay2';
         overlay.style.position = 'fixed';
@@ -314,24 +314,13 @@
         popup.style.borderRadius = '10px';
         popup.style.textAlign = 'center';
         popup.style.zIndex = '4';
-        let title = "";
-        let message = "";
-
-        if (category === "clockin") {
-            title = "Already Clocked In!";
-            message = "You are already clocked in for today.";
-        } else {
-            title = "Attendance Clock-out Updated!";
-            message = "Your clock-out time has been updated.";
-        }
         popup.innerHTML = `
             <div style="margin-bottom: 15px;">
                 <svg width="100" height="100" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill="#34C759" d="M6.75 10.25L4.5 8l-.75.75 3 3 6-6-.75-.75-5.25 5.25z"/>
                 </svg>
             </div>
-            <h2 style="color: #333; margin: 0 0 10px;">${title}</h2>
-            <p style="color: #A1A1A1; margin: 0; font-size: 20px;">${message}</p>
+            <h2 style="color: #333; margin: 0 0 10px;">${message}</h2>
             <button id="closeButton" 
                 style="
                     margin-top: 20px; 

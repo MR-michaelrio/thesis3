@@ -399,7 +399,7 @@ class AttendanceController extends Controller
             }else {
                 // If no attendance record is found to update
                 return response()->json([
-                    'message' => 'No attendance record found to update.',
+                    'message' => 'No attendance record found.',
                 ], 201); // Not Found
             }
         } else {
