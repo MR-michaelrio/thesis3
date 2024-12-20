@@ -15,7 +15,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Hash;
-
+use App\Models\User;
 use App\Http\Controllers\AttendanceController;
 Route::middleware(['auth'])->group(function () {
     Route::get('attendance_policy', [AttendancePolicyController::class, 'index'])->name('attendance_policy.index');
@@ -70,7 +70,12 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/test', function () {
-    return Hash::make("123123123");
+    $id_identification = "31730";
+    $id_employee = User::where('identification_number',$id_identification)->with('employee')->first();
+    $id_employee = $id_employee->employee->id_employee;
+    
+    return $id_employee;
+    // return Hash::make("123123123");
 });
 
 Auth::routes();
