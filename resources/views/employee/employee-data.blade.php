@@ -83,11 +83,14 @@
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '{{ url("employee/statusupdate/") }}/' + employeeId, true);
         xhr.onreadystatechange = function() {
+            var response = JSON.parse(xhr.response);
+
             if (xhr.readyState === 4 && xhr.status === 200) {
-                console.log('Status updated successfully!');
+                showSuccesPopup(response.message)
+                console.log(response.message);
                 // Optionally, show a success message or update the UI
             } else if (xhr.readyState === 4) {
-                console.error('Error updating status');
+                showSuccesPopup(response.message)
                 // Optionally, handle the error
             }
         };
