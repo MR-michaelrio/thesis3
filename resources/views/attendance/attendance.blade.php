@@ -254,21 +254,15 @@
                     clock: clock,
                 })
                 .then(response => {
-                    if (response.data.message === "Already clocked in!") {
-                        showAlreadyAbsence("clockin"); // Show Already Clocked In popup
-                    } else if (response.data.message === "Attendance clock-out updated!") {
-                        showAlreadyAbsence("clockout"); // Show Attendance Clock-out updated popup
-                    } else {
-                        // Handle normal attendance response
-                        document.getElementById('employeid').value = "";
-                        document.getElementById('employename').value = "";
-                        document.getElementById('clock').value = "";
-                        document.getElementById('time').value = "";
-                        document.body.removeChild(overlay);
+                    document.getElementById('employeid').value = "";
+                    document.getElementById('employename').value = "";
+                    document.getElementById('clock').value = "";
+                    document.getElementById('time').value = "";
+                    showAlreadyAbsence(response.data.message);
+                    document.body.removeChild(overlay);
 
-                        startCamera(); // Restart camera
-                        startFrameCapture(); // Restart frame capture
-                    }
+                    startCamera(); // Restart camera
+                    startFrameCapture(); // Restart frame capture
                 })
                 .catch(error => {
                     // console.error("Error Absen:", error.response ? error.response.data : error.message);
