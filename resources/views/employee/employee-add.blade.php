@@ -33,7 +33,7 @@
                         <!-- Profile Image Section -->
                         <div class="text-center mb-4">
                             <div style="position: relative; display: inline-block;">
-                            <img src="https://cdn-icons-png.flaticon.com/512/147/147144.png" 
+                            <img src="https://img.icons8.com/ios-filled/100/000000/user.png" 
                             id="profileImagePreview" alt="Profile Image" class="rounded-circle" width="120"
                                     height="120" style="border: 2px solid #ccc;">
                                 <label for="profileImageInput"
