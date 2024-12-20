@@ -76,7 +76,7 @@
                                 <label>Request For</label>
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        <input type="text" class="form-control" name="id_employee" value="{{Auth::user()->employee->id_employee}}" placeholder="Enter Employee ID" disabled="">
+                                        <input type="text" class="form-control" name="id_employee" value="{{Auth::user()->identification_number}}" placeholder="Enter Employee ID" disabled="">
                                     </div>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" value="{{Auth::user()->employee->full_name}}" placeholder="Employee Name" disabled="">

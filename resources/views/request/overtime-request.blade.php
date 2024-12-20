@@ -28,7 +28,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Time</label>
-                                        <input type="text" class="form-control" placeholder="HH:MM - HH:MM" disabled="" id="start" name="start">
+                                        <input type="text" class="form-control" placeholder="--:--" disabled="" id="start" name="start">
                                         <input type="hidden" class="form-control" id="mulai" name="mulai">
                                         <input type="hidden" class="form-control" id="akhir" name="akhir">
                                     </div>
@@ -36,25 +36,16 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Total Overtime</label>
-                                        <input type="text" class="form-control" name="total_overtime" id="total_overtime" disabled="">
+                                        <input type="text" class="form-control" name="total_overtime" value="-" id="total_overtime" disabled="">
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col-12 text-danger">
+                                <span id="error"></span>
                             </div>
                         </div>
+                        
                         <div class="col-lg-6">
-                            <div class="form-group">
-                                <label>Requester</label>
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <input type="text" class="form-control" placeholder="Requester ID" value="{{Auth::id()}}" name="id_employee" disabled="">
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" placeholder="Requester Name" 
-                                        value="{{ Auth::user()->employee->full_name }}" 
-                                        disabled>                                    
-                                    </div>
-                                </div>
-                            </div>
                             <div class="form-group">
                                 <label>Request Description</label>
                                 <textarea class="form-control" rows="3"
@@ -107,17 +98,27 @@
                     $('input[name="mulai"]').val(response.mulai);
                     $('input[name="akhir"]').val(response.akhir);
                     $('input[name="total_overtime"]').val(response.total_overtime);
+                    $('#error').html('');
+                    $('#error').hide();
             },
             error: function (xhr, status, error) {
                 // Display detailed error messages from the backend
-                if (xhr.status === 404) {
-                    alert(xhr.responseJSON.error + `\nDate: ${xhr.responseJSON.date}`);
-                } else if (xhr.status === 500) {
-                    alert('Internal Server Error: ' + xhr.responseJSON.error);
-                } else {
-                    alert('An error occurred while fetching data: ' + error);
-                }
-
+                // if (xhr.status === 404) {
+                //     alert(xhr.responseJSON.error + `\nDate: ${xhr.responseJSON.date}`);
+                // } else if (xhr.status === 500) {
+                //     alert('Internal Server Error: ' + xhr.responseJSON.error);
+                // } else {
+                //     alert('An error occurred while fetching data: ' + error);
+                // }
+                
+                $('input[name="reservationdate1"]').val('');
+                $('input[name="start"]').val('');
+                $('input[name="mulai"]').val('');
+                $('input[name="akhir"]').val('');
+                $('input[name="total_overtime"]').val('');
+                $('#error').html(xhr.responseJSON.error);
+                $('#error').show();
+                
                 console.error('Error details:', error);
                 console.error('Response:', xhr.responseJSON);
             },
