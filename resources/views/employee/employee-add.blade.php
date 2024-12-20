@@ -33,9 +33,9 @@
                         <!-- Profile Image Section -->
                         <div class="text-center mb-4">
                             <div style="position: relative; display: inline-block;">
-                            <img src="https://img.icons8.com/ios-filled/100/000000/user.png" 
-                            id="profileImagePreview" alt="Profile Image" class="rounded-circle" width="120"
-                                    height="120" style="border: 2px solid #ccc;">
+                                    <div class="user-icon rounded-circle" style="border: 2px solid #ccc;" id="profileImagePreview" alt="Profile Image" >
+                                        <i class="fas fa-user"></i>
+                                    </div>
                                 <label for="profileImageInput"
                                     style="position: absolute; bottom: 0; right: 0; background-color: white; border-radius: 50%; padding: 5px; cursor: pointer;">
                                     <i class="fas fa-search" style="font-size: 18px; color: gray;"></i>
