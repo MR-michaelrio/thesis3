@@ -94,6 +94,7 @@
     } else {
         console.error('Overlay tidak ditemukan di DOM.');
     }
+
     document.getElementById('addmanualform').addEventListener('submit', function (event) {
         event.preventDefault(); // Prevent the default form submission
 
@@ -127,8 +128,6 @@
                 console.log('Response data:', data);
                 $('#addmanualmodal').modal('hide');
                 showAlreadyAbsence("clockin");
-                startCamera();
-                startFrameCapture();
             } else {
                 alert('Error: ' + data.message);
             }
