@@ -33,10 +33,9 @@
                         <!-- Profile Image Section -->
                         <div class="text-center mb-4">
                             <div style="position: relative; display: inline-block;">
-                                <img src="{{ asset('profile_picture/' . $e->employee->profile_picture) }}"
-                                    id="profileImagePreview" alt="Profile Image" class="rounded-circle" width="120"
-                                    height="120" style="border: 2px solid #ccc;">
-
+                                    <div style="background-color:#CED4DA; border-radius:50%; width:120px; height:120px; display: flex; justify-content: center; align-items: center;" id="profileImagePreview" alt="Profile Image">
+                                            <i class="far fa-user fa-2x"></i>
+                                        </div>
                                 <label for="profileImageInput"
                                     style="position: absolute; bottom: 0; right: 0; background-color: white; border-radius: 50%; padding: 5px; cursor: pointer;">
                                     <i class="fas fa-search" style="font-size: 18px; color: gray;"></i>
