@@ -94,21 +94,8 @@
                         <strong>Leave Status:</strong> <span id="modalLeaveStatus"></span>
                     </div>
                     <div class="col-12">
-                        <strong>Leave Type:</strong> <span id="modalLeaveType"></span>
-                    </div>
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="col-6"><strong>Leave Date:</strong> <span id="modalLeaveDates"></span></div>
-                            <div class="col-6">
-                                <strong>Half Day/Full Day:</strong>
-                                <div class="form-group">
-                                    <select class="form-control" id="leave_time" name="leave_time">
-                                        <option value="half">Half Day</option>
-                                        <option value="full">Full Day</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="col-6"><strong>Leave Date:</strong> <span id="modalLeaveDates"></span></div>
+                        <div class="col-6"><strong>Half Day/Full Day:</strong> <span id="modalLeaveTime"></span></div>
                     </div>
                     <div class="col-12">
                         <div class="row">
@@ -185,8 +172,6 @@
             $("#modalApproverID").text($(this).data('approver'));
             $("#modalApproverName").text($(this).data('approver-name'));
             $("#modalDescription").text($(this).data('description'));
-            $("#leave_time").val($(this).data('leavetime')).change();
-            $("#leave_time").val("half").change(); 
 
             // Perbarui tombol dokumen
             var uploadedDoc = $(this).data('upload');
