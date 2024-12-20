@@ -405,6 +405,16 @@
         stopCamera(); // Stop camera when the modal is shown
     });
 
+    $('#addmanualmodal').on('show.bs.modal', function () {
+        // Hentikan frame capture saat modal terbuka
+        clearInterval(captureInterval);
+        stopCamera();
+    });
+    $('#addmanualmodal').on('hide.bs.modal', function () {
+        // Restart frame capture saat modal ditutup
+        startCamera();
+        startFrameCapture();
+    });
     startFrameCapture(); // Start capturing frames
 </script>
 @endsection
