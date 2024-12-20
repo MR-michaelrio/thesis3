@@ -32,7 +32,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/leave/remaining-quota', [RequestLeaveController::class, 'getRemainingQuota'])->name('leave.remainingQuota');
 
     Route::resource('attendance', AttendanceController::class);
-    Route::get('/attendance/data', [AttendanceController::class, 'data'])->name('attendance.data');
+    Route::get('/attendancedata', [AttendanceController::class, 'data'])->name('attendance.data');    
     Route::post('/attendance/checkin', [AttendanceController::class, 'checkin'])->name('attendance.checkin');
     Route::post('/recognize', [AttendanceController::class, 'recognize'])->name('recognize');
     Route::get('/attendance-data', [AttendanceController::class, 'getAttendanceData'])->name('attendance-data');

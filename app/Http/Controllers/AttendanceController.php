@@ -63,13 +63,25 @@ class AttendanceController extends Controller
                             ->where('id_company', Auth::user()->id_company)
                             ->where('attendance_date', Carbon::now()->toDateString())
                             ->get();
+        
         }
+        
         return view('attendance/attendance-data',compact("overview","summary"));
+    }
+
+    public function data2()
+    {
+        //
+        return "seru";
     }
 
     /**
      * Show the form for creating a new resource.
      */
+    public function show($id){
+
+    }
+
     public function create()
     {
         //

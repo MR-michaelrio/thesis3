@@ -1,4 +1,3 @@
-
 @extends('index')
 @section('title','Attendance Data')
 @section('css')
