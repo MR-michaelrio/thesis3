@@ -190,6 +190,7 @@ class AttendanceController extends Controller
                 'message' => 'Already clocked out!',
             ], 201); // OK
         }
+        $employee = Employee::where("id_employee",$request->id_employee)->with('user')->first();
 
         // Check if the current time is after the employee's clock-out time
         if ($currentTime->format('H:i:s') >= $assignshift->shift->clock_out) {
@@ -242,6 +243,8 @@ class AttendanceController extends Controller
                 return response()->json([
                     'message' => 'Attendance clock-out updated!',
                     'attendance' => $attendance,
+                    'employee_name' => $employee->full_name,
+                    'employee_id' =>$employee->user->identification_number,
                     'time' => "Clock Out"
                 ], 200); // OK
             }else {
@@ -282,8 +285,6 @@ class AttendanceController extends Controller
                 'attendance_status' => $attendance_status,
                 'id_company' => Auth::user()->id_company,
             ]);
-
-            $employee = Employee::where("id_employee",$request->id_employee)->with('user')->first();
 
             // Return a success response after storing the attendance
             return response()->json([
@@ -412,6 +413,8 @@ class AttendanceController extends Controller
                 return response()->json([
                     'message' => 'Attendance clock-out updated!',
                     'attendance' => $attendance,
+                    'employee_name' => $id_employe->employee->full_name,
+                    'employee_id' =>$id_employe->identification_number,
                     'time' => "Clock Out"
                 ], 200); // OK
             }else {
