@@ -170,7 +170,14 @@
                                 </a>
                             </li>
                         @endif
-
+                        <li class="nav-item">
+                                <a href="{{route('attendance.data')}}" class="nav-link">
+                                    <i class="nav-icon fas fa-user-clock"></i>
+                                    <p>
+                                    Attendance Data
+                                    </p>
+                                </a>
+                            </li>
                         <!-- @if(Auth::user()->role == "supervisor1" || Auth::user()->role == "employee1")
                             <li class="nav-item">
                                 <a href="{{route('attendance.data')}}" class="nav-link">
