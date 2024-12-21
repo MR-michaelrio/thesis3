@@ -445,7 +445,7 @@ class AttendanceController extends Controller
 
             // Create a new attendance record for the employee
             $attendance = Attendance::create([
-                'id_employee' => $request->id_employee, // Ensure the employee ID is passed correctly
+                'id_employee' => $id_employee, // Ensure the employee ID is passed correctly
                 'attendance_date' => $attendance_date,
                 'shift_id' => $assignshift->id_shift,
                 'clock_in' => $attendance_clock,
