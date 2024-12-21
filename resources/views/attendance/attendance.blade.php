@@ -247,7 +247,7 @@
                     clock: clock,
                 })
                 .then(response => {
-                    console.log("checkin", response.data);
+                    console.log("checkin", response);
                     document.getElementById('employeid').value = "";
                     document.getElementById('employename').value = "";
                     document.getElementById('clock').value = "";
