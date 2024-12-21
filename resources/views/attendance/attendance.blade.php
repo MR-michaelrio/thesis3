@@ -248,10 +248,10 @@
                 })
                 .then(response => {
                     console.log("checkin", response);
-                    document.getElementById('employeid').value = "";
-                    document.getElementById('employename').value = "";
-                    document.getElementById('clock').value = "";
-                    document.getElementById('time').value = "";
+                    document.getElementById('employeid').value = response.data?.employee_id;
+                    document.getElementById('employename').value = response.data?.employee_name;
+                    document.getElementById('clock').value = response.data?.attendance.clock_in || response.data?.attendance.clock_out;
+                    document.getElementById('time').value = response.data?.time;
                     showSuccesPopup(response.data.message);
                     document.body.removeChild(overlay);
 

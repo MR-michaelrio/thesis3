@@ -283,10 +283,14 @@ class AttendanceController extends Controller
                 'id_company' => Auth::user()->id_company,
             ]);
 
+            $employee = Employee::where("id_employee",$request->id_employee)->with('user')->first();
+
             // Return a success response after storing the attendance
             return response()->json([
                 'message' => 'Attendance successfully stored!',
                 'attendance' => $attendance,
+                'employee_name' => $employee->full_name,
+                'employee_id' =>$employee->user->identification_number,
                 'time' => "Clock In"
             ], 201); // Created
         }
