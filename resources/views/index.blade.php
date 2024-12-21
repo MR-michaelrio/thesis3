@@ -530,7 +530,6 @@
                 document.getElementById('clock').value = "";
                 document.getElementById('time').value = "";
                 document.getElementById('id_identification').value = "";
-                
                 startCamera(); // Restart camera
                 startFrameCapture(); // Restart frame capture
             });

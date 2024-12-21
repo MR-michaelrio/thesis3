@@ -16,7 +16,7 @@
                 <div class="card-body" style="height: calc(100% - 56px);">
                     <div class="form-group">
                         <label>Attendance</label>
-                        <input type="text" class="form-control" id="clock" placeholder="" disabled>
+                        <input type="text" class="form-control" id="time" placeholder="" disabled>
                         <!-- <select class="form-control">
                             <option>Clock In</option>
                             <option>Clock Out</option>
@@ -38,7 +38,7 @@
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>
                         </div> -->
-                        <input type="text" class="form-control" id="time" placeholder="Enter Time" disabled>
+                        <input type="text" class="form-control" id="clock" placeholder="Enter Time" disabled>
                     </div>
                     <button type="button" class="btn btn-block btn-primary btn-sm" data-toggle="modal" data-target="#addmanualmodal">Add Manually</button>
                     <a href="{{route('attendance.create')}}" class="btn btn-block btn-sm" style="color:#007bff">Register Face Recognition here!</a>
