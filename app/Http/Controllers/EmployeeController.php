@@ -30,8 +30,10 @@ class EmployeeController extends Controller
                             })
                             ->get();
 
-        }else{
+        }else if(Auth::user()->role == "admin"){
             $employees = Employee::with(['user.department', 'user.position'])->where("id_company",Auth::user()->id_company)->get();
+        }else{
+            return redirect()->route('home');
         }
         return view('employee.employee-data', compact('employees'));
     }
