@@ -120,6 +120,10 @@
                 console.log('Form data:', formData);
                 console.log('Response data:', data);
                 $('#addmanualmodal').modal('hide');
+                document.getElementById('employeid').value = data?.employee_id;
+                document.getElementById('employename').value = data?.employee_name;
+                document.getElementById('clock').value = data?.attendance.clock_in || data?.attendance.clock_out;
+                document.getElementById('time').value = data?.time;
                 showSuccesPopup(data.message);
             } else {
                 alert('Error: ' + data.message);
