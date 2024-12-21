@@ -2,7 +2,7 @@
 @section('title','Dashboard')
 @section('content')
 <!-- Small boxes (Stat box) -->
-@if(Auth::user()->role != "admin")
+<!-- @if(Auth::user()->role != "admin") -->
 <div class="row">
     <!-- Main Card -->
     <div class="col-lg-8 col-md-12 d-flex">
@@ -71,7 +71,7 @@
         </div>
     </div>
 </div>
-@endif
+<!-- @endif -->
 <div class="row">
     <div class="col-lg-3 col-6">
         <!-- small box -->
