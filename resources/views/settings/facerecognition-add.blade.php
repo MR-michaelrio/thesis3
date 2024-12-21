@@ -73,7 +73,7 @@
                                         {{$a->employee->full_name}}
                                     </div>
                                     <div class="col text-primary">
-                                        {{$a->id_employee}} | {{$a->employee->user->email}}
+                                        {{$a->employee->user->identification_number}} | {{$a->employee->user->email}}
                                     </div>
                                 </td>
                                 <td>{{$a->employee->user->id_department}}</td>
@@ -91,18 +91,19 @@
                 <div class="card-header" style="background-color:#0FBEF2;color:white">
                     <h3 class="card-title">Face Recognition Registration</h3>
                 </div>
-                <form action="{{route('attendance.store')}}" method="post" enctype="multipart/form-data">
+                <form action="{{route('attendance.store')}}" method="post" id="employeeForm" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
                         <div class="col-12">
                             <div class="form-group">
                                 <label for="employeeID">Employee ID</label>
-                                <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" name="id_employee" id="employeeID" data-select2-id="2" tabindex="-1" aria-hidden="true">
+                                <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" required name="id_employee" id="employeeID" data-select2-id="2" tabindex="-1" aria-hidden="true">
                                     <option disabled selected>Employee ID</option>
                                     @foreach($employee as $e)
-                                        <option value="{{$e->id_employee}}" data-name="{{$e->full_name}}">{{$e->full_name}}</option>
+                                        <option value="{{$e->id_employee}}" data-name="{{$e->full_name}}">{{$e->user->identification_number}} - {{$e->full_name}}</option>
                                     @endforeach
                                 </select> 
+                                <span id="error-message" style="color: red; display: none;">Employee ID is required.</span>
                                 <!-- <input type="text" class="form-control" id="employeeID" placeholder="[Employee ID]"> -->
                             </div>
                             <div class="form-group">
@@ -120,7 +121,7 @@
                                             <span class="pl-2">Upload files here</span>
                                         </label>
                                         <small class="text-muted d-block">Accepted file types: JPEG, JPG</small>
-                                        <input type="file" class="d-none" name="image" id="file-upload" multiple onchange="handleFileUpload(event)">
+                                        <input type="file" class="d-none" name="image" id="file-upload" required multiple onchange="handleFileUpload(event)">
                                     </div>
                                     <!-- accept="image/jpeg, image/jpg, image/png" -->
                                     <button type="button" class="btn btn-outline-primary ml-3" onclick="triggerFileInput()">Upload</button>
@@ -135,7 +136,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="submit">Submit</button>
+                        <button class="btn btn-primary" type="submit">Submit</button>
                     </div>
                 </form>
             </div>
@@ -146,6 +147,20 @@
 
 @section('scripts')
 <script>
+    document.getElementById('employeeForm').addEventListener('submit', function(event) {
+        const select = document.getElementById('employeeID');
+        const errorMessage = document.getElementById('error-message');
+
+        if (!select.value) {
+            event.preventDefault(); // Mencegah pengiriman form
+            errorMessage.style.display = 'inline'; // Tampilkan pesan kesalahan
+        } else {
+            errorMessage.style.display = 'none'; // Sembunyikan pesan kesalahan
+        }
+    });
+
+
+
     $(document).ready(function() {
         // When Employee ID is selected, update the Employee Name field
         $('#employeeID').change(function() {

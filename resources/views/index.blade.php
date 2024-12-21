@@ -171,7 +171,7 @@
                             </li>
                         @endif
 
-                        @if(Auth::user()->role == "supervisor1" || Auth::user()->role == "employee1")
+                        <!-- @if(Auth::user()->role == "supervisor1" || Auth::user()->role == "employee1")
                             <li class="nav-item">
                                 <a href="{{route('attendance.data')}}" class="nav-link">
                                     <i class="nav-icon fas fa-user-clock"></i>
@@ -193,7 +193,7 @@
                                     <li class="nav-item">
                                         <a href="{{route('attendance.index')}}" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>Attendance</p>
+                                            <p>Take Attendance</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
@@ -204,7 +204,7 @@
                                     </li>
                                 </ul>
                             </li>
-                        @endif
+                        @endif -->
 
                         <li class="nav-item">
                             <a href="#" class="nav-link">
@@ -329,6 +329,21 @@
                         <li class="nav-item">
                             <a href="javascript:void(0);" class="nav-link" id="logoutButton">
                                 <i class="nav-icon fas fa-sign-out-alt"></i> Sign Out
+                            </a>
+                        </li>
+                        <span style="color:#C2C7D0; border-top:1px solid #C2C7D0; padding-top:5px;">Simulation</span>
+                        <li class="nav-item">
+                            <a href="{{route('attendance.index')}}" class="nav-link">
+                                <i class="nav-icon fas fa-sign-in-alt"></i>
+                                <p>
+                                    Take Attendance
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('attendance.create')}}" class="nav-link">
+                                <i class="nav-icon fas fa-camera"></i>
+                                <p>Face Registration</p>
                             </a>
                         </li>
                     </ul>

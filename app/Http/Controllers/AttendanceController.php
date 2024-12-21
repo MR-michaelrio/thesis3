@@ -242,6 +242,7 @@ class AttendanceController extends Controller
                 return response()->json([
                     'message' => 'Attendance clock-out updated!',
                     'attendance' => $attendance,
+                    'time' => "Clock Out"
                 ], 200); // OK
             }else {
                 // If no attendance record is found to update
@@ -286,7 +287,7 @@ class AttendanceController extends Controller
             return response()->json([
                 'message' => 'Attendance successfully stored!',
                 'attendance' => $attendance,
-                
+                'time' => "Clock In"
             ], 201); // Created
         }
     }
@@ -407,6 +408,7 @@ class AttendanceController extends Controller
                 return response()->json([
                     'message' => 'Attendance clock-out updated!',
                     'attendance' => $attendance,
+                    'time' => "Clock Out"
                 ], 200); // OK
             }else {
                 // If no attendance record is found to update
@@ -451,6 +453,7 @@ class AttendanceController extends Controller
             return response()->json([
                 'message' => 'Attendance successfully stored!',
                 'attendance' => $attendance,
+                'time' => "Clock In"
                 
             ], 201); // Created
         }
