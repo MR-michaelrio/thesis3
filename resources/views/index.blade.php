@@ -485,6 +485,7 @@
             overlay.style.zIndex = '3';
 
             const popup = document.createElement('div');
+            popup.style.width = "400px";
             popup.style.position = 'fixed';
             popup.style.top = '50%';
             popup.style.left = '50%';
