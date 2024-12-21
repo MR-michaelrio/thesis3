@@ -354,7 +354,11 @@ class EmployeeController extends Controller
                 }
             }
             // Return success response
-            return redirect()->route('employee.index')->with('success', 'Employee updated successfully!');
+            if(Auth::user()->role == "employee"){
+                return redirect()->route('home')->with('success', 'Employee updated successfully!');
+            }else{
+                return redirect()->route('employee.index')->with('success', 'Employee updated successfully!');
+            }
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
