@@ -102,9 +102,9 @@
                             <tbody>
                                 @foreach($summary as $a)
                                     <tr style="text-transform:capitalize;">
-                                        <td>{{$a->employee->full_name}}</td>
-                                        <td>{{$a->employee->user->identification_number}}</td>
-                                        <td>{{$a->employee->user->department->department_code}}</td>
+                                        <td>{{$a->full_name}}</td>
+                                        <td>{{$a->identification_number}}</td>
+                                        <td>{{$a->department->department_code}}</td>
                                         <td style="font-weight:bold">{{ $a->daily_total ? \Carbon\Carbon::parse($a->daily_total)->format('H:i') . ' Hours' : '' }}</td>
                                         <td style="color:red">{{$a->total_overtime}}</td>                                 
                                     </tr>
