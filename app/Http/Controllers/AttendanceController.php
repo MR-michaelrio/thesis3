@@ -76,6 +76,7 @@ class AttendanceController extends Controller
             $summary = DB::table('attendance')
                             ->join('employee', 'attendance.id_employee', '=', 'employee.id_employee')  // Join the employee table
                             ->join('users', 'employee.id_users', '=', 'users.id_user')  // Join the user table via employee
+                            ->join('department', 'users.id_department', '=', 'department.id_department')
                             ->join('shift', 'attendance.id_shift', '=', 'shift.id_shift')
                             ->select(
                                 'attendance.id_employee',
