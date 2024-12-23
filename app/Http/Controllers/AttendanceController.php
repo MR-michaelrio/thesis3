@@ -73,23 +73,24 @@ class AttendanceController extends Controller
                             ->where('id_company', Auth::user()->id_company)
                             ->orderBy('attendance_date', 'desc')  // Sort by 'attendance_date' in ascending order
                             ->get();
-            $summary = DB::table('attendance')
-                            ->join('employee', 'attendance.id_employee', '=', 'employee.id_employee')
+                            $summary = DB::table('attendance')
+                            ->join('employee', 'attendance.id_employee', '=', 'employee.id_employee')  // Ensure you're using the correct table name 'employee'
                             ->join('shift', 'attendance.id_shift', '=', 'shift.id_shift')
                             ->select(
                                 'attendance.id_employee',
                                 'employee.full_name',
-                                'employee.user->identification_number',
-                                'employee.user->department->department_code',
+                                DB::raw('json_unquote(json_extract(employee.user, "$.identification_number")) as identification_number'),
+                                DB::raw('json_unquote(json_extract(employee.user, "$.department.department_code")) as department_code'),
                                 DB::raw('SEC_TO_TIME(SUM(TIME_TO_SEC(STR_TO_DATE(daily_total, "%H:%i")))) as total_daily_total'),
                                 DB::raw('SEC_TO_TIME(SUM(TIME_TO_SEC(STR_TO_DATE(IFNULL(total_overtime, "00:00"), "%H:%i")))) as total_overtime'),
-                                'shifts.clock_in',
-                                'shifts.clock_out'
+                                'shift.clock_in',
+                                'shift.clock_out'
                             )
                             ->where('attendance.id_company', Auth::user()->id_company)
                             ->whereBetween('attendance.attendance_date', [$startDate, $endDate])
                             ->groupBy('attendance.id_employee')
                             ->get();
+                        
                         
         }
 
