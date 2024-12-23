@@ -82,7 +82,7 @@
                                     <form action="{{ route('attendance.destroy', $a->id_employee) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-block text-left custom-btn"
+                                        <button type="submit" class="btn btn-block btn-danger"
                                             onclick="return confirm('Are you sure you want to delete this data?');">
                                             <i class="fas fa-trash mr-2"></i>Delete Data
                                         </button>
