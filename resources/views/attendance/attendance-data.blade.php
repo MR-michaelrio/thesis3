@@ -72,7 +72,7 @@
                     </div>
 
                     <!-- Table 2 -->
-                    <div class="tab-pane fade" id="table2" role="tabpanel" aria-labelledby="tab-2">
+                    <div class="tab-pane fade" style="background-color:red" id="table2" role="tabpanel" aria-labelledby="tab-2">
                         <form action="{{ route('attendance.data') }}" method="GET">
                             <div class="form-group">
                                 <label for="daterange">Date Range:</label>
@@ -92,7 +92,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            <tr>
+                                <tr>
                                     <td>Name</td>
                                     <td>ID</td>
                                     <td>Department Code</td>
