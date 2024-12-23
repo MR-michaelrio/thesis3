@@ -11,6 +11,9 @@
     .nav-tabs .nav-link {
         color: #000; /* Default text color for inactive tabs */
     }
+    #table2 table {
+    width: 100% !important;
+}
 </style>
 @endsection
 @section('content')
@@ -73,14 +76,15 @@
 
                     <!-- Table 2 -->
                     <div class="tab-pane fade" style="background-color:red" id="table2" role="tabpanel" aria-labelledby="tab-2">
-                        <form action="{{ route('attendance.data') }}" method="GET">
+                        
+                    <form action="{{ route('attendance.data') }}" method="GET">
                             <div class="form-group">
                                 <label for="daterange">Date Range:</label>
                                 <input type="text" name="daterange" id="daterange" class="form-control" value="{{ request('daterange') }}">
                             </div>
                             <button type="submit" class="btn btn-primary">Filter</button>
                         </form>
-                        <table id="example2" class="table table-bordered table-striped" style="width:1000px">
+                        <table id="example2" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -147,4 +151,10 @@
     </div>
 </div>
 @endsection
-
+@section('scripts')
+<script>
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+    $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+});
+</script>
+@endsection
