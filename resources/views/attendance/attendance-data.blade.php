@@ -36,6 +36,18 @@
                 <div class="tab-content" style="padding:10px 10px 10px 10px; border:1px solid #DDE2E5" id="attendanceTabsContent">
                     <!-- Table 1 -->
                     <div class="tab-pane fade show active" id="table1" role="tabpanel" aria-labelledby="tab-1">
+                        <button type="button" class="btn" id="showFilterBtn1">
+                            <i class="fas fa-filter"></i> Filter
+                        </button>    
+                        <div class="col-3">               
+                            <form action="{{ route('attendance.data') }}" method="GET" id="filterForm1" style="display: none;" onsubmit="goToOverviewTab(event)">
+                                <div class="form-group">
+                                    <label for="daterange">Date Range:</label>
+                                    <input type="text" name="daterange" id="daterange" class="form-control" value="{{ request('daterange') }}">
+                                </div>
+                                <button type="submit" class="btn btn-primary mb-3">Filter</button>
+                            </form>
+                        </div>     
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -76,17 +88,17 @@
 
                     <!-- Table 2 -->
                     <div class="tab-pane fade" id="table2" role="tabpanel" aria-labelledby="tab-2">
-                        <button type="button" class="btn" id="showFilterBtn">
+                        <button type="button" class="btn" id="showFilterBtn2">
                             <i class="fas fa-filter"></i> Filter
                         </button>    
                         <div class="col-3">               
-                        <form action="{{ route('attendance.data') }}" method="GET" id="filterForm" style="display: none;" onsubmit="goToSummaryTab(event)">
-                            <div class="form-group">
-                                <label for="daterange">Date Range:</label>
-                                <input type="text" name="daterange" id="daterange" class="form-control" value="{{ request('daterange') }}">
-                            </div>
-                            <button type="submit" class="btn btn-primary mb-3">Filter</button>
-                        </form>
+                            <form action="{{ route('attendance.data') }}" method="GET" id="filterFor2" style="display: none;" onsubmit="goToSummaryTab(event)">
+                                <div class="form-group">
+                                    <label for="daterange">Date Range:</label>
+                                    <input type="text" name="daterange" id="daterange" class="form-control" value="{{ request('daterange') }}">
+                                </div>
+                                <button type="submit" class="btn btn-primary mb-3">Filter</button>
+                            </form>
                         </div> 
                         <table id="example2" class="table table-bordered table-striped">
                             <thead>
@@ -158,13 +170,21 @@
 @section('scripts')
 <script>
     // When the Filter button is clicked
-    document.getElementById('showFilterBtn').addEventListener('click', function() {
+    document.getElementById('showFilterBtn1').addEventListener('click', function() {
         // Show the filter form
-        document.getElementById('filterForm').style.display = 'block';
+        document.getElementById('filterForm1').style.display = 'block';
+    });
+    document.getElementById('showFilterBtn2').addEventListener('click', function() {
+        // Show the filter form
+        document.getElementById('filterForm2').style.display = 'block';
     });
     function goToSummaryTab(event) {
         event.preventDefault(); // Prevent the default form submission
-        document.getElementById('filterForm').submit(); // Submit the form
+        document.getElementById('filterForm2').submit(); // Submit the form
+    }
+    function goToOverviewTab(event) {
+        event.preventDefault(); // Prevent the default form submission
+        document.getElementById('filterForm1').submit(); // Submit the form
     }
 
     // Automatically switch to the "Summary" tab after page reload (if `daterange` parameter is in the URL)
@@ -173,6 +193,11 @@
         if (window.location.search.indexOf('daterange') !== -1) {
             // Switch to the "Summary" tab
             $('#tab-2').tab('show');
+        }
+
+        if (window.location.search.indexOf('daterange') !== -1) {
+            // Switch to the "Summary" tab
+            $('#tab-1').tab('show');
         }
     });
 </script>
