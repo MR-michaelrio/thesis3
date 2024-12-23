@@ -169,6 +169,16 @@
 @endsection
 @section('scripts')
 <script>
+$('#daterange').daterangepicker({
+    locale: {
+        format: 'DD/MM/YYYY'
+    }
+})
+$('#daterange').daterangepicker({
+    locale: {
+        format: 'DD/MM/YYYY'
+    }
+})
 // When the Filter button is clicked
 document.getElementById('showFilterBtn1').addEventListener('click', function() {
     // Show the filter form
