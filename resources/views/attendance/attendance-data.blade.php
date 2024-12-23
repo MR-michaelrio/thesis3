@@ -191,12 +191,10 @@
     window.addEventListener('DOMContentLoaded', function() {
         // Check if 'daterange' is present in the URL
         if (window.location.search.indexOf('daterange') !== -1) {
-            // Switch to the "Summary" tab
+        // Switch to the "Summary" tab
             $('#tab-2').tab('show');
-        }
-
-        if (window.location.search.indexOf('daterange') !== -1) {
-            // Switch to the "Summary" tab
+        } else {
+            // If there's no 'daterange', make sure the Overview tab is active
             $('#tab-1').tab('show');
         }
     });
