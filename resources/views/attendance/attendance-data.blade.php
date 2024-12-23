@@ -171,13 +171,14 @@
 <script>
     // When the Filter button is clicked
     document.getElementById('showFilterBtn1').addEventListener('click', function() {
-        // Show the filter form
-        document.getElementById('filterForm1').style.display = 'block';
+    // Show the filter form
+    document.getElementById('filterForm1').style.display = 'block';
     });
     document.getElementById('showFilterBtn2').addEventListener('click', function() {
         // Show the filter form
         document.getElementById('filterForm2').style.display = 'block';
     });
+
     function goToSummaryTab(event) {
         event.preventDefault(); // Prevent the default form submission
         document.getElementById('filterForm2').submit(); // Submit the form
@@ -188,16 +189,32 @@
     }
 
     // Automatically switch to the "Summary" tab after page reload (if `daterange` parameter is in the URL)
-    window.addEventListener('DOMContentLoaded', function() {
-        // Check if 'daterange' is present in the URL
-        if (window.location.search.indexOf('daterange') !== -1) {
+window.addEventListener('DOMContentLoaded', function() {
+    // Check if 'daterange' is present in the URL
+    if (window.location.search.indexOf('daterange') !== -1) {
         // Switch to the "Summary" tab
-            $('#tab-2').tab('show');
-        } else {
-            // If there's no 'daterange', make sure the Overview tab is active
-            $('#tab-1').tab('show');
-        }
-    });
+        $('#tab-2').tab('show');
+    } else {
+        // If there's no 'daterange', make sure the Overview tab is active
+        $('#tab-1').tab('show');
+    }
+});
+
+// After submitting filterForm1, ensure the correct tab is selected
+document.getElementById('filterForm1').addEventListener('submit', function(event) {
+    // Ensure the form submission occurs only if the "Overview" tab is active
+    if ($('#tab-1').hasClass('active')) {
+        $('#tab-1').tab('show'); // Ensure tab-1 is active
+    }
+});
+
+// After submitting filterForm2, ensure the correct tab is selected
+document.getElementById('filterForm2').addEventListener('submit', function(event) {
+    // Ensure the form submission occurs only if the "Summary" tab is active
+    if ($('#tab-2').hasClass('active')) {
+        $('#tab-2').tab('show'); // Ensure tab-2 is active
+    }
+});
 </script>
 <script>
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
