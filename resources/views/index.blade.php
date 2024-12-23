@@ -743,7 +743,7 @@
             });
 
             //Date range picker
-            $('#reservation').daterangepicker({
+            $('#daterange').daterangepicker({
                 locale: {
                     format: 'DD/MM/YYYY'
                 }
