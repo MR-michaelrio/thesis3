@@ -59,18 +59,17 @@ class AttendanceController extends Controller
                             ->where('id_company', Auth::user()->id_company)
                             ->orderBy('attendance_date', 'desc')  // Sort by 'attendance_date' in ascending order
                             ->get();
-                            $summary = DB::table('attendance')
-    ->select(
-        'id_employee',
-        DB::raw('SEC_TO_TIME(SUM(TIME_TO_SEC(STR_TO_DATE(daily_total, "%H:%i")))) as total_daily_total'), // Mengonversi daily_total ke detik
-        DB::raw('SEC_TO_TIME(SUM(
-            TIME_TO_SEC(STR_TO_DATE(IFNULL(total_overtime, "00:00"), "%H:%i"))
-        )) as total_overtime')
-    )
-    ->where('id_company', Auth::user()->id_company)
-    ->whereDate('attendance_date', Carbon::now()->toDateString())
-    ->groupBy('id_employee')
-    ->get();
+            $summary = DB::table('attendance')
+                            ->select(
+                                'id_employee',
+                                DB::raw('SEC_TO_TIME(SUM(TIME_TO_SEC(STR_TO_DATE(daily_total, "%H:%i")))) as total_daily_total'), // Mengonversi daily_total ke detik
+                                DB::raw('SEC_TO_TIME(SUM(
+                                    TIME_TO_SEC(STR_TO_DATE(IFNULL(total_overtime, "00:00"), "%H:%i"))
+                                )) as total_overtime')
+                            )
+                            ->where('id_company', Auth::user()->id_company)
+                            ->groupBy('id_employee')
+                            ->get();
         }
 
         dd($summary);
