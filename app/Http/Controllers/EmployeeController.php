@@ -228,11 +228,7 @@ class EmployeeController extends Controller
         if(Auth::user()->role == "admin"){
             $leave = Leave::where("id_company", Auth::user()->id_company)->get();
         }else{
-            $leave = AssignLeave::where('id_employee', $employee->id_employee)->get();
-            $leave->each(function ($assignLeave) {
-                // Misalnya, mendapatkan data dari relasi leave
-                $assignLeave->leave; // Asumsi relasi 'leave' ada di model AssignLeave
-            });
+            $leave = AssignLeave::with('leave')->where('id_employee', $employee->id_employee)->get();
         }
         dd($leave);
         $assignShiftByDay = $assignShift->groupBy('day');
