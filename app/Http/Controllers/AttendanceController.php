@@ -29,8 +29,19 @@ class AttendanceController extends Controller
         return view('attendance/attendance');
     }
 
-    public function data()
+    public function data(Request $request)
     {
+        $daterange = $request->input('daterange');
+
+        if ($daterange) {
+            // Pisahkan tanggal mulai dan selesai
+            list($startDate, $endDate) = explode(' - ', $daterange);
+        } else {
+            // Jika tidak ada input, gunakan default date range (misalnya bulan ini)
+            $startDate = Carbon::now()->startOfMonth()->toDateString();
+            $endDate = Carbon::now()->endOfMonth()->toDateString();
+        }
+
         if (Auth::user()->role == "supervisor") {
             $overview = Attendance::with('employee.user', 'shift')
                 ->where('id_company', Auth::user()->id_company)
@@ -68,7 +79,9 @@ class AttendanceController extends Controller
                                 )) as total_overtime')
                             )
                             ->where('id_company', Auth::user()->id_company)
+                            ->whereBetween('attendance_date', [$startDate, $endDate])
                             ->groupBy('id_employee')
+                            ->orderBy('attendance_date', 'desc')
                             ->get();
         }
 

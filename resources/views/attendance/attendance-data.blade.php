@@ -11,6 +11,10 @@
     .nav-tabs .nav-link {
         color: #000; /* Default text color for inactive tabs */
     }
+    #example2 th, #example2 td {
+    white-space: nowrap;
+}
+
 </style>
 @endsection
 @section('content')
