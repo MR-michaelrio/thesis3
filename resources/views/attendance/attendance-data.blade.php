@@ -11,15 +11,6 @@
     .nav-tabs .nav-link {
         color: #000; /* Default text color for inactive tabs */
     }
-    #example2 {
-    table-layout: fixed;
-}
-#example2 td, #example2 th {
-    word-wrap: break-word;
-    overflow: hidden;
-}
-
-
 </style>
 @endsection
 @section('content')
@@ -110,16 +101,6 @@
                                     <td>Overtime</td>
                                 </tr>
                             </tbody>
-                            <tfoot>
-                            <tr>
-                                    <th>Name</th>
-                                    <th>ID</th>
-                                    <th>Department Code</th>
-                                    <th>Daily Total</th>
-                                    <th>Regular Hours</th>
-                                    <th>Overtime</th>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
                 </div>
