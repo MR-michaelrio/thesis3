@@ -79,7 +79,7 @@
                         <button type="button" class="btn" id="showFilterBtn">
                             <i class="fas fa-filter"></i> Filter
                         </button>    
-                        <div class="col-4">               
+                        <div class="col-2">               
                         <form action="{{ route('attendance.data') }}" method="GET" id="filterForm" style="display: none;">
                             <div class="form-group">
                                 <label for="daterange">Date Range:</label>
