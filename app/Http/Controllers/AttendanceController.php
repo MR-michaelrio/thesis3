@@ -61,7 +61,7 @@ class AttendanceController extends Controller
                             ->get();
             $summary = DB::table('attendance')
                             ->select(
-                                '*',
+                                'id_employee',
                                 DB::raw('SEC_TO_TIME(SUM(TIME_TO_SEC(STR_TO_DATE(daily_total, "%H:%i")))) as total_daily_total'), // Mengonversi daily_total ke detik
                                 DB::raw('SEC_TO_TIME(SUM(
                                     TIME_TO_SEC(STR_TO_DATE(IFNULL(total_overtime, "00:00"), "%H:%i"))

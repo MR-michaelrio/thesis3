@@ -85,16 +85,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($summary as $a)
-                                    <tr style="text-transform:capitalize;">
-                                        <td>{{$a->employee->full_name}}</td>
-                                        <td>{{$a->employee->user->identification_number}}</td>
-                                        <td>{{$a->employee->user->department->department_code}}</td>
-                                        <td style="font-weight:bold">{{ $a->daily_total ? \Carbon\Carbon::parse($a->daily_total)->format('H:i') . ' Hours' : '' }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($a->shift->clock_in)->diff(\Carbon\Carbon::parse($a->shift->clock_out))->format('%H:%I') }} Hours</td>
-                                        <td style="color:red">{{$a->total_overtime}}</td>                                 
-                                    </tr>
-                                @endforeach
+                            <tr>
+                                    <td>Name</td>
+                                    <td>ID</td>
+                                    <td>Department Code</td>
+                                    <td>Daily Total</td>
+                                    <td>Regular Hours</td>
+                                    <td>Overtime</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
