@@ -72,7 +72,6 @@ class AttendanceController extends Controller
                             ->get();
         }
 
-        dd($summary);
         
         return view('attendance/attendance-data',compact("overview","summary"));
     }
