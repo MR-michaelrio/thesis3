@@ -593,7 +593,7 @@
                 
             $("#example2").DataTable({
                 "paging": true,
-                "searching": false,
+                "searching": true,
                 "lengthChange": false,
                 "ordering": true,
                 "info": true,
@@ -601,7 +601,7 @@
                 "responsive": true,
                 "scrollX": true,
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
+            }).buttons().container().appendTo('#example2_wrapper .col-md-12:eq(0)');
 
             $("#AdminAccount").DataTable({
                 "paging": true,
