@@ -59,12 +59,19 @@ class AttendanceController extends Controller
                             ->where('id_company', Auth::user()->id_company)
                             ->orderBy('attendance_date', 'desc')  // Sort by 'attendance_date' in ascending order
                             ->get();
-            $summary = Attendance::with('employee.user', 'shift')
+            $summary = DB::table('attendance')
+                            ->select(
+                                'id_employee',
+                                DB::raw('SUM(CAST(daily_total AS DECIMAL(10,2))) as total_daily_total'),
+                                DB::raw('SEC_TO_TIME(SUM(TIME_TO_SEC(total_overtime))) as total_overtime')
+                            )
                             ->where('id_company', Auth::user()->id_company)
-                            ->where('attendance_date', Carbon::now()->toDateString())
+                            ->whereDate('attendance_date', Carbon::now()->toDateString())
+                            ->groupBy('id_employee')
                             ->get();
-        
         }
+
+        dd($summary);
         
         return view('attendance/attendance-data',compact("overview","summary"));
     }

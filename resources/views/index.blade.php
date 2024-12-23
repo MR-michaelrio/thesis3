@@ -472,7 +472,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 
     @yield("scripts")
-
     <!-- popup success -->
     <script>
         const overlay = document.getElementById('popup-overlay');
@@ -543,6 +542,7 @@
             });
         }
     </script>
+
     <!-- logout -->
     <script>
         document.getElementById('logoutButton').addEventListener('click', function() {
@@ -563,6 +563,7 @@
             form.submit();
         });
     </script>
+    
     <!-- Preview Image Company Profile -->
     <script>
         function previewImage(event) {
@@ -596,7 +597,7 @@
                 "lengthChange": false,
                 "ordering": true,
                 "info": true,
-                "autoWidth": false,
+                "autoWidth": true,
                 "responsive": false,
                 "scrollX": true,
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
