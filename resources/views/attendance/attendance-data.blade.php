@@ -169,12 +169,12 @@
 @endsection
 @section('scripts')
 <script>
-$('#daterange').daterangepicker({
+$('#daterange1').daterangepicker({
     locale: {
         format: 'DD/MM/YYYY'
     }
 })
-$('#daterange').daterangepicker({
+$('#daterange2').daterangepicker({
     locale: {
         format: 'DD/MM/YYYY'
     }
