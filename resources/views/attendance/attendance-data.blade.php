@@ -80,7 +80,7 @@
                             </div>
                             <button type="submit" class="btn btn-primary">Filter</button>
                         </form>
-                        <table id="example2" class="table table-bordered table-striped">
+                        <table id="example2" class="table table-bordered table-striped" style="width:1000px">
                             <thead>
                                 <tr>
                                     <th>Name</th>
