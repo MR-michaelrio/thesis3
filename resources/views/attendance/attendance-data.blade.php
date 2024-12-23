@@ -76,7 +76,8 @@
 
                     <!-- Table 2 -->
                     <div class="tab-pane fade" id="table2" role="tabpanel" aria-labelledby="tab-2">
-                        <form action="{{ route('attendance.data') }}" class="col-6" method="GET">
+                    <button type="button" class="btn btn-secondary" id="showFilterBtn">Filter</button>
+                    <form action="{{ route('attendance.data') }}" method="GET" id="filterForm" style="display: none;">
                             <div class="form-group">
                                 <label for="daterange">Date Range:</label>
                                 <input type="text" name="daterange" id="daterange" class="form-control" value="{{ request('daterange') }}">
@@ -151,6 +152,13 @@
 </div>
 @endsection
 @section('scripts')
+<script>
+    // When the Filter button is clicked
+    document.getElementById('showFilterBtn').addEventListener('click', function() {
+        // Show the filter form
+        document.getElementById('filterForm').style.display = 'block';
+    });
+</script>
 <script>
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
