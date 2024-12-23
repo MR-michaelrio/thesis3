@@ -12,8 +12,8 @@
         color: #000; /* Default text color for inactive tabs */
     }
     #table2 table {
-    width: 100% !important;
-}
+        width: 100% !important;
+    }
 </style>
 @endsection
 @section('content')
@@ -75,9 +75,8 @@
                     </div>
 
                     <!-- Table 2 -->
-                    <div class="tab-pane fade" style="background-color:red" id="table2" role="tabpanel" aria-labelledby="tab-2">
-                        
-                    <form action="{{ route('attendance.data') }}" method="GET">
+                    <div class="tab-pane fade" id="table2" role="tabpanel" aria-labelledby="tab-2">
+                        <form action="{{ route('attendance.data') }}" class="col-6" method="GET">
                             <div class="form-group">
                                 <label for="daterange">Date Range:</label>
                                 <input type="text" name="daterange" id="daterange" class="form-control" value="{{ request('daterange') }}">
