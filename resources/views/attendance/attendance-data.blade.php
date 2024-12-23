@@ -164,16 +164,17 @@
     });
     function goToSummaryTab(event) {
         event.preventDefault(); // Prevent the default form submission
+        document.getElementById('filterForm').submit(); // Submit the form
+    }
 
-        // Submit the form via AJAX or standard form submission
-        document.getElementById('filterForm').submit();
-
-        // Wait for the form submission and then switch to the summary tab
-        setTimeout(function() {
+    // Automatically switch to the "Summary" tab after page reload (if `daterange` parameter is in the URL)
+    window.addEventListener('DOMContentLoaded', function() {
+        // Check if 'daterange' is present in the URL
+        if (window.location.search.indexOf('daterange') !== -1) {
             // Switch to the "Summary" tab
             $('#tab-2').tab('show');
-        }, 500); // Adjust the delay if needed
-    }
+        }
+    });
 </script>
 <script>
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
