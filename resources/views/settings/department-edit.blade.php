@@ -77,6 +77,7 @@
             <div class="card-header" style="background-color:#0FBEF2;color:white">
                 <h3 class="card-title">Position Title</h3>
             </div>
+            <form id="positionForm">
             <div class="card-body">
                 <div class="mb-3">
                     <input type="hidden" id="position_id" name="position_id">
@@ -100,6 +101,7 @@
                     Discard
                 </button>
             </div>
+            </form>
         </div>
     </div>
 </section>
