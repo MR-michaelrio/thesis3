@@ -228,9 +228,9 @@ class EmployeeController extends Controller
         if(Auth::user()->role == "admin"){
             $leave = Leave::where("id_company", Auth::user()->id_company)->get();
         }else{
-            $leave = $employeeLeaves;
+            $leave = AssignLeave::where('id_employee', $employee->id_employee)->with('leave')->get();
         }
-
+        dd($leave);
         $assignShiftByDay = $assignShift->groupBy('day');
 
         return view('employee.employee-edit', compact('leave','employee', 'employeeLeaves', 'assignShiftByDay', 'department', 'departmentPosition', 'user', 'shift'));
