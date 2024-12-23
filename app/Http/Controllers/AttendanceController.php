@@ -82,7 +82,7 @@ class AttendanceController extends Controller
                                 'attendance.id_employee',
                                 'employee.full_name',
                                 'users.identification_number',  // Access the identification_number from the user table
-                                'users.department_code',  // Access the department_code from the user table
+                                'department.department_code',  // Access the department_code from the user table
                                 DB::raw('SEC_TO_TIME(SUM(TIME_TO_SEC(STR_TO_DATE(daily_total, "%H:%i")))) as total_daily_total'),
                                 DB::raw('SEC_TO_TIME(SUM(TIME_TO_SEC(STR_TO_DATE(IFNULL(total_overtime, "00:00"), "%H:%i")))) as total_overtime'),
                                 'shift.clock_in',
