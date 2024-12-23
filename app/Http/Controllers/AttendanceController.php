@@ -71,6 +71,14 @@ class AttendanceController extends Controller
         }else{
             $overview = Attendance::with('employee.user', 'shift')
                             ->where('id_company', Auth::user()->id_company)
+                            ->when(request('daterange'), function ($query) {
+                                $dates = explode(' - ', request('daterange'));
+                                if (count($dates) == 2) {
+                                    $startDate = Carbon::parse($dates[0])->startOfDay(); // start of the first date
+                                    $endDate = Carbon::parse($dates[1])->endOfDay(); // end of the second date
+                                    return $query->whereBetween('attendance_date', [$startDate, $endDate]);
+                                }
+                            })
                             ->orderBy('attendance_date', 'desc')  // Sort by 'attendance_date' in ascending order
                             ->get();
             $summary = DB::table('attendance')
