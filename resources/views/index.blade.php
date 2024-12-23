@@ -593,7 +593,7 @@
                 
             $("#example2").DataTable({
                 "paging": true,
-                "searching": true,
+                "searching": false,
                 "lengthChange": false,
                 "ordering": true,
                 "info": true,
