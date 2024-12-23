@@ -11,9 +11,14 @@
     .nav-tabs .nav-link {
         color: #000; /* Default text color for inactive tabs */
     }
-    #example2 th, #example2 td {
-    white-space: nowrap;
+    #example2 {
+    table-layout: fixed;
 }
+#example2 td, #example2 th {
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
 
 </style>
 @endsection
