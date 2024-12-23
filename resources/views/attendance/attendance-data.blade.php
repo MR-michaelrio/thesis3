@@ -84,7 +84,7 @@
                                 <label for="daterange">Date Range:</label>
                                 <input type="text" name="daterange" id="daterange" class="form-control" value="{{ request('daterange') }}">
                             </div>
-                            <button type="submit" class="btn btn-primary pb-5">Filter</button>
+                            <button type="submit" class="btn btn-primary mb-3">Filter</button>
                         </form>
 
                         <table id="example2" class="table table-bordered table-striped">
