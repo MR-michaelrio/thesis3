@@ -31,18 +31,22 @@ class AttendanceController extends Controller
 
     public function data(Request $request)
     {
-        $daterange = $request->input('daterange');
-        if ($daterange) {
-            // Pisahkan tanggal mulai dan selesai
-            list($startDate, $endDate) = explode(' - ', $daterange);
-            
-            // Mengonversi tanggal menjadi format yang sesuai dengan database (YYYY-MM-DD)
+        $daterange1 = $request->input('daterange1');
+        $daterange2 = $request->input('daterange2');
+        
+        // Tentukan default tanggal jika tidak ada input
+        $startDate = Carbon::now()->startOfMonth()->toDateString();
+        $endDate = Carbon::now()->endOfMonth()->toDateString();
+        
+        // Periksa apakah daterange1 atau daterange2 ada di input
+        if ($daterange1) {
+            list($startDate, $endDate) = explode(' - ', $daterange1);
             $startDate = Carbon::createFromFormat('d/m/Y', $startDate)->toDateString();
             $endDate = Carbon::createFromFormat('d/m/Y', $endDate)->toDateString();
-        } else {
-            // Jika tidak ada input, gunakan default date range (misalnya bulan ini)
-            $startDate = Carbon::now()->startOfMonth()->toDateString();
-            $endDate = Carbon::now()->endOfMonth()->toDateString();
+        } elseif ($daterange2) {
+            list($startDate, $endDate) = explode(' - ', $daterange2);
+            $startDate = Carbon::createFromFormat('d/m/Y', $startDate)->toDateString();
+            $endDate = Carbon::createFromFormat('d/m/Y', $endDate)->toDateString();
         }
 
         if (Auth::user()->role == "supervisor") {
@@ -71,7 +75,7 @@ class AttendanceController extends Controller
         }else{
             $overview = Attendance::with('employee.user', 'shift')
                             ->where('id_company', Auth::user()->id_company)
-                            ->when($daterange, function ($query) use ($startDate, $endDate) {
+                            ->when($daterange1, function ($query) use ($startDate, $endDate) {
                                 return $query->whereBetween('attendance_date', [$startDate, $endDate]);
                             })
                             ->orderBy('attendance_date', 'desc')  // Sort by 'attendance_date' in ascending order

@@ -42,8 +42,8 @@
                         <div class="col-3">               
                             <form action="{{ route('attendance.data') }}" method="GET" id="filterForm1" style="display: none;" onsubmit="goToOverviewTab(event)">
                                 <div class="form-group">
-                                    <label for="daterange">Date Range:</label>
-                                    <input type="text" name="daterange" id="daterange" class="form-control" value="{{ request('daterange') }}">
+                                    <label for="daterange1">Date Range:</label>
+                                    <input type="text" name="daterange1" id="daterange1" class="form-control" value="{{ request('daterange1') }}">
                                 </div>
                                 <button type="submit" class="btn btn-primary mb-3">Filter</button>
                             </form>
@@ -94,8 +94,8 @@
                         <div class="col-3">               
                             <form action="{{ route('attendance.data') }}" method="GET" id="filterFor2" style="display: none;" onsubmit="goToSummaryTab(event)">
                                 <div class="form-group">
-                                    <label for="daterange">Date Range:</label>
-                                    <input type="text" name="daterange" id="daterange" class="form-control" value="{{ request('daterange') }}">
+                                    <label for="daterange2">Date Range:</label>
+                                    <input type="text" name="daterange2" id="daterange2" class="form-control" value="{{ request('daterange2') }}">
                                 </div>
                                 <button type="submit" class="btn btn-primary mb-3">Filter</button>
                             </form>
@@ -169,33 +169,38 @@
 @endsection
 @section('scripts')
 <script>
-    // When the Filter button is clicked
-    document.getElementById('showFilterBtn1').addEventListener('click', function() {
+// When the Filter button is clicked
+document.getElementById('showFilterBtn1').addEventListener('click', function() {
     // Show the filter form
     document.getElementById('filterForm1').style.display = 'block';
-    });
-    document.getElementById('showFilterBtn2').addEventListener('click', function() {
-        // Show the filter form
-        document.getElementById('filterForm2').style.display = 'block';
-    });
+});
 
-    function goToSummaryTab(event) {
-        event.preventDefault(); // Prevent the default form submission
-        document.getElementById('filterForm2').submit(); // Submit the form
-    }
-    function goToOverviewTab(event) {
-        event.preventDefault(); // Prevent the default form submission
-        document.getElementById('filterForm1').submit(); // Submit the form
-    }
+document.getElementById('showFilterBtn2').addEventListener('click', function() {
+    // Show the filter form
+    document.getElementById('filterForm2').style.display = 'block';
+});
 
-    // Automatically switch to the "Summary" tab after page reload (if `daterange` parameter is in the URL)
+function goToSummaryTab(event) {
+    event.preventDefault(); // Prevent the default form submission
+    document.getElementById('filterForm2').submit(); // Submit the form
+}
+
+function goToOverviewTab(event) {
+    event.preventDefault(); // Prevent the default form submission
+    document.getElementById('filterForm1').submit(); // Submit the form
+}
+
+// Automatically switch to the "Summary" tab after page reload (if `daterange` parameter is in the URL)
 window.addEventListener('DOMContentLoaded', function() {
-    // Check if 'daterange' is present in the URL
-    if (window.location.search.indexOf('daterange') !== -1) {
+    // Check if 'daterange1' or 'daterange2' are present in the URL
+    if (window.location.search.indexOf('daterange1') !== -1) {
+        // Switch to the "Overview" tab
+        $('#tab-1').tab('show');
+    } else if (window.location.search.indexOf('daterange2') !== -1) {
         // Switch to the "Summary" tab
         $('#tab-2').tab('show');
     } else {
-        // If there's no 'daterange', make sure the Overview tab is active
+        // If there are no 'daterange' parameters, make sure the Overview tab is active
         $('#tab-1').tab('show');
     }
 });
@@ -203,18 +208,23 @@ window.addEventListener('DOMContentLoaded', function() {
 // After submitting filterForm1, ensure the correct tab is selected
 document.getElementById('filterForm1').addEventListener('submit', function(event) {
     // Ensure the form submission occurs only if the "Overview" tab is active
+    event.preventDefault(); // Prevent the default form submission
     if ($('#tab-1').hasClass('active')) {
         $('#tab-1').tab('show'); // Ensure tab-1 is active
     }
+    this.submit(); // Manually submit the form after handling the tab
 });
 
 // After submitting filterForm2, ensure the correct tab is selected
 document.getElementById('filterForm2').addEventListener('submit', function(event) {
     // Ensure the form submission occurs only if the "Summary" tab is active
+    event.preventDefault(); // Prevent the default form submission
     if ($('#tab-2').hasClass('active')) {
         $('#tab-2').tab('show'); // Ensure tab-2 is active
     }
+    this.submit(); // Manually submit the form after handling the tab
 });
+
 </script>
 <script>
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
