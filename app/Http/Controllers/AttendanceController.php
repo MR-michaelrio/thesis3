@@ -71,7 +71,6 @@ class AttendanceController extends Controller
     ->whereDate('attendance_date', Carbon::now()->toDateString())
     ->groupBy('id_employee')
     ->get();
-        }
 
         dd($summary);
         
