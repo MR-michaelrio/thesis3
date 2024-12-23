@@ -77,9 +77,9 @@
                                         {{$a->employee->user->identification_number}} | {{$a->employee->user->email}}
                                     </div>
                                 </td>
-                                <td>{{$a->employee->user->id_department}}</td>
+                                <td>{{$a->employee->user->department_code}}</td>
                                 <td>
-                                    <form action="{{ route('attendance.destroy', $a->id_employee) }}" method="POST" style="display: inline;">
+                                    <form action="{{ route('attendance.destroy', $a->id_face_security) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger"
