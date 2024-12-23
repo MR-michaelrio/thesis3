@@ -84,8 +84,9 @@
                                 <label for="daterange">Date Range:</label>
                                 <input type="text" name="daterange" id="daterange" class="form-control" value="{{ request('daterange') }}">
                             </div>
-                            <button type="submit" class="btn btn-primary">Filter</button>
+                            <button type="submit" class="btn btn-primary pb-5">Filter</button>
                         </form>
+
                         <table id="example2" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -163,7 +164,7 @@
 </script>
 <script>
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-    $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
-});
+        $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+    });
 </script>
 @endsection
