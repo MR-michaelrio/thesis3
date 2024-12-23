@@ -58,6 +58,7 @@
                                 <th>Rendering engine</th>
                                 <th>Browser</th>
                                 <th>Platform(s)</th>
+                                <th>action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -77,6 +78,16 @@
                                     </div>
                                 </td>
                                 <td>{{$a->employee->user->id_department}}</td>
+                                <td>
+                                    <form action="{{ route('attendance.destroy', $a->id_employee) }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-block text-left custom-btn"
+                                            onclick="return confirm('Are you sure you want to delete this data?');">
+                                            <i class="fas fa-trash mr-2"></i>Delete Data
+                                        </button>
+                                    </form>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>

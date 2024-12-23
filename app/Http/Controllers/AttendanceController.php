@@ -500,4 +500,11 @@ class AttendanceController extends Controller
             ], 201); // Created
         }
     }
+
+    public function destroy($id){
+        $facelist = FaceEncoding::findOrFail($id);
+        $facelist->delete();
+
+        return redirect()->back()->with('success', 'Face deleted successfully');
+    }
 }
