@@ -171,8 +171,8 @@
         // Wait for the form submission and then switch to the summary tab
         setTimeout(function() {
             // Switch to the "summary" tab
-            $('#tab-2').tab('show');
-        }, 500); // Adjust the delay if needed
+            $('#table2').tab('show');
+        }, 100); // Adjust the delay if needed
     }
 </script>
 <script>
