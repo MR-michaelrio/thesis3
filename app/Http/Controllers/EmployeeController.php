@@ -233,7 +233,7 @@ class EmployeeController extends Controller
             ->where('assign_leave.id_employee', $employee->id_employee)
             ->get();
         }
-        dd($leave);
+        // dd($leave);
         $assignShiftByDay = $assignShift->groupBy('day');
 
         return view('employee.employee-edit', compact('leave','employee', 'employeeLeaves', 'assignShiftByDay', 'department', 'departmentPosition', 'user', 'shift'));
