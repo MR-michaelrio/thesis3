@@ -74,8 +74,8 @@ class AttendanceController extends Controller
                             ->orderBy('attendance_date', 'desc')  // Sort by 'attendance_date' in ascending order
                             ->get();
             $summary = DB::table('attendance')
-                            ->join('employee', 'attendance.id_employee', '=', 'employee.id')
-                            ->join('shifts', 'attendance.shift_id', '=', 'shifts.id')
+                            ->join('employee', 'attendance.id_employee', '=', 'employee.id_employee')
+                            ->join('shift', 'attendance.id_shift', '=', 'shift.id_shift')
                             ->select(
                                 'attendance.id_employee',
                                 'employee.full_name',
