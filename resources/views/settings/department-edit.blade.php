@@ -78,29 +78,29 @@
                 <h3 class="card-title">Position Title</h3>
             </div>
             <form id="positionForm">
-            <div class="card-body">
-                <div class="mb-3">
-                    <input type="hidden" id="position_id" name="position_id">
-                    <label for="position_title" class="form-label">Position Title</label>
-                    <input type="text" class="form-control" id="position_title" placeholder="Enter Position Title">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <input type="hidden" id="position_id" name="position_id">
+                        <label for="position_title" class="form-label">Position Title</label>
+                        <input type="text" class="form-control" id="position_title" placeholder="Enter Position Title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="position_description" class="form-label">Position Description</label>
+                        <input type="text" class="form-control" id="position_description" placeholder="Enter Position Description">
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="position_description" class="form-label">Position Description</label>
-                    <input type="text" class="form-control" id="position_description" placeholder="Enter Position Description">
-                </div>
-            </div>
 
-            <div class="card-footer" style="background-color:#E7F9FE; display: flex; justify-content: flex-end;">
-                <button type="button" class="btn btn-primary" id="add-position">
-                    Add
-                </button>&nbsp;
-                <button type="button" class="btn bg-gradient-info" style="display:none" id="update-position">
-                    <i class="fas fa-sync"></i> Update
-                </button>
-                <button type="reset" class="btn btn-default ml-2">
-                    Discard
-                </button>
-            </div>
+                <div class="card-footer" style="background-color:#E7F9FE; display: flex; justify-content: flex-end;">
+                    <button type="button" class="btn btn-primary" id="add-position">
+                        Add
+                    </button>&nbsp;
+                    <button type="button" class="btn bg-gradient-info" style="display:none" id="update-position">
+                        <i class="fas fa-sync"></i> Update
+                    </button>
+                    <button type="reset" class="btn btn-default ml-2">
+                        Discard
+                    </button>
+                </div>
             </form>
         </div>
     </div>
