@@ -80,7 +80,7 @@
                             <i class="fas fa-filter"></i> Filter
                         </button>    
                         <div class="col-3">               
-                        <form action="{{ route('attendance.data') }}" method="GET" id="filterForm" style="display: none;">
+                        <form action="{{ route('attendance.data') }}" method="GET" id="filterForm" style="display: none;" onsubmit="goToSummaryTab(event)">
                             <div class="form-group">
                                 <label for="daterange">Date Range:</label>
                                 <input type="text" name="daterange" id="daterange" class="form-control" value="{{ request('daterange') }}">
@@ -162,6 +162,18 @@
         // Show the filter form
         document.getElementById('filterForm').style.display = 'block';
     });
+    function goToSummaryTab(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Submit the form via AJAX or standard form submission
+        document.getElementById('filterForm').submit();
+
+        // Wait for the form submission and then switch to the summary tab
+        setTimeout(function() {
+            // Switch to the "summary" tab
+            $('#tab-2').tab('show');
+        }, 500); // Adjust the delay if needed
+    }
 </script>
 <script>
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
