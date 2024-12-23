@@ -76,24 +76,19 @@ class AttendanceController extends Controller
             $summary = DB::table('attendance')
                             ->join('employee', 'attendance.id_employee', '=', 'employee.id_employee')  // Join the employee table
                             ->join('users', 'employee.id_users', '=', 'users.id_user')  // Join the user table via employee
-                            ->join('department', 'users.id_department', '=', 'department.id_department')  // Join department table
-                            ->join('shift', 'attendance.shift_id', '=', 'shift.id_shift')  // Join shift table via attendance (assuming shift_id is the correct column)
-                            ->join('assign_shift', 'shift.id_shift', '=', 'assign_shift.id_shift')  // Join assign_shift table
+                            ->join('department', 'users.id_department', '=', 'department.id_department')
                             ->select(
                                 'attendance.id_employee',
                                 'employee.full_name',
                                 'users.identification_number',  // Access the identification_number from the user table
-                                'department.department_code',  // Access the department_code from the department table
+                                'department.department_code',  // Access the department_code from the user table
                                 DB::raw('SEC_TO_TIME(SUM(TIME_TO_SEC(STR_TO_DATE(daily_total, "%H:%i")))) as total_daily_total'),
                                 DB::raw('SEC_TO_TIME(SUM(TIME_TO_SEC(STR_TO_DATE(IFNULL(total_overtime, "00:00"), "%H:%i")))) as total_overtime'),
-                                'shift.clock_in',
-                                'shift.clock_out'
                             )
-                            ->where('attendance.id_company', Auth::user()->id_company)  // Filter by company
-                            ->whereBetween('attendance.attendance_date', [$startDate, $endDate])  // Filter by date range
-                            ->groupBy('attendance.id_employee')  // Group by employee ID
+                            ->where('attendance.id_company', Auth::user()->id_company)
+                            ->whereBetween('attendance.attendance_date', [$startDate, $endDate])
+                            ->groupBy('attendance.id_employee')
                             ->get();
-                        
         }
 
         
