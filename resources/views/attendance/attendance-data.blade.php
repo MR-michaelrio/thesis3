@@ -92,7 +92,7 @@
                             <i class="fas fa-filter"></i> Filter
                         </button>    
                         <div class="col-3">               
-                            <form action="{{ route('attendance.data') }}" method="GET" id="filterFor2" style="display: none;" onsubmit="goToSummaryTab(event)">
+                            <form action="{{ route('attendance.data') }}" method="GET" id="filterForm2" style="display: none;" onsubmit="goToSummaryTab(event)">
                                 <div class="form-group">
                                     <label for="daterange2">Date Range:</label>
                                     <input type="text" name="daterange2" id="daterange2" class="form-control" value="{{ request('daterange2') }}">
