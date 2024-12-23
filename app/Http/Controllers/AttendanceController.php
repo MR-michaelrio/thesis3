@@ -59,12 +59,12 @@ class AttendanceController extends Controller
                             ->where('id_company', Auth::user()->id_company)
                             ->orderBy('attendance_date', 'desc')  // Sort by 'attendance_date' in ascending order
                             ->get();
-            $summary = DB::table('attendance')
+                            $summary = DB::table('attendance')
                             ->select(
                                 'id_employee',
                                 DB::raw('SUM(CAST(daily_total AS DECIMAL(10,2))) as total_daily_total'),
                                 DB::raw('SEC_TO_TIME(SUM(
-                                    TIME_TO_SEC(STR_TO_DATE(total_overtime, "%H:%i"))
+                                    TIME_TO_SEC(STR_TO_DATE(IFNULL(total_overtime, "00:00"), "%H:%i"))
                                 )) as total_overtime')
                             )
                             ->where('id_company', Auth::user()->id_company)
