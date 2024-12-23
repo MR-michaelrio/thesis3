@@ -743,13 +743,17 @@
             });
 
             //Date range picker
-            $('#reservation').daterangepicker()
+            $('#reservation').daterangepicker({
+                locale: {
+                    format: 'DD/MM/YYYY'
+                }
+            })
             //Date range picker with time picker
             $('#reservationtime').daterangepicker({
                 timePicker: true,
                 timePickerIncrement: 30,
                 locale: {
-                    format: 'MM/DD/YYYY hh:mm A'
+                    format: 'DD/MM/YYYY hh:mm A'
                 }
             })
             //Date range as a button

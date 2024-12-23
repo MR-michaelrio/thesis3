@@ -74,14 +74,9 @@
                     <!-- Table 2 -->
                     <div class="tab-pane fade" id="table2" role="tabpanel" aria-labelledby="tab-2">
                         <form action="{{ route('attendance.data') }}" method="GET">
-                            @csrf
                             <div class="form-group">
-                                <label for="start_date">Start Date:</label>
-                                <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request('start_date') }}">
-                            </div>
-                            <div class="form-group">
-                                <label for="end_date">End Date:</label>
-                                <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request('end_date') }}">
+                                <label for="daterange">Date Range:</label>
+                                <input type="text" name="daterange" id="daterange" class="form-control" value="{{ request('daterange') }}">
                             </div>
                             <button type="submit" class="btn btn-primary">Filter</button>
                         </form>
