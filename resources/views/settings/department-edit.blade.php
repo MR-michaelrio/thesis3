@@ -96,6 +96,9 @@
                 <button type="button" class="btn bg-gradient-info" style="display:none" id="update-position">
                     <i class="fas fa-sync"></i> Update
                 </button>
+                <button type="reset" class="btn bg-gradient-info">
+                    <i class="fas fa-sync"></i> Discard
+                </button>
             </div>
         </div>
     </div>
