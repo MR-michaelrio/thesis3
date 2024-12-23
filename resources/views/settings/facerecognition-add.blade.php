@@ -84,7 +84,7 @@
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger"
                                             onclick="return confirm('Are you sure you want to delete this face?');">
-                                            <i class="fas fa-trash mr-2"></i>
+                                            <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
                                 </td>
