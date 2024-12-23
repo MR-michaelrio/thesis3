@@ -63,7 +63,9 @@ class AttendanceController extends Controller
                             ->select(
                                 'id_employee',
                                 DB::raw('SUM(CAST(daily_total AS DECIMAL(10,2))) as total_daily_total'),
-                                DB::raw('SEC_TO_TIME(SUM(TIME_TO_SEC(total_overtime))) as total_overtime')
+                                DB::raw('SEC_TO_TIME(SUM(
+                                    TIME_TO_SEC(STR_TO_DATE(total_overtime, "%H:%i"))
+                                )) as total_overtime')
                             )
                             ->where('id_company', Auth::user()->id_company)
                             ->whereDate('attendance_date', Carbon::now()->toDateString())
