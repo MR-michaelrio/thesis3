@@ -76,8 +76,10 @@
 
                     <!-- Table 2 -->
                     <div class="tab-pane fade" id="table2" role="tabpanel" aria-labelledby="tab-2">
-                    <button type="button" class="btn btn-secondary" id="showFilterBtn">Filter</button>
-                    <form action="{{ route('attendance.data') }}" method="GET" id="filterForm" style="display: none;">
+                        <button type="button" class="btn" id="showFilterBtn">
+                            <i class="fas fa-filter"></i> Filter
+                        </button>                    
+                        <form action="{{ route('attendance.data') }}" method="GET" id="filterForm" style="display: none;">
                             <div class="form-group">
                                 <label for="daterange">Date Range:</label>
                                 <input type="text" name="daterange" id="daterange" class="form-control" value="{{ request('daterange') }}">
