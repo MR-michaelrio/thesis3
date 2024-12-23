@@ -214,21 +214,21 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="emergency_name">Emergency Name <span style="color:red"> *</span></label>
+                                    <label for="emergency_name">Emergency Contact Name <span style="color:red"> *</span></label>
                                     <input type="text" class="form-control" id="emergency_name" name="emergency_name"
                                         placeholder="Enter Emergency Name" required value="{{ old('emergency_name') }}">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="emergency_relation">Emergency Relation <span style="color:red"> *</span></label>
+                                    <label for="emergency_relation">Emergency Contact Relation <span style="color:red"> *</span></label>
                                     <input type="text" class="form-control" id="emergency_relation" name="emergency_relation"
                                         placeholder="Enter Emergency Relation" required value="{{ old('emergency_relation') }}">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="emergency_phone">Emergency Phone <span style="color:red"> *</span></label>
+                                    <label for="emergency_phone">Emergency Contact Phone <span style="color:red"> *</span></label>
                                     <input type="text" class="form-control" id="emergency_phone" name="emergency_phone"
                                         placeholder="Enter Emergency Phone" required value="{{ old('emergency_phone') }}">
                                 </div>
