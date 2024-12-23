@@ -74,13 +74,13 @@ class AttendanceController extends Controller
                             ->orderBy('attendance_date', 'desc')  // Sort by 'attendance_date' in ascending order
                             ->get();
             $summary = DB::table('attendance')
-                            ->join('employees', 'attendance.id_employee', '=', 'employees.id')
+                            ->join('employee', 'attendance.id_employee', '=', 'employee.id')
                             ->join('shifts', 'attendance.shift_id', '=', 'shifts.id')
                             ->select(
                                 'attendance.id_employee',
-                                'employees.full_name',
-                                'employees.user->identification_number',
-                                'employees.user->department->department_code',
+                                'employee.full_name',
+                                'employee.user->identification_number',
+                                'employee.user->department->department_code',
                                 DB::raw('SEC_TO_TIME(SUM(TIME_TO_SEC(STR_TO_DATE(daily_total, "%H:%i")))) as total_daily_total'),
                                 DB::raw('SEC_TO_TIME(SUM(TIME_TO_SEC(STR_TO_DATE(IFNULL(total_overtime, "00:00"), "%H:%i")))) as total_overtime'),
                                 'shifts.clock_in',
