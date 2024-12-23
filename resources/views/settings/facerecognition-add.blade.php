@@ -83,8 +83,8 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-block btn-danger"
-                                            onclick="return confirm('Are you sure you want to delete this data?');">
-                                            <i class="fas fa-trash mr-2"></i>Delete Data
+                                            onclick="return confirm('Are you sure you want to delete this face?');">
+                                            <i class="fas fa-trash mr-2"></i>Delete
                                         </button>
                                     </form>
                                 </td>
