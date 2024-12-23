@@ -32,10 +32,13 @@ class AttendanceController extends Controller
     public function data(Request $request)
     {
         $daterange = $request->input('daterange');
-
         if ($daterange) {
             // Pisahkan tanggal mulai dan selesai
             list($startDate, $endDate) = explode(' - ', $daterange);
+            
+            // Mengonversi tanggal menjadi format yang sesuai dengan database (YYYY-MM-DD)
+            $startDate = Carbon::createFromFormat('d/m/Y', $startDate)->toDateString();
+            $endDate = Carbon::createFromFormat('d/m/Y', $endDate)->toDateString();
         } else {
             // Jika tidak ada input, gunakan default date range (misalnya bulan ini)
             $startDate = Carbon::now()->startOfMonth()->toDateString();
@@ -81,7 +84,6 @@ class AttendanceController extends Controller
                             ->where('id_company', Auth::user()->id_company)
                             ->whereBetween('attendance_date', [$startDate, $endDate])
                             ->groupBy('id_employee')
-                            ->orderBy('attendance_date', 'desc')
                             ->get();
         }
 
