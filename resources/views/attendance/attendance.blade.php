@@ -119,11 +119,12 @@
             if (data) {
                 console.log('Response data:', data.message);
                 $('#addmanualmodal').modal('hide');
+                showSuccesPopup(data.message);
+
                 document.getElementById('employeid').value = data?.employee_id;
                 document.getElementById('employename').value = data?.employee_name;
                 document.getElementById('clock').value = data?.attendance.clock_in || data?.attendance.clock_out;
                 document.getElementById('time').value = data?.time;
-                showSuccesPopup(data.message);
             } else {
                 alert('Error: ' + data.message);
             }
@@ -251,11 +252,11 @@
                 })
                 .then(response => {
                     console.log("checkin", response);
+                    showSuccesPopup(response.data?.message || response.message);
                     document.getElementById('employeid').value = response.data?.employee_id;
                     document.getElementById('employename').value = response.data?.employee_name;
                     document.getElementById('clock').value = response.data?.attendance.clock_in || response.data?.attendance.clock_out;
                     document.getElementById('time').value = response.data?.time;
-                    showSuccesPopup(response.data?.message || response.message);
                     document.body.removeChild(overlay);
 
                     startCamera(); // Restart camera
