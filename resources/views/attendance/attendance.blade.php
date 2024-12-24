@@ -114,16 +114,16 @@
         .then(response => response.json()) // Parse the JSON response
         .then(data => {
             // Handle the response
-            console.log("Response Data:", data);
-            document.getElementById('loadingSpinner').style.display = 'none';
             console.log('Response data:', data.message);
+            document.getElementById('loadingSpinner').style.display = 'none';
             $('#addmanualmodal').modal('hide');
+
             showSuccesPopup(data.message);
 
-            document.getElementById('employeid').value = data?.employee_id;
-            document.getElementById('employename').value = data?.employee_name;
-            document.getElementById('clock').value = data?.attendance.clock_in || data?.attendance.clock_out;
-            document.getElementById('time').value = data?.time;
+            document.getElementById('employeid').value = data?.employee_id || "";
+            document.getElementById('employename').value = data?.employee_name || "";
+            document.getElementById('clock').value = data?.attendance.clock_in || data?.attendance.clock_out || "";
+            document.getElementById('time').value = data?.time || "";
 
         })
         .catch(error => {
@@ -252,10 +252,10 @@
                 .then(response => {
                     console.log("checkin", response);
                     showSuccesPopup(response.data?.message || response.message);
-                    document.getElementById('employeid').value = response.data?.employee_id;
-                    document.getElementById('employename').value = response.data?.employee_name;
-                    document.getElementById('clock').value = response.data?.attendance.clock_in || response.data?.attendance.clock_out;
-                    document.getElementById('time').value = response.data?.time;
+                    document.getElementById('employeid').value = response.data?.employee_id || "";
+                    document.getElementById('employename').value = response.data?.employee_name || "";
+                    document.getElementById('clock').value = response.data?.attendance.clock_in || response.data?.attendance.clock_out || "";
+                    document.getElementById('time').value = response.data?.time || "";
                     document.body.removeChild(overlay);
 
                     startCamera(); // Restart camera
