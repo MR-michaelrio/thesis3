@@ -164,16 +164,24 @@ class EmployeeController extends Controller
 
             if ($request->has('leaves')) {
                 foreach ($request->input('leaves') as $leaveId) {
-                    $leave = Leave::where("id_leave",$leaveId)->first();
+                    // Ambil leave dari database
+                    $leave = Leave::where("id_leave", $leaveId)->first();
+            
+                    // Ambil custom quota jika ada, gunakan default_quota jika tidak
+                    $customQuota = $request->input("custom_quotas.$leaveId") ?? $leave->default_quota;
+            
+                    // Buat record di tabel AssignLeave
                     AssignLeave::create([
                         'id_employee' => $employee->id_employee,
                         'id_leave' => $leaveId,
-                        'quota' => $leave->default_quota, 
-                        'remaining' => $leave->default_quota,
+                        'quota' => $customQuota,
+                        'remaining' => $customQuota,
                         'id_company' => Auth::user()->id_company,
                     ]);
                 }
             }
+            
+            
 
             $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
             $dayMapping = [
