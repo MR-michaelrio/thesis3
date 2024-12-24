@@ -703,7 +703,7 @@ function toggleQuotaInput(leaveId) {
         input.style.display = 'block';
     } else {
         input.style.display = 'none';
-        input.value = ''; // Reset value when hidden
+        // Reset value when hidden
     }
 }
 </script>
