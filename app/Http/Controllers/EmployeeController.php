@@ -238,11 +238,11 @@ class EmployeeController extends Controller
             ->join('leave', 'assign_leave.id_leave', '=', 'leave.id_leave')
             ->where('assign_leave.id_employee', $employee->id_employee)
             ->get();
-            $employeeLeavesQuota = AssignLeave::where('id_employee', $employee->id_employee)
-                        ->pluck('quota', 'id_leave')
-                        ->toArray()->get();
+            
         }
-        dd($employeeLeavesQuota);
+        $employeeLeavesQuota = AssignLeave::where('id_employee', $employee->id_employee)
+                        ->pluck('quota', 'id_leave')
+                        ->toArray();
         $assignShiftByDay = $assignShift->groupBy('day');
 
         return view('employee.employee-edit', compact('leave','employee', 'employeeLeaves', 'assignShiftByDay', 'department', 'departmentPosition', 'user', 'shift', 'employeeLeavesQuota'));
