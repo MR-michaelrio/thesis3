@@ -493,58 +493,58 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body" style="display: block;">
-    @foreach($leave as $l)
-        <div class="custom-control custom-checkbox">
-            <div class="row m-2" style="background-color: #F8F9FA; border-radius: 10px;">
-                <div class="col-1 d-flex justify-content-center align-items-center">
-                    <input type="checkbox" 
-                        id="leave_{{$l->id_leave}}" 
-                        name="leaves[]" 
-                        value="{{$l->id_leave}}">
-                </div>
-                <div class="col-10">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="row">
-                                <div class="col-12" style="font-size: 1.1rem; font-weight: bold;">
-                                    {{$l->leave_name}}
+                        @foreach($leave as $l)
+                            <div class="custom-control custom-checkbox">
+                                <div class="row m-2" style="background-color: #F8F9FA; border-radius: 10px;">
+                                    <div class="col-1 d-flex justify-content-center align-items-center">
+                                        <input type="checkbox" 
+                                            id="leave_{{$l->id_leave}}" 
+                                            name="leaves[]" 
+                                            value="{{$l->id_leave}}">
+                                    </div>
+                                    <div class="col-10">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="row">
+                                                    <div class="col-12" style="font-size: 1.1rem; font-weight: bold;">
+                                                        {{$l->leave_name}}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12" style="font-size: 0.875rem;">Category: {{$l->category}}</div>
+                                                    <div class="col-12" style="font-size: 0.875rem;">Default: {{$l->default_quota}}</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="row">
+                                                    <div class="col-12" style="font-size: 1rem;">Custom Quota:</div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <input type="number" 
+                                                            name="custom_quotas[{{$l->id_leave}}]" 
+                                                            id="quota_{{$l->id_leave}}" 
+                                                            class="form-control" 
+                                                            style="display: none;" 
+                                                            min="0" 
+                                                            placeholder="Enter custom quota">
+                                                            <div class="col-1 d-flex justify-content-center align-items-center">
+                                        <button type="button" 
+                                            class="btn btn-sm btn-secondary" 
+                                            onclick="toggleQuotaInput({{$l->id_leave}})">
+                                            <i class="fa fa-edit"></i> <!-- Ikon edit -->
+                                        </button>
+                                    </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-12" style="font-size: 0.875rem;">Category: {{$l->category}}</div>
-                                <div class="col-12" style="font-size: 0.875rem;">Default: {{$l->default_quota}}</div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="row">
-                                <div class="col-12" style="font-size: 1rem;">Custom Quota:</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <input type="number" 
-                                        name="custom_quotas[{{$l->id_leave}}]" 
-                                        id="quota_{{$l->id_leave}}" 
-                                        class="form-control" 
-                                        style="display: none;" 
-                                        min="0" 
-                                        placeholder="Enter custom quota">
-                                </div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
-                </div>
-                <div class="col-1 d-flex justify-content-center align-items-center">
-                    <button type="button" 
-                        class="btn btn-sm btn-secondary" 
-                        onclick="toggleQuotaInput({{$l->id_leave}})">
-                        <i class="fa fa-edit"></i> <!-- Ikon edit -->
-                    </button>
-                </div>
-            </div>
-        </div>
-    @endforeach
-</div>
-
                     <!-- /.card-body -->
                 </div>
             </div>
