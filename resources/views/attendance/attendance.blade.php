@@ -120,10 +120,11 @@
 
             showSuccesPopup(data.message);
 
-            // document.getElementById('employeid').value = data?.employee_id || "";
-            // document.getElementById('employename').value = data?.employee_name || "";
-            // document.getElementById('clock').value = data?.attendance.clock_in || data?.attendance.clock_out || "";
-            // document.getElementById('time').value = data?.time || "";
+            document.getElementById('employeid').value = data?.employee_id ? data.employee_id : "";
+            document.getElementById('employename').value = data?.employee_name ? data.employee_name : "";
+            document.getElementById('clock').value = data?.attendance?.clock_in ? data.attendance.clock_in : (data?.attendance?.clock_out || "");
+            document.getElementById('time').value = data?.time ? data.time : "";
+
 
         })
         .catch(error => {
