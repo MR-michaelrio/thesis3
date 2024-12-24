@@ -242,7 +242,8 @@ class EmployeeController extends Controller
             ->pluck('quota', 'id_leave') // Menyimpan 'quota' dengan 'id_leave' sebagai key
             ->toArray();
         }
-        // dd($leave);
+
+        dd($employeeLeavesQuota);
         $assignShiftByDay = $assignShift->groupBy('day');
 
         return view('employee.employee-edit', compact('leave','employee', 'employeeLeaves', 'assignShiftByDay', 'department', 'departmentPosition', 'user', 'shift', 'employeeLeavesQuota'));
