@@ -663,7 +663,7 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                                         class="form-control" 
                                         min="0" 
                                         placeholder="Enter custom quota"
-                                        value="{{ $employeeLeavesQuota[$l->id_leave] ?? $l->default_quota }}"
+                                        value="{{ array_key_exists($l->id_leave, $employeeLeavesQuota) ? $employeeLeavesQuota[$l->id_leave] : $l->default_quota }}"
                                         style="{{ in_array($l->id_leave, $employeeLeaves) ? 'display: block;' : 'display: none;' }}">
                                 </div>
                             </div>

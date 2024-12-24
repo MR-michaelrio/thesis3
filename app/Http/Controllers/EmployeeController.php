@@ -243,7 +243,6 @@ class EmployeeController extends Controller
                         ->pluck('quota', 'id_leave')
                         ->toArray();
         }
-        dd($employeeLeavesQuota, $l->id_leave); // Lihat apakah id_leave ada dalam array employeeLeavesQuota
 
         $assignShiftByDay = $assignShift->groupBy('day');
 
