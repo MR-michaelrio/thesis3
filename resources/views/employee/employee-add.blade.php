@@ -500,10 +500,9 @@
                     <input type="checkbox" 
                         id="leave_{{$l->id_leave}}" 
                         name="leaves[]" 
-                        value="{{$l->id_leave}}" 
-                        onchange="toggleQuotaInput({{$l->id_leave}})">
+                        value="{{$l->id_leave}}">
                 </div>
-                <div class="col-11">
+                <div class="col-10">
                     <div class="row">
                         <div class="col-6">
                             <div class="row">
@@ -534,10 +533,18 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-1 d-flex justify-content-center align-items-center">
+                    <button type="button" 
+                        class="btn btn-sm btn-secondary" 
+                        onclick="toggleQuotaInput({{$l->id_leave}})">
+                        <i class="fa fa-edit"></i> <!-- Ikon edit -->
+                    </button>
+                </div>
             </div>
         </div>
     @endforeach
 </div>
+
                     <!-- /.card-body -->
                 </div>
             </div>
@@ -550,15 +557,16 @@
 @section('scripts')
 <script>
 function toggleQuotaInput(leaveId) {
-    const checkbox = document.getElementById(`leave_${leaveId}`);
     const input = document.getElementById(`quota_${leaveId}`);
-    if (checkbox.checked) {
-        input.style.display = 'block';
+    // Toggle visibility of the input field
+    if (input.style.display === 'none' || input.style.display === '') {
+        input.style.display = 'block'; // Show input
     } else {
-        input.style.display = 'none';
-        input.value = ''; // Reset quota if unchecked
+        input.style.display = 'none'; // Hide input
+        input.value = ''; // Reset value when hidden
     }
 }
+
 $(document).ready(function() {
     // Trigger when the department is changed
     $('#department').on('change', function() {
