@@ -116,18 +116,15 @@
             // Handle the response
             console.log("Response Data:", data);
             document.getElementById('loadingSpinner').style.display = 'none';
-            if (data) {
-                console.log('Response data:', data.message);
-                $('#addmanualmodal').modal('hide');
-                showSuccesPopup(data.message);
+            console.log('Response data:', data.message);
+            $('#addmanualmodal').modal('hide');
+            showSuccesPopup(data.message);
 
-                document.getElementById('employeid').value = data?.employee_id;
-                document.getElementById('employename').value = data?.employee_name;
-                document.getElementById('clock').value = data?.attendance.clock_in || data?.attendance.clock_out;
-                document.getElementById('time').value = data?.time;
-            } else {
-                alert('Error: ' + data.message);
-            }
+            document.getElementById('employeid').value = data?.employee_id;
+            document.getElementById('employename').value = data?.employee_name;
+            document.getElementById('clock').value = data?.attendance.clock_in || data?.attendance.clock_out;
+            document.getElementById('time').value = data?.time;
+
         })
         .catch(error => {
             // Handle error
@@ -135,6 +132,8 @@
 
             console.error('Error:', error);
             alert('There was an error with the submission.');
+            startCamera();
+            startFrameCapture();
         });
     });
 
