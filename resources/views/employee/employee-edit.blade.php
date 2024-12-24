@@ -626,50 +626,66 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body" style="display: block;">
-                        @foreach($leave as $l)
-                            <div class="custom-control custom-checkbox">
-                                <!-- Check if the employee has this leave assigned -->
-                                 <div class="row m-2" style="background-color: #F8F9FA;border-radius:10px">
-                                    <div class="col-1 d-flex justify-content-center align-items-center">
-                                    <input type="checkbox" 
-                                        id="leave_{{$l->id_leave}}" 
-                                        name="leaves[]" 
-                                        value="{{$l->id_leave}}" 
-                                        @if(Auth::user()->role != "admin") disabled class="disabled-checkbox" @endif
-
-                                        {{ in_array($l->id_leave, $employeeLeaves) ? 'checked' : '' }}
-                                        style="transform: scale(1.5);" >
-                                    </div>
-                                    <div class="col-11">
-                                        <div class="row" >
-                                            <div class="col-6">
-                                                <div class="row">
-                                                    <div class="col-12" style="font-size: 1.1rem;font-weight:bold">{{$l->leave_name}}</div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-12" style="font-size: 0.875rem;">Category: {{$l->category}}</div>
-                                                    <div class="col-12" style="font-size: 0.875rem;">Default: {{$l->default_quota}}</div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="row">
-                                                    <div class="col-12" style="font-size: 1rem;">Description:</div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-12" style="font-size: 0.875rem;">{{$l->description}}</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                 </div>
-                               
-                                <!-- <label for="leave_{{$l->id_leave}}" class="custom-control-label m-2 p-2" style="border: 1px solid #CED4DA;">
-                                    
-                                </label> -->
-                                    
+    @foreach($leave as $l)
+        <div class="custom-control custom-checkbox">
+            <div class="row m-2" style="background-color: #F8F9FA;border-radius:10px;">
+                <div class="col-1 d-flex justify-content-center align-items-center">
+                    <input type="checkbox" 
+                        id="leave_{{$l->id_leave}}" 
+                        name="leaves[]" 
+                        value="{{$l->id_leave}}" 
+                        {{ in_array($l->id_leave, $employeeLeaves) ? 'checked' : '' }}
+                        onchange="toggleQuotaInput({{$l->id_leave}})"
+                        @if(Auth::user()->role != 'admin') disabled @endif>
+                </div>
+                <div class="col-10">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-12" style="font-size: 1.1rem;font-weight:bold">
+                                    {{$l->leave_name}}
+                                </div>
                             </div>
-                        @endforeach
+                            <div class="row">
+                                <div class="col-12" style="font-size: 0.875rem;">Category: {{$l->category}}</div>
+                                <div class="col-12" style="font-size: 0.875rem;">Default: {{$l->default_quota}}</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-12" style="font-size: 1rem;">Custom Quota:</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <input type="number" 
+                                        name="custom_quotas[{{$l->id_leave}}]" 
+                                        id="quota_{{$l->id_leave}}" 
+                                        class="form-control" 
+                                        min="0" 
+                                        placeholder="Enter custom quota"
+                                        value="{{ $employeeLeavesQuota[$l->id_leave] ?? $l->default_quota }}"
+                                        style="{{ in_array($l->id_leave, $employeeLeaves) ? 'display: block;' : 'display: none;' }}">
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </div>
+                @if(Auth::user()->role == 'admin')
+                    <div class="col-1 d-flex justify-content-center align-items-center">
+                        <button type="button" 
+                            class="btn btn-sm btn-secondary" 
+                            onclick="toggleQuotaInput({{$l->id_leave}})">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                    </div>
+                @endif
+            </div>
+        </div>
+    @endforeach
+</div>
+
+
+
                     <!-- /.card-body -->
                 </div>
             </div>
@@ -680,7 +696,17 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
 @endsection
 
 @section('scripts')
-
+<script>
+function toggleQuotaInput(leaveId) {
+    const input = document.getElementById(`quota_${leaveId}`);
+    if (input.style.display === 'none' || input.style.display === '') {
+        input.style.display = 'block';
+    } else {
+        input.style.display = 'none';
+        input.value = ''; // Reset value when hidden
+    }
+}
+</script>
 <script>
     $(document).ready(function() {
     // Update position and supervisor based on department selection

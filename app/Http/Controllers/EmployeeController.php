@@ -179,10 +179,8 @@ class EmployeeController extends Controller
                         'id_company' => Auth::user()->id_company,
                     ]);
                 }
-            }
+            }            
             
-            
-
             $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
             $dayMapping = [
                 'monday' => 1,
@@ -342,12 +340,13 @@ class EmployeeController extends Controller
         
                 if ($request->has('leaves')) {
                     foreach ($request->input('leaves') as $leaveId) {
-                        $leave = Leave::where("id_leave",$leaveId)->first();
+                        $leave = Leave::where("id_leave", $leaveId)->first();
+                        $customQuota = $request->input("custom_quotas.$leaveId", $leave->default_quota); // Gunakan custom quota jika tersedia
                         AssignLeave::create([
                             'id_employee' => $employee->id_employee,
                             'id_leave' => $leaveId,
-                            'quota' => $leave->default_quota, 
-                            'remaining' => $leave->default_quota,
+                            'quota' => $customQuota, // Simpan custom quota
+                            'remaining' => $customQuota,
                             'id_company' => Auth::user()->id_company,
                         ]);
                     }
