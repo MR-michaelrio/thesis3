@@ -256,7 +256,7 @@
                     document.getElementById('employename').value = response.data?.employee_name;
                     document.getElementById('clock').value = response.data?.attendance.clock_in || response.data?.attendance.clock_out;
                     document.getElementById('time').value = response.data?.time;
-                    showSuccesPopup(response.data.message || response.message);
+                    showSuccesPopup(response.data?.message || response.message);
                     document.body.removeChild(overlay);
 
                     startCamera(); // Restart camera
