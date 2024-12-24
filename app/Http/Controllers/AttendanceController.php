@@ -207,9 +207,9 @@ class AttendanceController extends Controller
         $assignshift = AssignShift::where('id_employee', $id_employee)->where('day', $dayOfWeek)->first();
 
         // If no shift assignment found, return an error response
-        if (!$assignshift) {
+        if (!$assignshift->id_shift) {
             return response()->json([
-                'message' => 'No shift assignment found for the employee.',
+                'message' => 'No shift assignment found for the employee',
             ], 201); // Not Found
         }
 
@@ -378,7 +378,7 @@ class AttendanceController extends Controller
         $assignshift = AssignShift::where('id_employee', $id_employee)->where('day', $dayOfWeek)->first();
 
         // If no shift assignment found, return an error response
-        if (!$assignshift) {
+        if (!$assignshift->id_shift) {
             return response()->json([
                 'message' => 'No shift assignment found for the employee.',
             ], 201);
