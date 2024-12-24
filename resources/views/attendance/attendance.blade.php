@@ -118,7 +118,7 @@
             document.getElementById('loadingSpinner').style.display = 'none';
             if (data) {
                 console.log('Form data:', formData);
-                console.log('Response data:', data);
+                console.log('Response data:', data.message);
                 $('#addmanualmodal').modal('hide');
                 document.getElementById('employeid').value = data?.employee_id;
                 document.getElementById('employename').value = data?.employee_name;
@@ -256,7 +256,7 @@
                     document.getElementById('employename').value = response.data?.employee_name;
                     document.getElementById('clock').value = response.data?.attendance.clock_in || response.data?.attendance.clock_out;
                     document.getElementById('time').value = response.data?.time;
-                    showSuccesPopup(response.data.message);
+                    showSuccesPopup(response.data.message || response.message);
                     document.body.removeChild(overlay);
 
                     startCamera(); // Restart camera
