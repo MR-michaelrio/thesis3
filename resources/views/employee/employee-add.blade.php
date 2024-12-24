@@ -528,20 +528,18 @@
                                                             style="display: none;" 
                                                             min="0" 
                                                             placeholder="Enter custom quota">
-                                                            
                                                     </div>
-                                                    <div class="col-1 d-flex justify-content-center align-items-center">
-                                        <button type="button" 
-                                            class="btn btn-sm btn-secondary" 
-                                            onclick="toggleQuotaInput({{$l->id_leave}})">
-                                            <i class="fa fa-edit"></i> <!-- Ikon edit -->
-                                        </button>
-                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    
+                                    <div class="col-1 d-flex justify-content-center align-items-center">
+                                        <button type="button" 
+                                            class="btn btn-sm btn-secondary" 
+                                            onclick="toggleQuotaInput({{$l->id_leave}})">
+                                            <i class="fa fa-edit"></i> 
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         @endforeach
