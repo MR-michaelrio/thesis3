@@ -117,7 +117,6 @@
             console.log("Response Data:", data);
             document.getElementById('loadingSpinner').style.display = 'none';
             if (data) {
-                console.log('Form data:', formData);
                 console.log('Response data:', data.message);
                 $('#addmanualmodal').modal('hide');
                 document.getElementById('employeid').value = data?.employee_id;

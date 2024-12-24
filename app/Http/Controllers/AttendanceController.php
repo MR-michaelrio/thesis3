@@ -381,7 +381,7 @@ class AttendanceController extends Controller
         if (!$assignshift->id_shift) {
             return response()->json([
                 'message' => 'No shift assignment found for the employee.',
-            ], 201);
+            ], 200);
         }
 
         $attendance = Attendance::where('id_employee', $id_employee)
@@ -392,7 +392,7 @@ class AttendanceController extends Controller
         if ($attendance && $attendance->clock_out) {
             return response()->json([
                 'message' => 'Already clocked out!',
-            ], 201);
+            ], 200);
         }
 
         // Check if the current time is after the employee's clock-out time
@@ -454,7 +454,7 @@ class AttendanceController extends Controller
                 // If no attendance record is found to update
                 return response()->json([
                     'message' => 'No attendance record found.',
-                ], 201); // Not Found
+                ], 200); // Not Found
             }
         } else {
             // If attendance exists and clock-in is already recorded, return message
@@ -497,7 +497,7 @@ class AttendanceController extends Controller
                 'employee_id' =>$id_employe->identification_number,
                 'time' => "Clock In"
                 
-            ], 201); // Created
+            ], 200); // Created
         }
     }
 
