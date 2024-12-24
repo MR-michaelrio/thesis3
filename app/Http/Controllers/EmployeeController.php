@@ -231,7 +231,6 @@ class EmployeeController extends Controller
         ->get();
         $shift = Shift::where("id_company", Auth::user()->id_company)->get();
 
-        $employeeLeavesQuota = []; 
         if(Auth::user()->role == "admin"){
             $leave = Leave::where("id_company", Auth::user()->id_company)->get();
         }else{
@@ -241,7 +240,7 @@ class EmployeeController extends Controller
             ->get();
             $employeeLeavesQuota = AssignLeave::where('id_employee', $employee->id_employee)
                         ->pluck('quota', 'id_leave')
-                        ->toArray();
+                        ->toArray()->get();
         }
         dd($employeeLeavesQuota);
         $assignShiftByDay = $assignShift->groupBy('day');
