@@ -58,9 +58,14 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                         <!-- Profile Image Section -->
                         <div class="text-center mb-4">
                             <div style="position: relative; display: inline-block;">
-                                <img src="{{ asset('profile_picture/' . $employee->profile_picture) }}" 
-                                    id="profileImagePreview" alt="Profile Image" class="rounded-circle" width="120"
-                                    height="120" style="border: 2px solid #ccc;">
+                            <img src="{{ $employee->profile_picture ? asset('profile_picture/' . $employee->profile_picture) : 'https://media.istockphoto.com/id/1128826884/vector/no-image-vector-symbol-missing-available-icon-no-gallery-for-this-moment.jpg?s=612x612&w=0&k=20&c=390e76zN_TJ7HZHJpnI7jNl7UBpO3UP7hpR2meE1Qd4=' }}" 
+     id="profileImagePreview" 
+     alt="Profile Image" 
+     class="rounded-circle" 
+     width="120" 
+     height="120" 
+     style="border: 2px solid #ccc;">
+
                                 <label for="profileImageInput"
                                     style="position: absolute; bottom: 0; right: 0; background-color: white; border-radius: 50%; padding: 5px; cursor: pointer;">
                                     <i class="fas fa-search" style="font-size: 18px; color: gray;"></i>
@@ -626,66 +631,63 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body" style="display: block;">
-    @foreach($leave as $l)
-        <div class="custom-control custom-checkbox">
-            <div class="row m-2" style="background-color: #F8F9FA;border-radius:10px;">
-                <div class="col-1 d-flex justify-content-center align-items-center">
-                    <input type="checkbox" 
-                        id="leave_{{$l->id_leave}}" 
-                        name="leaves[]" 
-                        value="{{$l->id_leave}}" 
-                        {{ in_array($l->id_leave, $employeeLeaves) ? 'checked' : '' }}
-                        onchange="toggleQuotaInput({{$l->id_leave}})"
-                        @if(Auth::user()->role != 'admin') disabled @endif>
-                </div>
-                <div class="col-10">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="row">
-                                <div class="col-12" style="font-size: 1.1rem;font-weight:bold">
-                                    {{$l->leave_name}}
+                        @foreach($leave as $l)
+                            <div class="custom-control custom-checkbox">
+                                <div class="row m-2" style="background-color: #F8F9FA;border-radius:10px;">
+                                    <div class="col-1 d-flex justify-content-center align-items-center">
+                                        <input type="checkbox" 
+                                            id="leave_{{$l->id_leave}}" 
+                                            name="leaves[]" 
+                                            value="{{$l->id_leave}}" 
+                                            {{ in_array($l->id_leave, $employeeLeaves) ? 'checked' : '' }}
+                                            onchange="toggleQuotaInput({{$l->id_leave}})"
+                                            @if(Auth::user()->role != 'admin') disabled @endif>
+                                    </div>
+                                    <div class="col-10">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="row">
+                                                    <div class="col-12" style="font-size: 1.1rem;font-weight:bold">
+                                                        {{$l->leave_name}}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12" style="font-size: 0.875rem;">Category: {{$l->category}}</div>
+                                                    <div class="col-12" style="font-size: 0.875rem;">Default: {{$l->default_quota}}</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="row">
+                                                    <div class="col-12" style="font-size: 1rem;">Custom Quota:</div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <input type="number" 
+                                                            name="custom_quotas[{{$l->id_leave}}]" 
+                                                            id="quota_{{$l->id_leave}}" 
+                                                            class="form-control" 
+                                                            min="0" 
+                                                            placeholder="Enter custom quota"
+                                                            value="{{ isset($employeeLeavesQuota[$l->id_leave]) ? $employeeLeavesQuota[$l->id_leave] : $l->default_quota }}"
+                                                            style="{{ in_array($l->id_leave, $employeeLeaves) ? 'display: block;' : 'display: none;' }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @if(Auth::user()->role == 'admin')
+                                        <div class="col-1 d-flex justify-content-center align-items-center">
+                                            <button type="button" 
+                                                class="btn btn-sm btn-secondary" 
+                                                onclick="toggleQuotaInput({{$l->id_leave}})">
+                                                <i class="fa fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-12" style="font-size: 0.875rem;">Category: {{$l->category}}</div>
-                                <div class="col-12" style="font-size: 0.875rem;">Default: {{$l->default_quota}}</div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="row">
-                                <div class="col-12" style="font-size: 1rem;">Custom Quota:</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <input type="number" 
-                                        name="custom_quotas[{{$l->id_leave}}]" 
-                                        id="quota_{{$l->id_leave}}" 
-                                        class="form-control" 
-                                        min="0" 
-                                        placeholder="Enter custom quota"
-                                        value="{{ isset($employeeLeavesQuota[$l->id_leave]) ? $employeeLeavesQuota[$l->id_leave] : $l->default_quota }}"
-                                        style="{{ in_array($l->id_leave, $employeeLeaves) ? 'display: block;' : 'display: none;' }}">
-                                </div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
-                </div>
-                @if(Auth::user()->role == 'admin')
-                    <div class="col-1 d-flex justify-content-center align-items-center">
-                        <button type="button" 
-                            class="btn btn-sm btn-secondary" 
-                            onclick="toggleQuotaInput({{$l->id_leave}})">
-                            <i class="fa fa-edit"></i>
-                        </button>
-                    </div>
-                @endif
-            </div>
-        </div>
-    @endforeach
-</div>
-
-
-
                     <!-- /.card-body -->
                 </div>
             </div>
