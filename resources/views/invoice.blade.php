@@ -5,12 +5,18 @@
 <style>
     /* Custom CSS for active tab background */
     .nav-tabs .nav-link.active {
-        background-color: #027BFF !important; /* Replace this with your desired 'prinart' color */
+        background-color: #0FBEF2 !important; /* Replace this with your desired 'prinart' color */
         color: white !important; /* Ensure text is readable on the colored background */
-        border-color: #027BFF !important; /* Match border with background */
+        border-color: #0FBEF2 !important; /* Match border with background */
     }
     .nav-tabs .nav-link {
         color: #000; /* Default text color for inactive tabs */
+    }
+
+    .active-invoice {
+        background-color: #0FBEF2 !important;
+        border-color: #0FBEF2 !important;
+        color: white !important;
     }
 </style>
 @endsection
@@ -22,10 +28,10 @@
                 <!-- Tab Navigation -->
                 <ul class="nav nav-tabs" id="attendanceTabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link active" id="tab-1" data-toggle="tab" href="#table1" role="tab" aria-controls="table1" aria-selected="true">Overview</a>
+                        <a class="nav-link active" id="tab-1" data-toggle="tab" href="#table1" role="tab" aria-controls="table1" aria-selected="true">Unpaid</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="tab-2" data-toggle="tab" href="#table2" role="tab" aria-controls="table2" aria-selected="false">Summary</a>
+                        <a class="nav-link" id="tab-2" data-toggle="tab" href="#table2" role="tab" aria-controls="table2" aria-selected="false">Paid</a>
                     </li>
                 </ul>
 
@@ -33,12 +39,296 @@
                 <div class="tab-content" style="padding:10px 10px 10px 10px; border:1px solid #DDE2E5" id="attendanceTabsContent">
                     <!-- Table 1 -->
                     <div class="tab-pane fade show active" id="table1" role="tabpanel" aria-labelledby="tab-1">
-                        <h2>test</h2>
+                        <div class="card collapsed-card">
+                            <div class="card-header active-invoice">
+                                <h3 class="card-title">September 2024</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" style="color:white" data-card-widget="collapse" title="Collapse">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row">
+                                    <!-- Header Section -->
+                                    <div class="col-6">
+                                        <h3 style="color:#4776F4">AntTendance</h3>
+                                        <img src="{{ asset('assets/logo/logo.png') }}" alt="Logo" style="max-width: 100px;">
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <h3 style="color:#4776F4">Invoice</h3>
+                                        <p>Invoice Number: <strong>INV/00001</strong></p>
+                                        <p>Invoice Date: <strong>DD/MM/YYYY</strong></p>
+                                        <p>Period: <strong>DD/MM/YYYY - DD/MM/YYYY</strong></p>
+                                        <p>Payment Due: <strong>DD/MM/YYYY</strong></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <!-- From and To Section -->
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h5>From</h5>
+                                        <p>
+                                            <strong style="color:#4776F4">AntTendance</strong><br>
+                                            Alamat perusahaan kita<br>
+                                            Telp: +62 800 000 000<br>
+                                            Email: company.email@example.com
+                                        </p>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <h5>To</h5>
+                                        <p>
+                                            <strong style="color:#4776F4">Nama Perusahaan Pelanggan</strong><br>
+                                            Alamat perusahaan pelanggan<br>
+                                            Telp: +62 800 000 000<br>
+                                            Email: customercompany.email@example.com
+                                        </p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <!-- Items Table -->
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead class="text-white" style="background-color:#0798C2">
+                                            <tr>
+                                                <th>Item</th>
+                                                <th>Currency</th>
+                                                <th>Price</th>
+                                                <th>Discount</th>
+                                                <th>Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="background-color:#E7F9FE">
+                                                <td>Face Recognition Attendance System</td>
+                                                <td>IDR</td>
+                                                <td>000,000,000</td>
+                                                <td>000,000,000</td>
+                                                <td>000,000,000</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- Payment Information -->
+                                <div class="row mt-4">
+                                    <div class="col-6">
+                                        <h5 style="color:#4776F4">Payment Information</h5>
+                                        <p>
+                                            Bank Central Asia - Account Name<br>
+                                            xxxxxxxxxx
+                                        </p>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <h5>Total</h5>
+                                        <p>
+                                            Subtotal: <strong>000,000,000</strong><br>
+                                            Tax: <strong>0</strong><br>
+                                            <strong>Total: 000,000,000</strong>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-footer" style="display: none;">
+                                asd
+                            </div>
+                        </div>
+
+                        <div class="card collapsed-card">
+                            <div class="card-header active-invoice">
+                                <h3 class="card-title">Oktober 2024</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" style="color:white" data-card-widget="collapse" title="Collapse">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row">
+                                    <!-- Header Section -->
+                                    <div class="col-6">
+                                        <h3 style="color:#4776F4">AntTendance</h3>
+                                        <img src="{{ asset('assets/logo/logo.png') }}" alt="Logo" style="max-width: 100px;">
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <h3 style="color:#4776F4">Invoice</h3>
+                                        <p>Invoice Number: <strong>INV/00001</strong></p>
+                                        <p>Invoice Date: <strong>DD/MM/YYYY</strong></p>
+                                        <p>Period: <strong>DD/MM/YYYY - DD/MM/YYYY</strong></p>
+                                        <p>Payment Due: <strong>DD/MM/YYYY</strong></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <!-- From and To Section -->
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h5>From</h5>
+                                        <p>
+                                            <strong style="color:#4776F4">AntTendance</strong><br>
+                                            Alamat perusahaan kita<br>
+                                            Telp: +62 800 000 000<br>
+                                            Email: company.email@example.com
+                                        </p>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <h5>To</h5>
+                                        <p>
+                                            <strong style="color:#4776F4">Nama Perusahaan Pelanggan</strong><br>
+                                            Alamat perusahaan pelanggan<br>
+                                            Telp: +62 800 000 000<br>
+                                            Email: customercompany.email@example.com
+                                        </p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <!-- Items Table -->
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead class="text-white" style="background-color:#0798C2">
+                                            <tr>
+                                                <th>Item</th>
+                                                <th>Currency</th>
+                                                <th>Price</th>
+                                                <th>Discount</th>
+                                                <th>Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="background-color:#E7F9FE">
+                                                <td>Face Recognition Attendance System</td>
+                                                <td>IDR</td>
+                                                <td>000,000,000</td>
+                                                <td>000,000,000</td>
+                                                <td>000,000,000</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- Payment Information -->
+                                <div class="row mt-4">
+                                    <div class="col-6">
+                                        <h5 style="color:#4776F4">Payment Information</h5>
+                                        <p>
+                                            Bank Central Asia - Account Name<br>
+                                            xxxxxxxxxx
+                                        </p>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <h5>Total</h5>
+                                        <p>
+                                            Subtotal: <strong>000,000,000</strong><br>
+                                            Tax: <strong>0</strong><br>
+                                            <strong>Total: 000,000,000</strong>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-footer" style="display: none;">
+                                asd
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Table 2 -->
                     <div class="tab-pane fade" id="table2" role="tabpanel" aria-labelledby="tab-2">
-                        <h1>test</h1>
+                    <div class="card collapsed-card">
+                            <div class="card-header active-invoice">
+                                <h3 class="card-title">Oktober 2024</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" style="color:white" data-card-widget="collapse" title="Collapse">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row">
+                                    <!-- Header Section -->
+                                    <div class="col-6">
+                                        <h3 style="color:#4776F4">AntTendance</h3>
+                                        <img src="{{ asset('assets/logo/logo.png') }}" alt="Logo" style="max-width: 100px;">
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <h3 style="color:#4776F4">Invoice</h3>
+                                        <p>Invoice Number: <strong>INV/00001</strong></p>
+                                        <p>Invoice Date: <strong>DD/MM/YYYY</strong></p>
+                                        <p>Period: <strong>DD/MM/YYYY - DD/MM/YYYY</strong></p>
+                                        <p>Payment Due: <strong>DD/MM/YYYY</strong></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <!-- From and To Section -->
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h5>From</h5>
+                                        <p>
+                                            <strong style="color:#4776F4">AntTendance</strong><br>
+                                            Alamat perusahaan kita<br>
+                                            Telp: +62 800 000 000<br>
+                                            Email: company.email@example.com
+                                        </p>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <h5>To</h5>
+                                        <p>
+                                            <strong style="color:#4776F4">Nama Perusahaan Pelanggan</strong><br>
+                                            Alamat perusahaan pelanggan<br>
+                                            Telp: +62 800 000 000<br>
+                                            Email: customercompany.email@example.com
+                                        </p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <!-- Items Table -->
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead class="text-white" style="background-color:#0798C2">
+                                            <tr>
+                                                <th>Item</th>
+                                                <th>Currency</th>
+                                                <th>Price</th>
+                                                <th>Discount</th>
+                                                <th>Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="background-color:#E7F9FE">
+                                                <td>Face Recognition Attendance System</td>
+                                                <td>IDR</td>
+                                                <td>000,000,000</td>
+                                                <td>000,000,000</td>
+                                                <td>000,000,000</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- Payment Information -->
+                                <div class="row mt-4">
+                                    <div class="col-6">
+                                        <h5 style="color:#4776F4">Payment Information</h5>
+                                        <p>
+                                            Bank Central Asia - Account Name<br>
+                                            xxxxxxxxxx
+                                        </p>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <h5>Total</h5>
+                                        <p>
+                                            Subtotal: <strong>000,000,000</strong><br>
+                                            Tax: <strong>0</strong><br>
+                                            <strong>Total: 000,000,000</strong>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-footer" style="display: none;">
+                                asd
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
