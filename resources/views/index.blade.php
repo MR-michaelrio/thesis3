@@ -263,7 +263,7 @@
 
                         @if(Auth::user()->role == "admin")
                             <li class="nav-item">
-                                <a href="pages/gallery.html" class="nav-link">
+                                <a href="{{ route('invoice.index') }}" class="nav-link">
                                     <i class="nav-icon fas fa-file-invoice-dollar"></i>
                                     <p>
                                         Invoices

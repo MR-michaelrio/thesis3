@@ -14,9 +14,12 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\AttendanceController;
+
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use App\Http\Controllers\AttendanceController;
+
 Route::middleware(['auth'])->group(function () {
     Route::get('attendance_policy', [AttendancePolicyController::class, 'index'])->name('attendance_policy.index');
     Route::post('attendance_policy', [AttendancePolicyController::class, 'updateOrCreate'])->name('attendance_policy.updateOrCreate');
@@ -64,13 +67,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/events', [EventController::class, 'store'])->name('calendar.store'); // Correct route name here
     Route::delete('/events/{id}', [EventController::class, 'destroy'])->name('calendar.delete');
 
+    Route::resource('invoice', InvoiceController::class);
+
     Route::get('/', function () {
         return redirect()->route('home');
     });
 
-    Route::get('/invoice', function () {
-        return view('invoice');
-    });
+    
 });
 
 Route::get('/test', function () {
