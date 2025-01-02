@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Invoice;
+use Auth;
 class InvoiceController extends Controller
 {
     /**
@@ -11,7 +12,9 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        return view('invoice');
+        $paid = Invoice::with("invoiceitem")->where("id_company", Auth::user()->id_company)->where("payment_status","paid")->get();
+        $unpaid = Invoice::with("invoiceitem")->where("id_company", Auth::user()->id_company)->where("payment_status","unpaid")->get();
+        return view('invoice',compact("paid","unpaid"));
     }
 
     /**
