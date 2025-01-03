@@ -68,6 +68,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/events/{id}', [EventController::class, 'destroy'])->name('calendar.delete');
 
     Route::resource('invoice', InvoiceController::class);
+    Route::get('/invoice/pdf/{id}', [InvoiceController::class, 'generatePdf'])->name('invoice.pdf');
+    Route::post('/invoice/evidence', [InvoiceController::class, 'updateevidence'])->name('invoice.updateevidence');
 
     Route::get('/', function () {
         return redirect()->route('home');
