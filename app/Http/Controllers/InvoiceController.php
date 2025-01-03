@@ -91,7 +91,7 @@ class InvoiceController extends Controller
                 Log::info('Evidence file stored at:', ['path' => $invoice->evidence]); // Log path file
             } catch (\Exception $e) {
                 Log::error('Error uploading evidence: ' . $e->getMessage());
-                return redirect()->route('invoices.index')->with('error', 'Error uploading the evidence file.');
+                return redirect()->route('invoice.index')->with('error', 'Error uploading the evidence file.');
             }
         }
     
