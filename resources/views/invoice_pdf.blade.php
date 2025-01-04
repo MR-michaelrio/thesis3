@@ -143,15 +143,13 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($u->invoiceitem as $item)
                 <tr>
                     <td>Face Recognition Attendance System</td>
                     <td>IDR</td>
-                    <td>{{ $item->price }}</td>
-                    <td>{{ $item->discount }}</td>
-                    <td>{{ $item->sub_total }}</td>
+                    <td>{{ $u->invoiceitem->price }}</td>
+                    <td>{{ $u->invoiceitem->discount }}</td>
+                    <td>{{ $u->invoiceitem->sub_total }}</td>
                 </tr>
-                @endforeach
             </tbody>
         </table>
 
@@ -165,12 +163,23 @@
                     </p>
                 </td>
                 <td class="right">
-                    <p>Total</p>
-                    <p>
-                        Subtotal: <strong>{{ $u->invoiceitem->sum('sub_total') }}</strong><br>
-                        <p>Tax: <strong>{{ $u->tax ?? '0' }}</strong></p>
-                        <strong>Total: {{ $u->invoiceitem->sum('payed_amount') }}</strong>
-                    </p>
+                    <table style="float:right">
+                        <tr>
+                            <td>Subtotal</td>
+                            <td style="padding:0px 5px 0px 5px;">:</td>
+                            <td><strong>{{ $u->invoiceitem->sub_total ?? '0' }}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Tax</td>
+                            <td style="padding:0px 5px 0px 5px;">:</td>
+                            <td><strong>{{ $u->tax ?? '0' }}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Total</td>
+                            <td style="padding:0px 5px 0px 5px;">:</td>
+                            <td><strong>{{ $u->invoiceitem->payed_amount ?? '0' }}</strong></td>
+                        </tr>
+                    </table>
                 </td>
             </tr>
         </table>

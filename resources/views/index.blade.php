@@ -375,7 +375,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('invoice.index') }}" class="nav-link">
+                            <a href="{{ route('client.invoiceindex') }}" class="nav-link">
                                 <i class="nav-icon fas fa-file-invoice-dollar"></i> 
                                 <p>
                                     Inovice
@@ -482,6 +482,7 @@
     <script src="{{asset('assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
     <script src="{{asset('assets/plugins/datatables-buttons/js/dataTables.buttons.min.js')}}"></script>
     <script src="{{asset('assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js')}}"></script>
+
     <script src="{{asset('assets/plugins/jszip/jszip.min.js')}}"></script>
     <script src="{{asset('assets/plugins/pdfmake/pdfmake.min.js')}}"></script>
     <script src="{{asset('assets/plugins/pdfmake/vfs_fonts.js')}}"></script>
@@ -635,11 +636,23 @@
                 "lengthChange": false,
                 "ordering": true,
                 "info": true,
-                "autoWidth": true,
-                "responsive": true,
+                "autoWidth": false,
+                "responsive": false,
                 "scrollX": true,
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
+
+            $("#example3").DataTable({
+                "paging": true,
+                "searching": true,
+                "lengthChange": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": false,
+                "scrollX": true,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#example3_wrapper .col-md-6:eq(0)');
 
             $("#AdminAccount").DataTable({
                 "paging": true,
@@ -669,7 +682,7 @@
                 "autoWidth": false,
                 "responsive": false,
                 "scrollX": true,
-            }).buttons().container().appendTo('#example3_wrapper .col-md-6:eq(0)');
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
             $("#EmployeeAccount").DataTable({
                 "paging": true,
@@ -684,7 +697,7 @@
                 "autoWidth": false,
                 "responsive": false,
                 "scrollX": true,
-            }).buttons().container().appendTo('#example3_wrapper .col-md-6:eq(0)');
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
 
     </script>
@@ -725,6 +738,10 @@
             });
 
             $('#reservationdate3').datetimepicker({
+                format: 'DD/MM/YYYY'
+            });
+
+            $('#reservationdate4').datetimepicker({
                 format: 'DD/MM/YYYY'
             });
 

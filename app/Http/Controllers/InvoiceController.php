@@ -96,7 +96,7 @@ class InvoiceController extends Controller
         }
     
         $invoice->user_comment = $request->comment;  // Update this as needed
-        $invoice->payment_status = "pending";
+        $invoice->payment_status = "validation";
         // Attempt to save the updated invoice
         try {
             $invoice->save();
@@ -124,7 +124,7 @@ class InvoiceController extends Controller
 
     public function generatePdf($id)
     {
-        $u = Invoice::where("invoice_number", $id)->first();
+        $u = Invoice::with("invoiceitem")->where("invoice_number", $id)->first();
 
         $logo = base64_encode(file_get_contents(public_path('assets/logo/logo.png')));
     

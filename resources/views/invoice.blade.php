@@ -58,10 +58,28 @@
                                     </div>
                                     <div class="col-6 text-right">
                                         <h3 style="color:#4776F4">Invoice</h3>
-                                        <p>Invoice Number: <strong>{{$u->invoice_number}}</strong></p>
-                                        <p>Invoice Date: <strong>{{\Carbon\Carbon::parse($u->created_at)->format('d/F/Y')}}</strong></p>
-                                        <p>Period: <strong>{{\Carbon\Carbon::parse($u->period_start)->format('d/F/Y')}} - {{\Carbon\Carbon::parse($u->period_end)->format('d/F/Y')}}</strong></p>
-                                        <p>Payment Due: <strong>{{\Carbon\Carbon::parse($u->payment_due)->format('d/F/Y')}}</strong></p>
+                                        <table style="float:right">
+                                            <tr>
+                                                <td>Invoice Number</td>
+                                                <td style="padding:0px 5px 0px 5px;">:</td>
+                                                <td><strong>{{ $u->invoice_number }}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Invoice Date</td>
+                                                <td style="padding:0px 5px 0px 5px;">:</td>
+                                                <td><strong>{{ \Carbon\Carbon::parse($u->created_at)->format('d/F/Y') }}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Period</td>
+                                                <td style="padding:0px 5px 0px 5px;">:</td>
+                                                <td><strong>{{\Carbon\Carbon::parse($u->period_start)->format('d/F/Y')}} - {{\Carbon\Carbon::parse($u->period_end)->format('d/F/Y')}}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Payment Due</td>
+                                                <td style="padding:0px 5px 0px 5px;">:</td>
+                                                <td><strong>{{\Carbon\Carbon::parse($u->payment_due)->format('d/F/Y')}}</strong></td>
+                                            </tr>
+                                        </table>   
                                     </div>
                                 </div>
                                 <hr>
@@ -87,7 +105,7 @@
                                 </div>
                                 <hr>
                                 <div class="table-responsive">
-                                    <table class="table table-bordered">
+                                    <table class="table">
                                         <thead class="text-white" style="background-color:#0798C2">
                                             <tr>
                                                 <th>Item</th>
@@ -98,15 +116,13 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($u->invoiceitem as $item)
                                             <tr style="background-color:#E7F9FE">
                                                 <td>Face Recognition Attendance System</td>
                                                 <td>IDR</td>
-                                                <td>{{$item->price}}</td>
-                                                <td>{{$item->discount}}</td>
-                                                <td>{{$item->sub_total}}</td>
+                                                <td>{{ $u->invoiceitem->price }}</td>
+                                                <td>{{ $u->invoiceitem->discount }}</td>
+                                                <td>{{ $u->invoiceitem->sub_total }}</td>
                                             </tr>
-                                        @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -119,12 +135,23 @@
                                         </p>
                                     </div>
                                     <div class="col-6 text-right">
-                                        <h5>Total</h5>
-                                        <p>
-                                            Subtotal: <strong>{{ $u->invoiceitem->sum('sub_total') }}</strong><br>
-                                            Tax: <strong>{{$u->tax}}</strong><br>
-                                            <strong>Total: {{$u->invoiceitem->sum('payed_amount')}}</strong>
-                                        </p>
+                                        <table style="float:right">
+                                            <tr>
+                                                <td>Subtotal</td>
+                                                <td style="padding:0px 5px 0px 5px;">:</td>
+                                                <td><strong>{{ $u->invoiceitem->sub_total ?? '0' }}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tax</td>
+                                                <td style="padding:0px 5px 0px 5px;">:</td>
+                                                <td><strong>{{ $u->tax ?? '0' }}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total</td>
+                                                <td style="padding:0px 5px 0px 5px;">:</td>
+                                                <td><strong>{{ $u->invoiceitem->payed_amount ?? '0' }}</strong></td>
+                                            </tr>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -191,7 +218,7 @@
                                 </div>
                                 <hr>
                                 <div class="table-responsive">
-                                    <table class="table table-bordered">
+                                    <table class="table">
                                         <thead class="text-white" style="background-color:#0798C2">
                                             <tr>
                                                 <th>Item</th>
@@ -202,15 +229,13 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($u->invoiceitem as $item)
                                             <tr style="background-color:#E7F9FE">
                                                 <td>Face Recognition Attendance System</td>
                                                 <td>IDR</td>
-                                                <td>{{$item->price}}</td>
-                                                <td>{{$item->discount}}</td>
-                                                <td>{{$item->sub_total}}</td>
+                                                <td>{{ $u->invoiceitem->price }}</td>
+                                                <td>{{ $u->invoiceitem->discount }}</td>
+                                                <td>{{ $u->invoiceitem->sub_total }}</td>
                                             </tr>
-                                        @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -223,12 +248,23 @@
                                         </p>
                                     </div>
                                     <div class="col-6 text-right">
-                                        <h5>Total</h5>
-                                        <p>
-                                            Subtotal: <strong>{{ $u->invoiceitem->sum('sub_total') }}</strong><br>
-                                            Tax: <strong>{{$u->tax}}</strong><br>
-                                            <strong>Total: {{$u->invoiceitem->sum('payed_amount')}}</strong>
-                                        </p>
+                                        <table style="float:right">
+                                            <tr>
+                                                <td>Subtotal</td>
+                                                <td style="padding:0px 5px 0px 5px;">:</td>
+                                                <td><strong>{{ $u->invoiceitem->sub_total ?? '0' }}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tax</td>
+                                                <td style="padding:0px 5px 0px 5px;">:</td>
+                                                <td><strong>{{ $u->tax ?? '0' }}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total</td>
+                                                <td style="padding:0px 5px 0px 5px;">:</td>
+                                                <td><strong>{{ $u->invoiceitem->payed_amount ?? '0' }}</strong></td>
+                                            </tr>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -239,7 +275,7 @@
                                 </button>
                             </div>
                         </div>
-                        @endforeach
+                    @endforeach
                     </div>
                 </div>
             </div>

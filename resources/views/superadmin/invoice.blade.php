@@ -52,7 +52,7 @@
                 <form id="clientForm" action="javascript:void(0)" method="get">
                     @csrf
                     <div class="form-group">
-                        <label for="clientSelect">Select Client</label>
+                        <label for="">Select Client</label>
                         <select id="clientSelect" class="form-control select2bs4">
                             <option value="" selected>Select Client</option>
                             @foreach($client as $c)
@@ -236,14 +236,49 @@
 
                     <!-- Table 2 -->
                     <div class="tab-pane fade" id="table2" role="tabpanel" aria-labelledby="tab-2">
-                        <div class="col-3">   
-                            bs   
-                        </div> 
+                        <table id="example3" class="table table-bordered table-striped display nowrap" style="width: 100% !important;">
+                            <thead>
+                                <tr>
+                                    <th>Print Invoice</th>
+                                    <th>Invoice ID</th>
+                                    <th>Invoice Date</th>
+                                    <th>From Date</th>
+                                    <th>To Date</th>
+                                    <th>Payment Due</th>
+                                    <th>Currency</th>
+                                    <th>Tax</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($history as $h)
+                                <tr>
+                                    <td>
+                                        @if(!empty($h->evidence))
+                                            <a href="{{ asset($h->evidence) }}" target="_blank" download>
+                                                <i class="fas fa-file-pdf" style="font-size: 18px; color: #027BFF;"></i>
+                                            </a>
+                                        @else
+                                            <span>No Evidence</span>
+                                        @endif
+                                    </td>                                  
+                                    <td>{{ $h->invoice_number }}</td>
+                                    <td>{{ $h->payment_date }}</td>
+                                    <td>{{ $h->period_start }}</td>
+                                    <td>{{ $h->period_end }}</td>
+                                    <td>{{ $h->payment_due }}</td>
+                                    <td>{{ $h->invoiceitem->currency }}</td>
+                                    <td>{{ $h->tax }}</td>
+                                    <td>{{ $h->total }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
 
                     <!-- Table 3 -->
                     <div class="tab-pane fade" id="table3" role="tabpanel" aria-labelledby="tab-3">
-                        <table id="AdminAccount" class="table table-bordered table-striped">
+                        <table id="example2" class="table table-bordered table-striped display nowrap" style="width: 100% !important;">
                             <thead>
                                 <tr>
                                     <th>Invoice ID</th>
@@ -258,27 +293,55 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($invoicedata as $invoice)
-                                <tr>
-                                    <td>{{ $invoice->invoice_number }}</td>
-                                    <td>{{ $invoice->payment_due }}</td>
-                                    <td>{{ $invoice->invoiceitem->currency }}</td>
-                                    <td>{{ $invoice->invoiceitem->sub_total }}</td>
-                                    <td>{{ $invoice->payed_amount }}</td>
-                                    <td><span style="background-color:red;border-radius:5px;color:white;padding:2px;">Not Yet Paid</span></td>
-                                    <td>{{ $invoice->evidence }}</td>
-                                    <td>{{ $invoice->payment_date }}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-success">Accept</button>
-                                        <button type="button" class="btn btn-danger">Decline</button>
-                                    </td>
-                                </tr>
-                                @endforeach
+                                
                             </tbody>
-
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Invoice Detail -->
+<div class="modal fade" id="invoiceModal" tabindex="-1" role="dialog" aria-labelledby="invoiceModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#0FBEF2;color:white">
+                <h5 class="modal-title" id="invoiceModalLabel">Payment Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="updateStatusForm" action="{{ route('client.invoiceupdate') }}" style="text-transform: capitalize;" method="post">
+                    @csrf
+                    <!-- ID Request sebagai hidden input -->
+                    <input type="hidden" name="id_invoice" id="id_invoice">
+                    <!-- Data lainnya -->
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>Payment Date</label>
+                            <div class="input-group date" id="reservationdate4" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input"
+                                    placeholder="DD/MM/YYYY" data-target="#reservationdate4" id="reservationdate4" name="payment_date">
+                                <div class="input-group-append" data-target="#reservationdate4"
+                                    data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>Nominal</label>
+                            <input type="text" class="form-control" name="nominal" placeholder="Enter a nominal">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -291,11 +354,49 @@
 
 @section('scripts')
 <script>
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+    });
+    $('#invoiceModal').on('show.bs.modal', function (e) {
+        var invoiceId = $(e.relatedTarget).data('id'); 
+        $('#id_invoice').val(invoiceId);
+    });
     // Update client name when client is selected
     $('#clientSelect').on('change', function () {
         var clientName = $(this).find('option:selected').data('name');
         $('#clientName').text(clientName || '[Client Name]'); // Update client name or reset if no selection
     });
+
+    function updatePaymentStatus(invoiceId) {
+        // Kirim request AJAX untuk mengubah status invoice
+        $('#loadingIndicator').show();
+        console.log("invoiceId",invoiceId);
+        $.ajax({
+            url: '{{ route("client.invoiceupdateunpaid") }}',
+            type: 'POST',
+            data: {
+                id_invoice: invoiceId,
+                _token: $('meta[name="csrf-token"]').attr('content'),
+            },
+            success: function(response) {
+                $('#loadingIndicator').hide();
+                showSuccesPopup(response.message);
+                var $clientSelect = $('#clientSelect');
+                if ($clientSelect.length && response.id_company) {
+                    $clientSelect.val(response.id_company).trigger('change');
+                    $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+                } else {
+                    console.log('Client select element or id_company not found.');
+                }          
+            },
+            error: function(response) {
+                $('#loadingIndicator').hide();
+                console.log("error",response);
+
+                alert(response);
+            }
+        });
+    }
 
     // Fungsi untuk menghitung total
     function calculateTotal() {
@@ -339,11 +440,9 @@
 <script>
     // Update client name when client is selected
     $('#clientSelect').on('change', function () {
+        var clientId = $(this).val();
         var clientName = $(this).find('option:selected').data('name');
         $('#clientName').text(clientName || '[Client Name]'); // Update client name or reset if no selection
-
-        // Fetch invoice data for the selected client
-        var clientId = $(this).val();
 
         if (clientId) {
             $('#loadingIndicator').show();
@@ -356,14 +455,42 @@
                     $('#loadingIndicator').hide();
 
                     console.log(data);
-                    if (data) {
-                        $('#invoiceAmount').text(data.invoiceAmount);
-                        $('#paidInvoice').text(data.paidInvoice);
-                        $('#unpaidInvoice').text(data.unpaidInvoice);
-                        $('#id_company').val(data.id_company);
-                        $('#invoiceData').show();
-                        $('#tabinvoice').show();
-                    }
+                    $('#invoiceAmount').text(data.invoiceAmount);
+                    $('#paidInvoice').text(data.paidInvoice);
+                    $('#unpaidInvoice').text(data.unpaidInvoice);
+                    $('#id_company').val(data.id_company);
+
+                    // Update tabel dengan data invoice
+                    var tableBody = '';
+                    $.each(data.invoicedata, function(index, invoice) {
+                        var paymentStatus = '';
+
+                        if (invoice.payment_status == "validation") {
+                            paymentStatus = '<span style="background-color:#FFC109;border-radius:5px;color:white;padding:2px;">Validation</span>';
+                        } else if (invoice.payment_status == "unpaid") {
+                            paymentStatus = '<span style="background-color:red;border-radius:5px;color:white;padding:2px;">Not Yet Paid</span>';
+                        } else {
+                            paymentStatus = '<span style="background-color:#28A745;border-radius:5px;color:white;padding:2px;">Paid</span>';
+                        }
+
+                        tableBody += '<tr>' +
+                            '<td>' + invoice.invoice_number + '</td>' +
+                            '<td>' + invoice.payment_due + '</td>' +
+                            '<td>' + invoice.currency + '</td>' +
+                            '<td>' + invoice.sub_total + '</td>' +
+                            '<td>' + invoice.payed_amount + '</td>' +
+                            '<td>' + paymentStatus + '</td>' +
+                            '<td>' + (invoice.evidence_url ? '<a href="' + invoice.evidence_url + '" target="_blank">Show</a>' : 'No Evidence') + '</td>' +
+                            '<td>' + invoice.payment_date + '</td>' +
+                            '<td>' +
+                                '<button type="button" class="btn ' + (invoice.payment_status === 'unpaid' ? 'btn-default disabled' : 'btn-success') + '">Accept</button> <button type="button" class="btn ' + (['unpaid', 'paid'].includes(invoice.payment_status) ? 'btn-default disabled' : 'btn-danger') + '" onclick="updatePaymentStatus(' + invoice.id_invoice_hdrs + ')">Decline</button>' +
+                            '</td>' +
+                        '</tr>';
+                    });
+
+                    $('#example2 tbody').html(tableBody); // Update tbody table
+                    $('#invoiceData').show();
+                    $('#tabinvoice').show();
                 },
                 error: function () {
                     $('#loadingIndicator').hide();

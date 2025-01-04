@@ -90,8 +90,8 @@ class SuperAdminController extends Controller
         $paidinvoice = Invoice::where("payment_status","paid")->count();
         $unpaidinvoice = Invoice::where("payment_status","unpaid")->count();
         $client = Company::all();
-        $invoicedata = Invoice::all();
-        return view('superadmin.invoice', compact("invoiceamount","paidinvoice","unpaidinvoice","client","invoicedata"));
+        $history = Invoice::where('payment_status', 'paid')->get();
+        return view('superadmin.invoice', compact("invoiceamount","paidinvoice","unpaidinvoice","client","history"));
     }
 
     public function getInvoiceData(Request $request)
@@ -100,13 +100,28 @@ class SuperAdminController extends Controller
         $invoiceAmount = Invoice::where('id_company', $clientId)->count();
         $paidInvoice = Invoice::where('id_company', $clientId)->where('payment_status', 'paid')->count();
         $unpaidInvoice = Invoice::where('id_company', $clientId)->where('payment_status', 'unpaid')->count();
+        $invoicedata = Invoice::where('id_company', $clientId)->get();
+        $client = Company::all();
+        $history = Invoice::where('id_company', $clientId)->where('payment_status', 'paid')->get();
 
-        return response()->json([
-            'invoiceAmount' => $invoiceAmount,
-            'paidInvoice' => $paidInvoice,
-            'unpaidInvoice' => $unpaidInvoice,
-            'id_company' => $clientId
-        ]);
+        // Pass the full URL for the evidence field
+        foreach ($invoicedata as $invoice) {
+            $invoice->evidence_url = $invoice->evidence ? asset($invoice->evidence) : null;
+        }
+
+        if ($request->ajax()) {
+            // For AJAX requests, return the data as JSON
+            return response()->json([
+                'invoiceAmount' => $invoiceAmount,
+                'paidInvoice' => $paidInvoice,
+                'unpaidInvoice' => $unpaidInvoice,
+                'id_company' => $clientId,
+                'invoicedata' => $invoicedata,
+                'history' => $history
+            ]);
+        }
+
+        return view('superadmin.invoice', compact('client','invoiceAmount', 'paidInvoice', 'unpaidInvoice', 'invoicedata', 'history'));
     }
 
     public function invoicecreate(Request $request)
@@ -149,7 +164,26 @@ class SuperAdminController extends Controller
             'id_company' => $request->id_company,
         ]);
 
-        return redirect()->route('home')->with('success', 'Company created successfully!');
+        return redirect()->route('home')->with('success', 'Invoice created successfully!');
+    }
+
+    public function invoiceupdate(Request $request){
+        $invoice = Invoice::find($request->id_invoice);
+        $invoice->payment_status = "paid";
+        $invoice->payed_amount = $request->nominal;
+        $invoice->payment_date = Carbon::createFromFormat('d/m/Y', $request->payment_date)->format('Y-m-d');
+        $invoice->save();
+
+        return redirect()->route('home')->with('success', 'Invoice updated successfully!');
+    }
+
+    public function invoiceupdateunpaid(Request $request)
+    {
+        // Ensure the invoice exists before updating
+        $invoice = Invoice::find($request->id_invoice);
+        $invoice->payment_status = 'unpaid';
+        $invoice->save();
+        return response()->json(['message' => 'Invoice updated successfully!', 'id_company' => $invoice->id_company]);
     }
 
 }

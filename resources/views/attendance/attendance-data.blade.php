@@ -100,7 +100,9 @@
                                 <button type="submit" class="btn btn-primary mb-3">Filter</button>
                             </form>
                         </div> 
-                        <table id="example2" class="table table-bordered table-striped">
+                        <div class="card">
+                            <div class="body">
+                            <table id="example2" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -122,6 +124,9 @@
                                 @endforeach
                             </tbody>
                         </table>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
                 @else
