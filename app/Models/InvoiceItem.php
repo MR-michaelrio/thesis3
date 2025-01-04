@@ -15,15 +15,6 @@ class InvoiceItem extends Model
     // Primary key
     protected $primaryKey = 'id_item';
 
-    // Auto incrementing primary key
-    public $incrementing = true;
-
-    // Key type
-    protected $keyType = 'int';
-
-    // Timestamps
-    public $timestamps = true;
-
     // Fillable fields
     protected $fillable = [
         'id_invoice',
@@ -35,10 +26,9 @@ class InvoiceItem extends Model
         'id_company',
     ];
 
-    // Relationships
     public function invoiceitem()
     {
-        return $this->hasMany(InvoiceItem::class, 'id_invoice', 'id_invoice_hdrs');
+        return $this->belongsTo(InvoiceItem::class, 'id_invoice', 'id_invoice_hdrs');
     }
 
 

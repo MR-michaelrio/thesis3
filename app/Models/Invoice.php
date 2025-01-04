@@ -15,15 +15,6 @@ class Invoice extends Model
     // Primary key
     protected $primaryKey = 'id_invoice_hdrs';
 
-    // Auto incrementing primary key
-    public $incrementing = true;
-
-    // Key type
-    protected $keyType = 'int';
-
-    // Timestamps
-    public $timestamps = true;
-
     // Fillable fields
     protected $fillable = [
         'invoice_number',
@@ -37,13 +28,14 @@ class Invoice extends Model
         'period_end',
         'period_start',
         'tax',
-        'created_at'
+        'created_at',
+        'payment_date'
     ];
 
     // Relationships
     public function invoiceitem()
     {
-        return $this->hasMany(InvoiceItem::class, 'id_invoice', 'id_invoice_hdrs');
+        return $this->belongsTo(InvoiceItem::class, 'id_invoice_hdrs', 'id_invoice');
     }
 
     public function company()

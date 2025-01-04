@@ -261,7 +261,6 @@
                 @csrf
                 <div class="modal-body">
                     <input type="hidden" name="modalInvoiceinput" id="modalInvoiceinput" value="">
-                    <input type="hidden" name="modalAmountinput" id="modalAmountinput" value="">
                     <div class="col-12">
                         <table>
                             <tr>
@@ -295,7 +294,6 @@
                     </div>
                     <div class="col-12">
                         <strong>Payment Amount:</strong> <span id="modalAmount"></span>
-                        <input type="hidden" name="modalAmountinput" id="modalAmountinput" value="">
                     </div>
                     <div class="col-12">
                         <strong>Payment Due:</strong> <span id="modalDueDate"></span>
@@ -350,7 +348,6 @@ $(document).ready(function() {
         $("#modalInvoiceinput").val(invoiceId);
         $("#modalClientName").text(clientName);
         $("#modalAmount").text(amount);
-        $("#modalAmountinput").val(amount);
         $("#modalDueDate").text(dueDate);
 
         // Show the modal
@@ -381,7 +378,6 @@ $(document).ready(function() {
             success: function(response) {
                 alert("Payment data submitted successfully.");
                 $(".custom-file-label").val("");
-                $("#modalAmountinput").val("");
                 $("#modalInvoiceinput").val("");
                 $('#paymentConfirmationModal').modal('hide'); // Hide modal on success
             },

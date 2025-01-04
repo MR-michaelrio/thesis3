@@ -141,6 +141,7 @@
 
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
+                    @if(Auth::user()->role != "superadmin")
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
                         <li class="nav-item">
@@ -354,6 +355,43 @@
                             </a>
                         </li>
                     </ul>
+                    @else
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                        data-accordion="false">
+                        <li class="nav-item">
+                            <a href="{{ route('home') }}" class="nav-link">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Dashboard
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('clientindex') }}" class="nav-link">
+                                <i class="nav-icon fas fa-users"></i> 
+                                <p>
+                                    Client
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('invoice.index') }}" class="nav-link">
+                                <i class="nav-icon fas fa-file-invoice-dollar"></i> 
+                                <p>
+                                    Inovice
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="javascript:void(0);" class="nav-link" id="logoutButton">
+                                <i class="nav-icon fas fa-sign-out-alt"></i> 
+                                <p>
+                                    Sign Out
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                    @endif
                 </nav>
                 <!-- /.sidebar-menu -->
             </div>

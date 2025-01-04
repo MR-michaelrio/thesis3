@@ -33,7 +33,8 @@ class User extends Authenticatable
         'emergency_relation',
         'emergency_phone',
         'id_company',
-        'identification_number'
+        'identification_number',
+        'is_active'
     ];
 
     /**

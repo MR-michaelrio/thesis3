@@ -46,8 +46,7 @@ class HomeController extends Controller
             $invoiceamount = Invoice::all()->count();
             $paidinvoice = Invoice::where("payment_status","paid")->count();
             $unpaidinvoice = Invoice::where("payment_status","unpaid")->count();
-            $unpaiddata = Invoice::where("payment_status","unpaid")->get();
-            
+            $unpaiddata = Invoice::with("invoiceitem")->where("payment_status","unpaid")->get();
             return view('dashboard', compact('activeclient', 'invoiceamount', 'paidinvoice', 'unpaidinvoice', 'unpaiddata'));
         }elseif(Auth::user()->role != "admin"){
             $Employee = Employee::with(['user.department'])

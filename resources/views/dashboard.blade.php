@@ -134,8 +134,8 @@
 <div class="row">
     <div class="col-lg-3 col-6">
         <!-- small box -->
-        <div class="small-box bg-info" style="height:142.52px">
-            <div class="inner" style="height:112.24px">
+        <div class="small-box bg-info" style="height:142px">
+            <div class="inner" style="height:112px">
                 <h3>{{$activeclient}}</h3>
 
                 <p>Active Client</p>
@@ -148,8 +148,8 @@
     <!-- ./col -->
     <div class="col-lg-3 col-6">
         <!-- small box -->
-        <div class="small-box bg-danger" style="height:142.52px">
-            <div class="inner" style="height:112.24px">
+        <div class="small-box bg-danger" style="height:142px">
+            <div class="inner" style="height:112px">
                 <h3>{{$invoiceamount}}</h3>
 
                 <p>Invoice Amount</p>
@@ -162,8 +162,8 @@
     <!-- ./col -->
     <div class="col-lg-3 col-6">
         <!-- small box -->
-        <div class="small-box bg-success" style="height:142.52px">
-            <div class="inner" style="height:112.24px">
+        <div class="small-box bg-success" style="height:142px">
+            <div class="inner" style="height:112px">
                 <h3>{{$paidinvoice}}</h3>
 
                 <p>Paid Invoice</p>
@@ -175,8 +175,8 @@
     </div>
     <div class="col-lg-3 col-6">
         <!-- small box -->
-        <div class="small-box bg-warning" style="height:142.52px">
-            <div class="inner" style="height:112.24px">
+        <div class="small-box bg-warning" style="height:142px">
+            <div class="inner" style="height:112px">
                 <h3>{{$unpaidinvoice}}</h3>
 
                 <p>Unpaid Invoice</p>
@@ -219,8 +219,8 @@
                     <td>{{ $unpaid->payment_due }}</td>
                     <td>{{ $unpaid->invoiceitem->currency }}</td>
                     <td>{{ $unpaid->invoiceitem->sub_total }}</td>
-                    <td>{{ $unpaid->invoiceitem->payed_amount }}</td>
-                    <td><span style="background-color:red;border-radius:5px;color:white">Not Yet Paid</span></td>
+                    <td>{{ $unpaid->payed_amount }}</td>
+                    <td><span style="background-color:red;border-radius:5px;color:white;padding:2px;">Not Yet Paid</span></td>
                 </tr>
                 @endforeach
             </tbody>

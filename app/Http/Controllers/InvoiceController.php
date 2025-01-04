@@ -96,8 +96,7 @@ class InvoiceController extends Controller
         }
     
         $invoice->user_comment = $request->comment;  // Update this as needed
-        $invoice->payed_amount = $request->modalAmountinput;  // Set the correct value for paid amount
-    
+        $invoice->payment_status = "pending";
         // Attempt to save the updated invoice
         try {
             $invoice->save();

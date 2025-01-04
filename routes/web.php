@@ -16,6 +16,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\SuperAdminController;
 
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -70,6 +71,14 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('invoice', InvoiceController::class);
     Route::get('/invoice/pdf/{id}', [InvoiceController::class, 'generatePdf'])->name('invoice.pdf');
     Route::post('/invoice/evidence', [InvoiceController::class, 'updateevidence'])->name('invoice.updateevidence');
+
+    Route::get('/superadmin/clientdata', [SuperAdminController::class, 'clientindex'])->name('clientindex');
+    Route::post('/superadmin/clientstatus/{id}', [SuperAdminController::class, 'clientstatus'])->name('client.status');
+    Route::get('/superadmin/clientcreate', [SuperAdminController::class, 'clientcreate'])->name('client.create');
+    Route::post('/superadmin/clientadd', [SuperAdminController::class, 'clientadd'])->name('client.add1');
+    Route::get('/superadmin/invoiceindex', [SuperAdminController::class, 'invoiceindex'])->name('invoice.index');
+    Route::get('/superadmin/invoicedata', [SuperAdminController::class, 'getInvoiceData'])->name('client.invoicedata');
+    Route::post('/superadmin/invoicecreate', [SuperAdminController::class, 'invoicecreate'])->name('client.invoicecreate');
 
     Route::get('/', function () {
         return redirect()->route('home');

@@ -24,6 +24,8 @@ class Company extends Model
         'postal_code',
         'company_email',
         'company_phone',
+        'is_active',
+        "pic"
     ];
     public function user()
     {
