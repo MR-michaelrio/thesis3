@@ -75,7 +75,7 @@
                                             Email: company.email@example.com
                                         </p>
                                     </div>
-                                    <div class="col-6 text-right">
+                                    <div class="col-6 text-left">
                                         <h5>To</h5>
                                         <p>
                                             <strong style="color:#4776F4">{{$u->company->company_name}}</strong><br>
@@ -179,7 +179,7 @@
                                             Email: company.email@example.com
                                         </p>
                                     </div>
-                                    <div class="col-6 text-right">
+                                    <div class="col-6 text-left">
                                         <h5>To</h5>
                                         <p>
                                             <strong style="color:#4776F4">{{$u->company->company_name}}</strong><br>
@@ -260,7 +260,33 @@
             <form id="updateStatusForm" action="{{ route('invoice.updateevidence') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
+                    <input type="hidden" name="modalInvoiceinput" id="modalInvoiceinput" value="">
+                    <input type="hidden" name="modalAmountinput" id="modalAmountinput" value="">
                     <div class="col-12">
+                        <table>
+                            <tr>
+                                <td style="width:30%"><strong>Invoice ID</strong></td>
+                                <td>:</td>
+                                <td><span id="modalInvoiceID"></td>
+                            </tr>
+                            <tr>
+                                <td style="width:30%"><strong>Client Name</strong></td>
+                                <td>:</td>
+                                <td><span id="modalClientName"></td>
+                            </tr>
+                            <tr>
+                                <td style="width:30%"><strong>Payment Amount</strong></td>
+                                <td>:</td>
+                                <td><span id="modalAmount"></td>
+                            </tr>
+                            <tr>
+                                <td style="width:30%"><strong>Payment Due</strong></td>
+                                <td>:</td>
+                                <td><span id="modalDueDate"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- <div class="col-12">
                         <strong>Invoice ID: </strong><span id="modalInvoiceID"></span>
                         <input type="hidden" name="modalInvoiceinput" id="modalInvoiceinput" value="">
                     </div>
@@ -273,17 +299,21 @@
                     </div>
                     <div class="col-12">
                         <strong>Payment Due:</strong> <span id="modalDueDate"></span>
-                    </div>
+                    </div> -->
 
                     <hr style="border:1px solid #DADFE5">
+
                     <div class="col-12" id="documentSection">
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" name="evidence" id="evidence" accept=".pdf" required>
-                                <label class="custom-file-label" for="evidence">Choose file</label>
-                            </div>
-                            <div class="input-group-append">
-                                <span class="input-group-text">Upload</span>
+                        <div class="form-group">
+                            <label for="exampleInputFile">Upload Proof of Payment</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="evidence" id="evidence" required>
+                                    <label class="custom-file-label" for="evidence">Choose file</label>
+                                </div>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">Upload</span>
+                                </div>
                             </div>
                         </div>
                     </div>

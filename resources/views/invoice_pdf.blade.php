@@ -118,7 +118,7 @@
                         Email: company.email@example.com
                     </p>
                 </td>
-                <td class="right">
+                <td class="right" style="text-align:left">
                     <p>To</p>
                     <p>
                         <strong style="color:#4776F4">{{ $u->company->company_name }}</strong><br>

@@ -8,6 +8,8 @@ use App\Models\RequestOvertime;
 use App\Models\Employee;
 use App\Models\Attendance;
 use App\Models\AssignShift;
+use App\Models\Company;
+use App\Models\Invoice;
 use Auth;
 use Carbon\Carbon;
 
@@ -39,7 +41,15 @@ class HomeController extends Controller
 
         $attendance = Attendance::where("id_employee",Auth::user()->employee->id_employee)->where("attendance_date", $today)->first();
 
-        if(Auth::user()->role != "admin"){
+        if(Auth::user()->role == "superadmin"){
+            $activeclient = Company::all()->count();
+            $invoiceamount = Invoice::all()->count();
+            $paidinvoice = Invoice::where("payment_status","paid")->count();
+            $unpaidinvoice = Invoice::where("payment_status","unpaid")->count();
+            $unpaiddata = Invoice::where("payment_status","unpaid")->get();
+            
+            return view('dashboard', compact('activeclient', 'invoiceamount', 'paidinvoice', 'unpaidinvoice', 'unpaiddata'));
+        }elseif(Auth::user()->role != "admin"){
             $Employee = Employee::with(['user.department'])
                                         ->whereHas('user', function($query) {
                                             $query->where('id_company', Auth::user()->id_company)
@@ -78,7 +88,7 @@ class HomeController extends Controller
 
         $assignshift = AssignShift::with('shift')->where("id_employee", Auth::user()->employee->id_employee)->where("day", $dayMapping[strtolower($currentDay)])->first();
 
-        return view('dashboard', compact('RequestLeave', 'RequestOvertime', 'Employee', 'assignshift', 'attendance'));
+        return view('dashboard', compact('RequestLeave', 'RequestOvertime', 'Employee', 'assignshift', 'attendance', 'activeclient', 'invoiceamount', 'paidinvoice', 'unpaidinvoice', 'unpaiddata'));
     }
 
     public function calendar()

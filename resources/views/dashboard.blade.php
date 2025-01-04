@@ -1,7 +1,7 @@
 @extends('index')
 @section('title','Dashboard')
 @section('content')
-<!-- Small boxes (Stat box) -->
+@if(Auth::user()->role != "superadmin")
 <div class="row">
     <!-- Main Card -->
     <div class="col-lg-8 col-md-12 d-flex">
@@ -70,6 +70,7 @@
         </div>
     </div>
 </div>
+
 <div class="row">
     <div class="col-lg-3 col-6">
         <!-- small box -->
@@ -129,6 +130,106 @@
     @endif
     <!-- ./col -->
 </div>
+@else
+<div class="row">
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-info" style="height:142.52px">
+            <div class="inner" style="height:112.24px">
+                <h3>{{$activeclient}}</h3>
+
+                <p>Active Client</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-user-friends"></i>
+            </div>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-danger" style="height:142.52px">
+            <div class="inner" style="height:112.24px">
+                <h3>{{$invoiceamount}}</h3>
+
+                <p>Invoice Amount</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-file-invoice-dollar"></i>
+            </div>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-success" style="height:142.52px">
+            <div class="inner" style="height:112.24px">
+                <h3>{{$paidinvoice}}</h3>
+
+                <p>Paid Invoice</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-file-invoice-dollar"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-warning" style="height:142.52px">
+            <div class="inner" style="height:112.24px">
+                <h3>{{$unpaidinvoice}}</h3>
+
+                <p>Unpaid Invoice</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header" style="background-color:#07BEF1; color:white;">
+        <div class="row">
+            <div class="col-6 d-flex align-items-center text-white">
+                <h3 class="card-title">Not Yet Paid Invoice</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="card-body">
+        <table id="AdminAccount" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Client</th>
+                    <th>Invoice ID</th>
+                    <th>Payment Due</th>
+                    <th>Currency</th>
+                    <th>Total Bill</th>
+                    <th>Total Payment</th>
+                    <th>Payment Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($unpaiddata as $unpaid)
+                <tr>
+                    <td>{{ $unpaid->company->company_name }}</td>
+                    <td>{{ $unpaid->invoice_number }}</td>
+                    <td>{{ $unpaid->payment_due }}</td>
+                    <td>{{ $unpaid->invoiceitem->currency }}</td>
+                    <td>{{ $unpaid->invoiceitem->sub_total }}</td>
+                    <td>{{ $unpaid->invoiceitem->payed_amount }}</td>
+                    <td><span style="background-color:red;border-radius:5px;color:white">Not Yet Paid</span></td>
+                </tr>
+                @endforeach
+            </tbody>
+
+        </table>
+    </div>
+    <!-- /.Data Table -->
+</div>
+@endif
 <!-- /.row -->
 
 <!-- Main row -->
