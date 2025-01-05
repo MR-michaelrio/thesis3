@@ -171,15 +171,8 @@
                                 </a>
                             </li>
                         @endif
-                        <li class="nav-item">
-                                <a href="{{route('attendance.data')}}" class="nav-link">
-                                    <i class="nav-icon fas fa-user-clock"></i>
-                                    <p>
-                                    Attendance Data
-                                    </p>
-                                </a>
-                            </li>
-                        <!-- @if(Auth::user()->role == "supervisor1" || Auth::user()->role == "employee1")
+
+                        @if(Auth::user()->role == "supervisor" || Auth::user()->role == "employee")
                             <li class="nav-item">
                                 <a href="{{route('attendance.data')}}" class="nav-link">
                                     <i class="nav-icon fas fa-user-clock"></i>
@@ -212,7 +205,7 @@
                                     </li>
                                 </ul>
                             </li>
-                        @endif -->
+                        @endif
 
                         <li class="nav-item">
                             <a href="#" class="nav-link">
@@ -326,32 +319,9 @@
                                 </ul>
                             </li>
                         @endif
-                        <!-- <li class="nav-item">
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="btn btn-flat nav-link float-left text-white">
-                                    <i class="nav-icon fas fa-sign-out-alt"></i> Sign Out
-                                </button>
-                            </form>
-                        </li> -->
                         <li class="nav-item">
                             <a href="javascript:void(0);" class="nav-link" id="logoutButton">
                                 <i class="nav-icon fas fa-sign-out-alt"></i> Sign Out
-                            </a>
-                        </li>
-                        <span style="color:#C2C7D0; border-top:1px solid #C2C7D0; padding-top:5px;">Simulation</span>
-                        <li class="nav-item">
-                            <a href="{{route('attendance.index')}}" class="nav-link">
-                                <i class="nav-icon fas fa-sign-in-alt"></i>
-                                <p>
-                                    Take Attendance
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{route('attendance.create')}}" class="nav-link">
-                                <i class="nav-icon fas fa-camera"></i>
-                                <p>Face Registration</p>
                             </a>
                         </li>
                     </ul>
@@ -378,7 +348,7 @@
                             <a href="{{ route('client.invoiceindex') }}" class="nav-link">
                                 <i class="nav-icon fas fa-file-invoice-dollar"></i> 
                                 <p>
-                                    Inovice
+                                    Invoice
                                 </p>
                             </a>
                         </li>

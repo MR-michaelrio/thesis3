@@ -87,7 +87,7 @@ class HomeController extends Controller
 
         $assignshift = AssignShift::with('shift')->where("id_employee", Auth::user()->employee->id_employee)->where("day", $dayMapping[strtolower($currentDay)])->first();
 
-        return view('dashboard', compact('RequestLeave', 'RequestOvertime', 'Employee', 'assignshift', 'attendance', 'activeclient', 'invoiceamount', 'paidinvoice', 'unpaidinvoice', 'unpaiddata'));
+        return view('dashboard', compact('RequestLeave', 'RequestOvertime', 'Employee', 'assignshift', 'attendance'));
     }
 
     public function calendar()
