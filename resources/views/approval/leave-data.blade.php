@@ -42,7 +42,7 @@
                             data-leaveend="{{ \Carbon\Carbon::parse($r->leave_end_date)->format('d/m/Y H:i') }}" 
                             data-status="{{ $r->status }}" 
                             data-quota="{{ $r->requested_quota }}" 
-                            data-remaining="{{ $r->leaeveremaining->remaining }}" 
+                            data-remaining="{{ $r->leaveremaining->remaining }}" 
                             data-leavetime="{{ $r->leave_time }}" 
                             data-approver="{{ $r->id_approver ?? 'N/A' }}"
                             data-approver-name="{{ $r->approver ? $r->approver->full_name : 'N/A' }}"
@@ -54,7 +54,7 @@
                             <td>{{ \Carbon\Carbon::parse($r->leave_start_date)->format('d/m/Y H:i') }} - {{ \Carbon\Carbon::parse($r->leave_end_date)->format('d/m/Y H:i') }}</td>
                             <td>{{ $r->leave_time }}</td>
                             <td>{{ $r->requested_quota }}</td>
-                            <td>{{ $r->leaeveremaining->remaining }}</td>
+                            <td>{{ $r->leaveremaining->remaining }}</td>
                             <td>{{ $r->id_approver }}</td>
                             <td>{{ $r->approver?->full_name }}</td>
                             <td>{{ $r->status }}</td>

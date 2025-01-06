@@ -49,7 +49,7 @@ class RequestLeave extends Model
         return $this->belongsTo(Leave::class, 'leave_type', 'id_leave');
     }
 
-    public function leaeveremaining()
+    public function leaveremaining()
     {
         return $this->belongsTo(AssignLeave::class, 'leave_type', 'id_leave');
     }

@@ -34,7 +34,6 @@ class User extends Authenticatable
         'emergency_phone',
         'id_company',
         'identification_number',
-        'is_active'
     ];
 
     /**

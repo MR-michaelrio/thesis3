@@ -27,7 +27,7 @@ class RequestLeaveController extends Controller
                                     ->where('id_employee', Auth::user()->employee->id_employee)                              
                                     ->get();
         }else{
-            $leave = RequestLeave::where("id_company",Auth::user()->id_company)->with('leaeveremaining')->get();
+            $leave = RequestLeave::where("id_company",Auth::user()->id_company)->with('leaveremaining')->get();
         }
         // dd($leave);
         return view("approval.leave-data",compact("leave"));
