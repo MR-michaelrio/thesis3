@@ -481,6 +481,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 
     @yield("scripts")
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Periksa apakah ada pesan success dari session
+            @if(session('success'))
+                showSuccesPopup("{{ session('success') }}");
+            @endif
+        });
+    </script>
     <!-- popup success -->
     <script>
         const overlay = document.getElementById('popup-overlay');

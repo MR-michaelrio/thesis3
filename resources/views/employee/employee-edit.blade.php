@@ -697,6 +697,8 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
 @endsection
 
 @section('scripts')
+
+
 <script>
 function toggleQuotaInput(leaveId) {
     const input = document.getElementById(`quota_${leaveId}`);
