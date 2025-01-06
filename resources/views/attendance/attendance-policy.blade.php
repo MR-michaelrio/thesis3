@@ -12,11 +12,6 @@
                 @csrf
                 <!-- Form Body -->
                 <div class="card-body">
-                    @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                    @endif
                     <!-- Hidden Field for ID -->
                     <input type="hidden" name="id_attendance_policy" value="{{ $policy->id_attendance_policy }}">
 
