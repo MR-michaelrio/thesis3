@@ -121,8 +121,8 @@ class EmployeeController extends Controller
                 'id_department' => $request['id_department'],
                 'id_department_position' => $request['id_department_position'],
                 'supervisor' => $request['supervisor'] ?? null,
-                'start_work' => $request['start_work'],
-                'stop_work' => $request['stop_work'] ?? null,
+                'start_work' => Carbon::createFromFormat('d/m/Y', $request['start_work'])->format('Y-m-d'),
+                'stop_work' => $request['stop_work'] ? Carbon::createFromFormat('d/m/Y', $request['stop_work'])->format('Y-m-d') : null,
                 'role' => "employee",
                 'phone' => $request['phone'],
                 'emergency_name' => $request['emergency_name'],
@@ -331,9 +331,9 @@ class EmployeeController extends Controller
                     $user->password = Hash::make($request->new_password);
                 }
             }
-
-            $user->start_work = $request->start_work;
-            $user->stop_work = $request->stop_work;
+            $user->start_work = Carbon::createFromFormat('d/m/Y', $request->start_work)->format('Y-m-d');
+            $user->stop_work = $request->stop_work ? Carbon::createFromFormat('d/m/Y', $request->stop_work)->format('Y-m-d') : null;
+            
             $user->identification_number = $request->identification_number;
             // Save the user changes
             $user->save();

@@ -11,6 +11,7 @@ use App\Models\InvoiceItem;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class SuperAdminController extends Controller
 {
@@ -97,6 +98,9 @@ class SuperAdminController extends Controller
     public function getInvoiceData(Request $request)
     {
         $clientId = $request->input('client_id');
+        Log::debug('Received client_id:', ['client_id' => $clientId]);
+
+
         $invoiceAmount = Invoice::where('id_company', $clientId)->count();
         $paidInvoice = Invoice::where('id_company', $clientId)->where('payment_status', 'paid')->count();
         $unpaidInvoice = Invoice::where('id_company', $clientId)->where('payment_status', 'unpaid')->count();
@@ -104,13 +108,23 @@ class SuperAdminController extends Controller
         $client = Company::all();
         $history = Invoice::where('id_company', $clientId)->where('payment_status', 'paid')->get();
 
+        if ($history->isEmpty()) {
+            $history = [];
+        }
+
         // Pass the full URL for the evidence field
         foreach ($invoicedata as $invoice) {
+            $sub_total = $invoice->invoiceitem->sub_total; // Total dari relasi invoiceitems
+            $currency = $invoice->invoiceitem->currency ?? 'N/A'; // Ambil currency dari item pertama atau default ke 'N/A'
+
+            // Assign to invoice data for use in frontend
+            $invoice->sub_total = $sub_total;
+            $invoice->currency = $currency;
+    
             $invoice->evidence_url = $invoice->evidence ? asset($invoice->evidence) : null;
         }
 
         if ($request->ajax()) {
-            // For AJAX requests, return the data as JSON
             return response()->json([
                 'invoiceAmount' => $invoiceAmount,
                 'paidInvoice' => $paidInvoice,

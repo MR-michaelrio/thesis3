@@ -29,6 +29,7 @@ class EventController extends Controller
         // $events = Event::where('id_user', 1)->get();
         // $today = now('Asia/Jakarta')->format('Y-m-d H:i:s');
         $events = Event::where("status","aktif")->where("id_company",Auth::user()->id_company)->get()->map(function ($event) {
+            $event->end_time2 = \Carbon\Carbon::parse($event->end_time)->format('Y-m-d H:i:s');
             $event->end_time = \Carbon\Carbon::parse($event->end_time)->addDay()->format('Y-m-d');
             return $event;
         });

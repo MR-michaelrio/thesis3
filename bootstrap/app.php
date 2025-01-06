@@ -15,7 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
         //
         $middleware->alias([
             "SuperAdminMiddleware" => App\Http\Middleware\SuperAdminMiddleware::class,
-            "AdminMiddleware" => App\Http\Middleware\AdminMiddleware::class
+            "AdminMiddleware" => App\Http\Middleware\AdminMiddleware::class,
+            "CheckCompanyActive" => \App\Http\Middleware\CheckCompanyActive::class,
 
         ]);
     })

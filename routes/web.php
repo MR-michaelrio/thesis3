@@ -21,7 +21,7 @@ use App\Http\Controllers\SuperAdminController;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'CheckCompanyActive'])->group(function () {
     Route::get('/', function () {
         return redirect()->route('home');
     });

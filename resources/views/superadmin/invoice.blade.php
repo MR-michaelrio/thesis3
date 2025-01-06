@@ -454,7 +454,6 @@
                 success: function (data) {
                     $('#loadingIndicator').hide();
 
-                    console.log(data);
                     $('#invoiceAmount').text(data.invoiceAmount);
                     $('#paidInvoice').text(data.paidInvoice);
                     $('#unpaidInvoice').text(data.unpaidInvoice);
@@ -489,11 +488,16 @@
                     });
 
                     $('#example2 tbody').html(tableBody); // Update tbody table
+                    var table = $('#example2').DataTable(); 
+                    table.clear();
+                    table.rows.add($(tableBody)).draw();
                     $('#invoiceData').show();
                     $('#tabinvoice').show();
                 },
-                error: function () {
+                error: function (xhr, status, error) {
                     $('#loadingIndicator').hide();
+                    console.error("AJAX Error:", status, error); // Log the error details here
+                    console.log("Response:", xhr.responseText);
 
                     alert('Error fetching data');
                 }

@@ -44,7 +44,7 @@
                         </div>
                         <div class="form-group">
                             <label>End Time</label>
-                            <input type="datetime-local" class="form-control" id="end_time" name="end_time">
+                            <input type="datetime-local" class="form-control" id="end_time" name="end_time" required>
                         </div>
                         <div class="form-group">
                             <label>Background Color</label>
@@ -108,16 +108,26 @@
                         url: '{{route("calendar.get")}}', // Ganti dengan user ID yang sesuai
                         method: 'GET',
                         success: function (events) {
-                            var calendarEvents = events.map(event => ({
+                            console.log(events);
+                            var calendarEvents = events.map(event => {
+                            // Mengonversi waktu start dan end ke format yang lebih baik
+                            var startTime = moment(event.start_time).format('HH:mm');
+                            var endTime = moment(event.end_time2).format('HH:mm');
+
+                            // Menggabungkan start time, end time dan title
+                            var eventTitle = startTime + ' - ' + endTime + ' ' + event.title;
+
+                            return {
                                 id: event.id,
-                                title: event.title + " " + (event.holiday ? event.holiday : ""),
+                                title: eventTitle, // Menampilkan start time - end time dan title
                                 start: event.start_time,
                                 end: event.end_time,
                                 backgroundColor: event.background_color,
                                 borderColor: event.border_color,
                                 textColor: event.text_color,
                                 holiday: event.holiday
-                            }));
+                            };
+                        });
                             successCallback(calendarEvents);
                         },
                         error: function () {
@@ -127,12 +137,8 @@
                     });
                 },
                 editable: false,
+                displayEventTime: false,
                 droppable: false,
-                eventTimeFormat: { // Properti untuk mengatur format waktu
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: false // Menggunakan format 24 jam
-                },
                 eventDidMount: function(info) {
                     $(info.el).css({
                         backgroundColor: info.event.backgroundColor, 

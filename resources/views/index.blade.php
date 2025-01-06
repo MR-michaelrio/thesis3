@@ -166,7 +166,7 @@
                                 <a href="{{ route('employee.index') }}" class="nav-link">
                                     <i class="nav-icon fas fa-users"></i>
                                     <p>
-                                        Employe Data
+                                        Employee Data
                                     </p>
                                 </a>
                             </li>
@@ -348,7 +348,7 @@
                             <a href="{{ route('client.invoiceindex') }}" class="nav-link">
                                 <i class="nav-icon fas fa-file-invoice-dollar"></i> 
                                 <p>
-                                    Invoice
+                                    Invoices
                                 </p>
                             </a>
                         </li>
@@ -597,7 +597,7 @@
                 "autoWidth": false,
                 "responsive": false,
                 "scrollX": true,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                "buttons": ["csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
                 
             $("#example2").DataTable({
@@ -609,19 +609,19 @@
                 "autoWidth": false,
                 "responsive": false,
                 "scrollX": true,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                "buttons": [ "csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
 
             $("#example3").DataTable({
                 "paging": true,
                 "searching": true,
-                "lengthChange": true,
+                "lengthChange": false,
                 "ordering": true,
                 "info": true,
                 "autoWidth": false,
                 "responsive": false,
                 "scrollX": true,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                "buttons": ["csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#example3_wrapper .col-md-6:eq(0)');
 
             $("#AdminAccount").DataTable({

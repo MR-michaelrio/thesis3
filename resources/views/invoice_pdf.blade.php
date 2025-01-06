@@ -97,10 +97,28 @@
                 </td>
                 <td class="right">
                     <h3>Invoice</h3>
-                    <p>Invoice Number: <strong>{{ $u->invoice_number }}</strong></p>
-                    <p>Invoice Date: <strong>{{ \Carbon\Carbon::parse($u->created_at)->format('d/F/Y') }}</strong></p>
-                    <p>Period: <strong>{{ \Carbon\Carbon::parse($u->period_start)->format('d/F/Y') }} - {{ \Carbon\Carbon::parse($u->period_end)->format('d/F/Y') }}</strong></p>
-                    <p>Payment Due: <strong>{{ \Carbon\Carbon::parse($u->payment_due)->format('d/F/Y') }}</strong></p>
+                    <table style="float:right">
+                        <tr>
+                            <td>Invoice Number</td>
+                            <td style="padding:0px 5px 0px 5px;">:</td>
+                            <td><strong>{{ $u->invoice_number }}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Invoice Date</td>
+                            <td style="padding:0px 5px 0px 5px;">:</td>
+                            <td><strong>{{ \Carbon\Carbon::parse($u->created_at)->format('d/F/Y') }}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Period</td>
+                            <td style="padding:0px 5px 0px 5px;">:</td>
+                            <td><strong>{{\Carbon\Carbon::parse($u->period_start)->format('d/F/Y')}} - {{\Carbon\Carbon::parse($u->period_end)->format('d/F/Y')}}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Payment Due</td>
+                            <td style="padding:0px 5px 0px 5px;">:</td>
+                            <td><strong>{{\Carbon\Carbon::parse($u->payment_due)->format('d/F/Y')}}</strong></td>
+                        </tr>
+                    </table> 
                 </td>
             </tr>
         </table>
