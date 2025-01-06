@@ -40,9 +40,11 @@
                     <div class="col-6 d-flex align-items-center text-white">
                         <h3 class="card-title">Employee Data</h3>
                     </div>
+                    @if(Auth::user()->role == "admin")
                     <div class="col-6 d-flex justify-content-end align-items-center">
                         <a href="{{ route('employee.create') }}" class="btn btn-primary pr-4 pl-4 ml-2">Add</a>
                     </div>
+                    @endif
                 </div>
             </div>
 
