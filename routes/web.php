@@ -33,6 +33,7 @@ Route::middleware(['auth', 'CheckCompanyActive'])->group(function () {
     Route::resource('requestleave', RequestLeaveController::class);
     Route::put('/requestleave/update', [RequestLeaveController::class, 'update'])->name('requestleave.update');
     Route::get('/leave/remaining-quota', [RequestLeaveController::class, 'getRemainingQuota'])->name('leave.remainingQuota');
+    Route::post('leave/calculateQuota', [RequestLeaveController::class, 'calculateLeaveQuota'])->name('leave.calculateQuota');
 
     Route::resource('attendance', AttendanceController::class);
     Route::get('/attendancedata', [AttendanceController::class, 'data'])->name('attendance.data');    

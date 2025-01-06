@@ -146,39 +146,53 @@
         // Function to calculate requested quota based on leave time and dates
       // Function to calculate requested quota based on leave time and dates
       function calculateLeaveQuota() {
-        let leaveTime = $('select[name="leave_time"]').val(); // Half Day atau Full Day
-        let startDateValue = $('input[name="leave_start_date"]').val();
-        let endDateValue = $('input[name="leave_end_date"]').val();
+            let leaveTime = $('select[name="leave_time"]').val(); // Half Day or Full Day
+            let startDateValue = $('input[name="leave_start_date"]').val();
+            let endDateValue = $('input[name="leave_end_date"]').val();
 
-        // Jika tidak ada tanggal mulai atau selesai, set kuota menjadi 0
-        if (!startDateValue || !endDateValue) {
-            $('input[name="leave_quota_requested"]').val("0");  // Set nilai default (0)
-            return;
+            // If no start and end date, set leave quota as 0 or N/A
+            if (!startDateValue || !endDateValue) {
+                $('input[name="leave_quota_requested"]').val("0");  // Set default value (0)
+                return;
+            }
+
+            // Parse dates using moment.js
+            let startDate = moment(startDateValue, 'DD/MM/YYYY HH:mm', true); // 'true' for strict parsing
+            let endDate = moment(endDateValue, 'DD/MM/YYYY HH:mm', true); // 'true' for strict parsing
+
+            if (!startDate.isValid() || !endDate.isValid()) {
+                alert("Please enter valid start and end dates.");
+                return;
+            }
+
+            // Calculate the difference in days
+            let daysDifference = endDate.diff(startDate, 'days') + 1; // Include start day
+
+            let requestedQuota = (leaveTime === 'full') ? daysDifference : daysDifference * 0.5; // If full day, use full days, else half days
+
+            // Update the input field with the calculated quota
+            $('input[name="leave_quota_requested"]').val(requestedQuota);  
         }
 
-        // Kirim data tanggal ke server untuk dihitung
-        $.ajax({
-            url: '{{ route("leave.calculateQuota") }}',  // Ganti dengan rute yang sesuai
-            method: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                leave_start_date: startDateValue,
-                leave_end_date: endDateValue,
-                leave_time: leaveTime
-            },
-            success: function(response) {
-                // Set hasil kuota yang dihitung ke field input
-                $('input[name="leave_quota_requested"]').val(response.requested_quota);
-            },
-            error: function(xhr, status, error) {
-                alert('Error calculating leave quota.');
+        // Event listener for when the user selects the Leave Time (Half or Full)
+        $('select[name="leave_time"]').on('change', function() {
+            // When the leave time changes, set the leave quota requested to 0 initially
+            $('input[name="leave_quota_requested"]').val("0");
+
+            // Also, recalculate quota if start and end dates are already filled
+            let startDateValue = $('input[name="leave_start_date"]').val();
+            let endDateValue = $('input[name="leave_end_date"]').val();
+            
+            if (startDateValue && endDateValue) {
+                calculateLeaveQuota();
             }
         });
-    }
 
-    $('select[name="leave_time"], input[name="leave_start_date"], input[name="leave_end_date"]').on('change', function() {
-        calculateLeaveQuota();
-    });
+        // Event listener for when the user changes the Start Date or End Date
+        $('input[name="leave_start_date"], input[name="leave_end_date"]').on('change', function() {
+            // Recalculate the leave quota when dates are filled in
+            calculateLeaveQuota();
+        });
 
         // Initial calculation when page loads if leave time is already selected
         let initialLeaveTime = $('select[name="leave_time"]').val();
