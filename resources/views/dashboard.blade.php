@@ -102,6 +102,7 @@
         </div>
     </div>
     <!-- ./col -->
+    @if(Auth::user()->role == "admin" || Auth::user()->role == "supervisor")
     <div class="col-lg-3 col-6">
         <!-- small box -->
         <div class="small-box bg-warning" style="height:142.52px">
@@ -116,6 +117,7 @@
             <a href="{{route('employee.index')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
+    @endif
     <!-- ./col -->
     @if(Auth::user()->role == "admin")
         <div class="col-lg-3 col-6">

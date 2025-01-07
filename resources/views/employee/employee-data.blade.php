@@ -68,7 +68,7 @@
                         <tr>
                             <td @if(Auth::user()->role == "admin") onclick="window.location.href='{{ route('employee.edit', $employee->id_employee) }}'" style="cursor: pointer;" @endif>{{ $employee->full_name }}</td>
                             <td @if(Auth::user()->role == "admin") onclick="window.location.href='{{ route('employee.edit', $employee->id_employee) }}'" style="cursor: pointer;" @endif>{{ $employee->user->identification_number }}</td>
-                            <td @if(Auth::user()->role == "admin") onclick="window.location.href='{{ route('employee.edit', $employee->id_employee) }}'" style="cursor: pointer;" @endif>{{ $employee->user->department->department_name ?? '-' }}</td>
+                            <td @if(Auth::user()->role == "admin") onclick="window.location.href='{{ route('employee.edit', $employee->id_employee) }}'" style="cursor: pointer;" @endif>{{ $employee->user->department->department_code ?? '-' }}</td>
                             <td @if(Auth::user()->role == "admin") onclick="window.location.href='{{ route('employee.edit', $employee->id_employee) }}'" style="cursor: pointer;" @endif>{{ $employee->gender }}</td>
                             <td @if(Auth::user()->role == "admin") onclick="window.location.href='{{ route('employee.edit', $employee->id_employee) }}'" style="cursor: pointer;" @endif>{{ $employee->date_of_birth }}</td>
                             <td @if(Auth::user()->role == "admin") onclick="window.location.href='{{ route('employee.edit', $employee->id_employee) }}'" style="cursor: pointer;" @endif>{{ optional($employee->user)->email ?? '-' }}</td>
