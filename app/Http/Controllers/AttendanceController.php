@@ -374,11 +374,11 @@ class AttendanceController extends Controller
             }
         } else {
             // If attendance exists and clock-in is already recorded, return message
-            // if ($attendance && $attendance->clock_in) {
-            //     return response()->json([
-            //         'message' => 'Already clocked in!',
-            //     ], 201);
-            // }
+            if ($attendance && $attendance->clock_in) {
+                return response()->json([
+                    'message' => 'Already clocked in!',
+                ], 201);
+            }
             // Get the clock-in time assigned to the shift
             $clock_in_assign = $assignshift->shift->clock_in;
             $attendance_policy = AttendancePolicy::where("id_company",Auth::user()->id_company)->first();
