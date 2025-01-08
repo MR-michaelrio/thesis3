@@ -2,6 +2,32 @@
 @section('title','Face Recognition Registration')
 @section('css')
 <style>
+    #loadingIndicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 60px;  /* Increase the spinner size */
+            height: 60px; /* Increase the spinner size */
+            border: 5px solid rgba(0, 0, 0, 0.1);
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
     .file-item {
         display: flex;
         align-items: center;
@@ -33,11 +59,6 @@
 @endsection
 
 @section('content')
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
 @if (session('error'))
     <div class="alert alert-danger">
         {{ session('error') }}
@@ -148,6 +169,9 @@
         </div>
     </section>
 </div>
+<div id="loadingIndicator" style="display: none;">
+    <div class="spinner"></div>
+</div>
 @endsection
 
 @section('scripts')
@@ -206,5 +230,19 @@
         document.getElementById('upload-info').textContent = 'No photo uploaded';
         document.getElementById('file-upload').value = ''; // Reset input
     }
+
+    document.getElementById('employeeForm').addEventListener('submit', function (event) {
+        const loadingIndicator = document.getElementById('loadingIndicator');
+
+        event.preventDefault(); // Prevent default form submission to simulate loading
+        loadingIndicator.style.display = 'flex';
+        // Simulate an action (e.g., form submission or some other async task)
+        setTimeout(() => {
+            // Hide loading spinner after the task is complete
+            hideLoadingIndicator();
+            // Optionally, submit the form after the process completes
+            event.target.submit();
+        }, 3000); // Simulate a 3-second process (replace with real action)
+    });
 </script>
 @endsection
