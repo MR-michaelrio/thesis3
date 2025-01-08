@@ -11,6 +11,7 @@ use App\Models\AttendancePolicy;
 use App\Models\AssignShift;
 use App\Models\RequestOvertime;
 use App\Models\User;
+use App\Models\RequestLeave;
 
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
@@ -50,6 +51,7 @@ class AttendanceController extends Controller
         }
 
         if (Auth::user()->role == "supervisor") {
+            $datenow = Carbon::now()->toDateString();
             $overview = Attendance::with('employee.user', 'shift')
                 ->where('id_company', Auth::user()->id_company)
                 ->whereHas('employee.user', function($query) {
@@ -57,14 +59,64 @@ class AttendanceController extends Controller
                 })
                 ->orderBy('attendance_date', 'desc')
                 ->get();
-            
-            $summary = Attendance::with('employee.user', 'shift')
-                ->where('id_company', Auth::user()->id_company)
+                $summary = DB::table('attendance')
+                ->join('employee', 'attendance.id_employee', '=', 'employee.id_employee')  // Join the employee table
+                ->join('users', 'employee.id_users', '=', 'users.id_user')                 // Join the user table via employee
+                ->join('department', 'users.id_department', '=', 'department.id_department') // Join the department table
+                ->leftJoin(DB::raw('(SELECT id_employee, SUM(requested_quota) as total_quota 
+                            FROM request_leave_hdrs 
+                            WHERE status = "approve" 
+                            GROUP BY id_employee) as leaves'), 
+                        'employee.id_employee', '=', 'leaves.id_employee')       
+                ->leftJoin(DB::raw('(SELECT 
+                            s.id_employee, 
+                            COUNT(*) AS total_absent
+                        FROM (
+                            SELECT DATE_ADD("' . $datenow .'", INTERVAL t4.i * 10 + t3.i * 1 DAY) AS date
+                            FROM (SELECT 0 i UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 
+                                UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) t4,
+                                (SELECT 0 i UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 
+                                UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) t3
+                            WHERE DATE_ADD("' . $datenow .'", INTERVAL t4.i * 10 + t3.i * 1 DAY) <= "' . $datenow .'"
+                        ) d
+                        JOIN assign_shift AS s ON (CASE WHEN DAYOFWEEK(d.date) = 1 THEN 7 ELSE DAYOFWEEK(d.date) - 1 END) = s.day
+                        LEFT JOIN attendance AS a ON a.id_employee = s.id_employee AND a.attendance_date = d.date
+                        WHERE s.id_shift IS NOT NULL AND a.attendance_date IS NULL
+                        GROUP BY s.id_employee) AS absents'), 
+                    'attendance.id_employee', '=', 'absents.id_employee')
+                ->select(
+                    'attendance.id_employee',
+                    'employee.full_name',
+                    'users.identification_number',               // Access the identification_number from the user table
+                    'department.department_code',                // Access the department_code from the department table
+                    DB::raw('SEC_TO_TIME(SUM(TIME_TO_SEC(STR_TO_DATE(daily_total, "%H:%i:%s")))) as total_daily_total'),
+                    DB::raw('SEC_TO_TIME(SUM(TIME_TO_SEC(STR_TO_DATE(IFNULL(total_overtime, "00:00"), "%H:%i:%s")))) as total_overtime'),
+                    DB::raw('IFNULL(leaves.total_quota, 0) as total_approved_leave_quota'),
+                    DB::raw('IFNULL(absents.total_absent, 0) as total_absent')
+
+                    )
+                    
+                ->where('attendance.id_company', Auth::user()->id_company)
                 ->whereHas('employee.user', function($query) {
                     $query->where('id_department', Auth::user()->id_department);
                 })
-                ->where('attendance_date', Carbon::now()->toDateString())
-                ->get();
+                ->where('attendance_date', $datenow)
+                ->groupBy(
+                    'attendance.id_employee',
+                    'employee.full_name',
+                    'users.identification_number',
+                    'department.department_code',
+                    'leaves.total_quota',
+                    'absents.total_absent'
+                )
+                ->get(); 
+            // $summary = Attendance::with('employee.user', 'shift')
+            //     ->where('id_company', Auth::user()->id_company)
+            //     ->whereHas('employee.user', function($query) {
+            //         $query->where('id_department', Auth::user()->id_department);
+            //     })
+            //     ->where('attendance_date', Carbon::now()->toDateString())
+            //     ->get();
         } else if (Auth::user()->role == "employee") {
             $overview = Attendance::with('employee.user', 'shift')
                 ->where('id_company', Auth::user()->id_company)
@@ -82,30 +134,64 @@ class AttendanceController extends Controller
                             ->get();
             $summary = DB::table('attendance')
                             ->join('employee', 'attendance.id_employee', '=', 'employee.id_employee')  // Join the employee table
-                            ->join('users', 'employee.id_users', '=', 'users.id_user')  // Join the user table via employee
-                            ->join('department', 'users.id_department', '=', 'department.id_department')
+                            ->join('users', 'employee.id_users', '=', 'users.id_user')                 // Join the user table via employee
+                            ->join('department', 'users.id_department', '=', 'department.id_department') // Join the department table
+                            ->leftJoin(DB::raw('(SELECT id_employee, SUM(requested_quota) as total_quota 
+                                        FROM request_leave_hdrs 
+                                        WHERE status = "approve" 
+                                        GROUP BY id_employee) as leaves'), 
+                            'employee.id_employee', '=', 'leaves.id_employee')       
+                            ->leftJoin(DB::raw('(SELECT 
+                            s.id_employee, 
+                            COUNT(*) AS total_absent
+                          FROM (
+                            SELECT DATE_ADD("' . $startDate .'", INTERVAL t4.i * 10 + t3.i * 1 DAY) AS date
+                            FROM (SELECT 0 i UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 
+                                  UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) t4,
+                                 (SELECT 0 i UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 
+                                  UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) t3
+                            WHERE DATE_ADD("' . $startDate .'", INTERVAL t4.i * 10 + t3.i * 1 DAY) <= "' . $endDate .'"
+                          ) d
+                          JOIN assign_shift AS s ON (CASE WHEN DAYOFWEEK(d.date) = 1 THEN 7 ELSE DAYOFWEEK(d.date) - 1 END) = s.day
+                          LEFT JOIN attendance AS a ON a.id_employee = s.id_employee AND a.attendance_date = d.date
+                          WHERE s.id_shift IS NOT NULL AND a.attendance_date IS NULL
+                          GROUP BY s.id_employee) AS absents'), 
+                    'attendance.id_employee', '=', 'absents.id_employee')
+
                             ->select(
                                 'attendance.id_employee',
                                 'employee.full_name',
-                                'users.identification_number',  // Access the identification_number from the user table
-                                'department.department_code',  // Access the department_code from the user table
-                                DB::raw('SEC_TO_TIME(SUM(TIME_TO_SEC(STR_TO_DATE(daily_total, "%H:%i")))) as total_daily_total'),
-                                DB::raw('SEC_TO_TIME(SUM(TIME_TO_SEC(STR_TO_DATE(IFNULL(total_overtime, "00:00"), "%H:%i")))) as total_overtime'),
-                            )
+                                'users.identification_number',               // Access the identification_number from the user table
+                                'department.department_code',                // Access the department_code from the department table
+                                DB::raw('SEC_TO_TIME(SUM(TIME_TO_SEC(STR_TO_DATE(daily_total, "%H:%i:%s")))) as total_daily_total'),
+                                DB::raw('SEC_TO_TIME(SUM(TIME_TO_SEC(STR_TO_DATE(IFNULL(total_overtime, "00:00"), "%H:%i:%s")))) as total_overtime'),
+                                DB::raw('IFNULL(leaves.total_quota, 0) as total_approved_leave_quota'),
+                                DB::raw('IFNULL(absents.total_absent, 0) as total_absent')
+
+                                )
+                                
                             ->where('attendance.id_company', Auth::user()->id_company)
-                            ->whereBetween('attendance.attendance_date', [$startDate, $endDate])
-                            ->groupBy('attendance.id_employee')
-                            ->get();
+                            ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
+                                return $query->whereBetween('attendance.attendance_date', [$startDate, $endDate]);
+                            }, function ($query) {
+                                // Jika $startDate dan $endDate tidak ada, gunakan tanggal hari ini sebagai default
+                                $today = date('Y-m-d');
+                                
+                                return $query->whereDate('attendance.attendance_date', $today);
+                            })
+                            ->groupBy(
+                                'attendance.id_employee',
+                                'employee.full_name',
+                                'users.identification_number',
+                                'department.department_code',
+                                'leaves.total_quota',
+                                'absents.total_absent'
+                            )
+                            ->get();                        
         }
 
         
         return view('attendance/attendance-data',compact("overview","summary"));
-    }
-
-    public function data2()
-    {
-        //
-        return "seru";
     }
 
     /**

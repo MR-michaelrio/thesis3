@@ -67,14 +67,6 @@
                                                 <i class="fas fa-ellipsis-h"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                                <form action="{{ route('role.admin', $a->id_user) }}" method="POST">
-                                                    @csrf
-                                                    @method('POST')
-                                                    <button type="submit" class="btn btn-block text-left custom-btn">
-                                                        Make Main Admin
-                                                    </button>
-                                                </form>
-
                                                 <form action="{{ route('role.supervisor', $a->id_user) }}" method="POST">
                                                     @csrf
                                                     @method('POST')
@@ -149,12 +141,6 @@
                                                     @csrf
                                                     @method('POST')
                                                     <button type="submit" class="btn btn-block text-left custom-btn">Make Main Admin</button>
-                                                </form>
-
-                                                <form action="{{ route('role.supervisor', $s->id_user) }}" method="POST">
-                                                    @csrf
-                                                    @method('POST')
-                                                    <button type="submit" class="btn btn-block text-left custom-btn">Make to Supervisor</button>
                                                 </form>
 
                                                 <form action="{{ route('role.employee', $s->id_user) }}" method="POST">
@@ -235,12 +221,6 @@
                                                     @csrf
                                                     @method('POST')
                                                     <button type="submit" class="btn btn-block text-left custom-btn">Make to Supervisor</button>
-                                                </form>
-
-                                                <form action="{{ route('role.employee', $e->id_user) }}" method="POST">
-                                                    @csrf
-                                                    @method('POST')
-                                                    <button type="submit" class="btn btn-block text-left custom-btn">Make to Employee</button>
                                                 </form>
                                             </div>
                                             

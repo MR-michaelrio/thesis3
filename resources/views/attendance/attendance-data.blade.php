@@ -109,6 +109,8 @@
                                     <th>ID</th>
                                     <th>Department Code</th>
                                     <th>Daily Total</th>
+                                    <th>Leave</th>
+                                    <th>Absence</th>
                                     <th>Overtime</th>
                                 </tr>
                             </thead>
@@ -118,8 +120,10 @@
                                         <td>{{$a->full_name}}</td>
                                         <td>{{$a->identification_number}}</td>
                                         <td>{{$a->department_code}}</td>
-                                        <td style="font-weight:bold">{{ $a->total_daily_total ? $a->total_daily_total . ' Hours' : '' }}</td>
-                                        <td style="color:red">{{ $a->total_overtime ? $a->total_overtime . ' Hours' : '' }}</td>                                 
+                                        <td style="font-weight:bold">{{ $a->total_daily_total ? $a->total_daily_total . ' Hours' : '-' }}</td>
+                                        <td style="font-weight:bold">{{ $a->total_approved_leave_quota ? $a->total_approved_leave_quota : '-' }}</td>
+                                        <td style="font-weight:bold">{{ $a->total_absent ? $a->total_absent : '-' }}</td>
+                                        <td style="color:red">{{ $a->total_overtime ? $a->total_overtime . ' Hours' : '-' }}</td>                                 
                                     </tr>
                                 @endforeach
                             </tbody>
