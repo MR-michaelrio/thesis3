@@ -236,13 +236,6 @@
 
         event.preventDefault(); // Prevent default form submission to simulate loading
         loadingIndicator.style.display = 'flex';
-        // Simulate an action (e.g., form submission or some other async task)
-        setTimeout(() => {
-            // Hide loading spinner after the task is complete
-            hideLoadingIndicator();
-            // Optionally, submit the form after the process completes
-            event.target.submit();
-        }, 3000); // Simulate a 3-second process (replace with real action)
     });
 </script>
 @endsection

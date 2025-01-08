@@ -483,8 +483,12 @@
     @yield("scripts")
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+
             // Periksa apakah ada pesan success dari session
             @if(session('success'))
+                loadingIndicator.style.display = 'hide';
+
                 showSuccesPopup("{{ session('success') }}");
             @endif
         });
