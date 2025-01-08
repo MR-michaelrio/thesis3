@@ -128,12 +128,12 @@
                     <div class="card-body">
                         <div class="col-12">
                             <div class="form-group">
-                                <label for="employeeID">Employee ID</label>
+                                <label for="employeeID">Employee</label>
                                 <select class="form-control select2" required name="id_employee" id="employeeID" onchange="handleEmployeeChange()">
-                                    <option disabled selected>Employee ID</option>
+                                    <option disabled selected>Employee</option>
                                     @foreach($employee as $e)
                                         <option value="{{$e->id_employee}}" data-name="{{$e->full_name}}">
-                                            {{$e->full_name}}
+                                            {{$e->user->identification_number}} - {{$e->full_name}}
                                         </option>
                                     @endforeach
                                 </select>
