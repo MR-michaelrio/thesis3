@@ -125,6 +125,7 @@
                 method: 'GET',
                 data: { leave_type: leaveType },  // Send selected leave type
                 success: function(data) {
+                    console.log(data);
                     // Set the remaining quota to the input field
                     $('#remaining-quota').val(data.remaining_quota);  // Update remaining quota field
                 }

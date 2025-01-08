@@ -67,15 +67,16 @@ class RequestLeaveController extends Controller
                                     ->where('status', 'approve')
                                     ->sum('requested_quota'); 
 
+        $remainingQuota = AssignLeave::where('id_employee', Auth::user()->employee->id_employee)
+                                    ->where('id_leave', $leaveTypeId)->first();
         // $approvedLeave = RequestLeave::where('id_employee', Auth::user()->employee->id_employee)->get(); 
 
         // Calculate the remaining quota
-        $remainingQuota = $defaultQuota - $approvedLeave;
 
         return response()->json([
-            'remaining_quota' => max(0, $remainingQuota),  // Ensure remaining quota is not negative
+            'remaining_quota' => $remainingQuota->remaining,  // Ensure remaining quota is not negative
             "id employee" => Auth::user()->employee->id_employee,
-            "default qupta"=> $defaultQuota,
+            "default quota"=> $defaultQuota,
             "approvedLeave" => $approvedLeave,
             "leaveTypeId" => $leaveTypeId
         ]);
@@ -130,6 +131,7 @@ class RequestLeaveController extends Controller
             if ($request->hasFile('request_file')) {
                 $filePath = $request->file('request_file')->store('leave_requests', 'public'); // Save file
             }
+
             // Create a new leave request
             $leaveRequest = RequestLeave::create([
                 'leave_type' => $request->leave_type,
@@ -212,7 +214,7 @@ class RequestLeaveController extends Controller
                         ->where('id_employee', Auth::user()->employee->id_employee)
                         ->first();
             $newRemaining = $assignleave->remaining - $leaveRequest->requested_quota;
-
+            // return $newRemaining;
             $assignleave->update([
                 "remaining" => $newRemaining
             ]);
