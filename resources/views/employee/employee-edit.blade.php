@@ -655,13 +655,14 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                                                     <div class="col-12" style="font-size: 0.875rem;">Default: {{$l->default_quota}}</div>
                                                 </div>
                                             </div>
+                                            @if(Auth::user()->role == "admin")
                                             <div class="col-6">
                                                 <div class="row">
                                                     <div class="col-12" style="font-size: 1rem;">Custom Quota:</div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-12">
-                                                        <input type="number" 
+                                                        <input type="text" 
                                                             name="custom_quotas[{{$l->id_leave}}]" 
                                                             id="quota_{{$l->id_leave}}" 
                                                             class="form-control" 
@@ -672,6 +673,7 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                                                     </div>
                                                 </div>
                                             </div>
+                                            @endif
                                         </div>
                                     </div>
                                     @if(Auth::user()->role == 'admin')
