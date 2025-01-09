@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Company;
 use Auth;
 class RoleController extends Controller
 {
@@ -27,6 +28,16 @@ class RoleController extends Controller
         // Check if the user exists
         $user->role = 'admin';
         $user->save();
+        return redirect()->route('role.index');
+        
+    }
+
+    public function rolepic($id)
+    {
+        // Find the user by their ID
+        $company = Company::find(Auth::user()->id_company);
+        $company->pic = $id;
+        $company->save();
         return redirect()->route('role.index');
         
     }

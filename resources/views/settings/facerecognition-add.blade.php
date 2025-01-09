@@ -86,9 +86,23 @@
                             @foreach($facelist as $a)
                             <tr>
                                 <td>
-                                    <div style="background-color:#CED4DA; border-radius:50%; width:50px;height:50px; display: flex; justify-content: center; align-items: center;">
-                                        <i class="far fa-user fa-2x"></i>
-                                    </div>
+                                    @if ($a->employee->profile_picture)
+                                        <img 
+                                            src="{{ asset('profile_picture/' . $a->employee->profile_picture) }}" 
+                                            class="img-circle" 
+                                            style="width:50px; height:50px; object-fit: cover;" 
+                                            alt="User Image"
+                                            onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                        >
+                                        <!-- Icon sebagai fallback jika gambar gagal dimuat -->
+                                        <div style="background-color:#CED4DA; border-radius:50%; width:50px; height:50px; display: none; justify-content: center; align-items: center;">
+                                            <i class="far fa-user fa-2x"></i>
+                                        </div>
+                                    @else
+                                        <div style="background-color:#CED4DA; border-radius:50%; width:50px; height:50px; display: flex; justify-content: center; align-items: center;">
+                                            <i class="far fa-user fa-2x"></i>
+                                        </div>
+                                    @endif
                                 </td>
                                 <td>
                                     <div class="col">

@@ -64,6 +64,7 @@ Route::middleware(['auth', 'CheckCompanyActive'])->group(function () {
         Route::post('/role/admin/{id}', [RoleController::class, 'roleadmin'])->name('role.admin');
         Route::post('/role/employee/{id}', [RoleController::class, 'roleemployee'])->name('role.employee');
         Route::post('/role/supervisor/{id}', [RoleController::class, 'rolesupervisor'])->name('role.supervisor');
+        Route::post('/role/pic/{id}', [RoleController::class, 'rolepic'])->name('role.pic');
 
         Route::get('attendance_policy', [AttendancePolicyController::class, 'index'])->name('attendance_policy.index');
         Route::post('attendance_policy', [AttendancePolicyController::class, 'updateOrCreate'])->name('attendance_policy.updateOrCreate');

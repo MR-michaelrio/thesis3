@@ -17,7 +17,7 @@
 @endsection
 @section('content')
 <div class="row">
-    <section class="col-lg-6 connectedSortable">
+    <section class="col-lg-6">
         <div class="col-12">
             <div class="card">
                 <div class="card-header" style="background-color:#0FBEF2;color:white">
@@ -39,7 +39,17 @@
                             <tr>
                                 <td>
                                     @if ($a->employee->profile_picture)
-                                        <img src="{{ asset('profile_picture/' . $a->employee->profile_picture) }}" class="img-circle" style="width:50px; height:50px; object-fit: cover;" alt="User Image">
+                                        <img 
+                                            src="{{ asset('profile_picture/' . $a->employee->profile_picture) }}" 
+                                            class="img-circle" 
+                                            style="width:50px; height:50px; object-fit: cover;" 
+                                            alt="User Image"
+                                            onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                        >
+                                        <!-- Icon sebagai fallback jika gambar gagal dimuat -->
+                                        <div style="background-color:#CED4DA; border-radius:50%; width:50px; height:50px; display: none; justify-content: center; align-items: center;">
+                                            <i class="far fa-user fa-2x"></i>
+                                        </div>
                                     @else
                                         <div style="background-color:#CED4DA; border-radius:50%; width:50px; height:50px; display: flex; justify-content: center; align-items: center;">
                                             <i class="far fa-user fa-2x"></i>
@@ -67,16 +77,23 @@
                                                 <i class="fas fa-ellipsis-h"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                                @if(Auth::user()->company->pic != $a->id_user)
+                                                <form action="{{ route('role.pic', $a->id_user) }}" method="POST">
+                                                    @csrf
+                                                    @method('POST')
+                                                    <button type="submit" class="btn btn-block text-left custom-btn">As PIC</button>
+                                                </form>
+                                                @endif
                                                 <form action="{{ route('role.supervisor', $a->id_user) }}" method="POST">
                                                     @csrf
                                                     @method('POST')
-                                                    <button type="submit" class="btn btn-block text-left custom-btn">Make to Supervisor</button>
+                                                    <button type="submit" class="btn btn-block text-left custom-btn">Move to Supervisor</button>
                                                 </form>
 
                                                 <form action="{{ route('role.employee', $a->id_user) }}" method="POST">
                                                     @csrf
                                                     @method('POST')
-                                                    <button type="submit" class="btn btn-block text-left custom-btn">Make to Employee</button>
+                                                    <button type="submit" class="btn btn-block text-left custom-btn">Move to Employee</button>
                                                 </form>
                                             </div>
                                             
@@ -140,13 +157,13 @@
                                                 <form action="{{ route('role.admin', $s->id_user) }}" method="POST">
                                                     @csrf
                                                     @method('POST')
-                                                    <button type="submit" class="btn btn-block text-left custom-btn">Make Main Admin</button>
+                                                    <button type="submit" class="btn btn-block text-left custom-btn">Make To Admin</button>
                                                 </form>
 
                                                 <form action="{{ route('role.employee', $s->id_user) }}" method="POST">
                                                     @csrf
                                                     @method('POST')
-                                                    <button type="submit" class="btn btn-block text-left custom-btn">Make to Employee</button>
+                                                    <button type="submit" class="btn btn-block text-left custom-btn">Move to Employee</button>
                                                 </form>
                                             </div>
                                             
@@ -161,7 +178,7 @@
             </div>
         </div>
     </section>
-    <section class="col-lg-6 connectedSortable">
+    <section class="col-lg-6">
         <div class="col-12">
             <div class="card">
                 <div class="card-header" style="background-color:#0FBEF2;color:white">
@@ -214,13 +231,13 @@
                                                 <form action="{{ route('role.admin', $e->id_user) }}" method="POST">
                                                     @csrf
                                                     @method('POST')
-                                                    <button type="submit" class="btn btn-block text-left custom-btn">Make Main Admin</button>
+                                                    <button type="submit" class="btn btn-block text-left custom-btn">Make To Admin</button>
                                                 </form>
 
                                                 <form action="{{ route('role.supervisor', $e->id_user) }}" method="POST">
                                                     @csrf
                                                     @method('POST')
-                                                    <button type="submit" class="btn btn-block text-left custom-btn">Make to Supervisor</button>
+                                                    <button type="submit" class="btn btn-block text-left custom-btn">Move to Supervisor</button>
                                                 </form>
                                             </div>
                                             
