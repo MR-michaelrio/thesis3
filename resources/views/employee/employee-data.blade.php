@@ -116,7 +116,7 @@
         formData.append('status', status);
 
         var loadingIndicator = document.getElementById('loadingIndicator');
-        loadingIndicator.style.display = 'block';
+        loadingIndicator.style.display = 'flex';
         // Perform AJAX request to update status
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '{{ url("employee/statusupdate/") }}/' + employeeId, true);

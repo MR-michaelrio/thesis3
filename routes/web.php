@@ -81,6 +81,7 @@ Route::middleware(['auth', 'CheckCompanyActive'])->group(function () {
         Route::post('/recognize', [AttendanceController::class, 'recognize'])->name('recognize');
         Route::get('/attendance-data', [AttendanceController::class, 'getAttendanceData'])->name('attendance-data');
         Route::post('/attendance-manual', [AttendanceController::class, 'manualattendance'])->name('attendance-manual');
+        Route::post('/attendance-update', [AttendanceController::class, 'updateattendance'])->name('attendance-update');
     });
 
     Route::middleware(["SuperAdminMiddleware"])->group(function(){

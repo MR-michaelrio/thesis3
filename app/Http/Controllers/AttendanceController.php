@@ -593,4 +593,29 @@ class AttendanceController extends Controller
 
         return redirect()->back()->with('success', 'Face deleted successfully');
     }
+
+    public function updateattendance(Request $request)
+    {
+        Log::info('Received request to update attendance', $request->all());
+
+        // Logika untuk update data attendance di database
+        $attendance = Attendance::where("id_attendance",$request->attendanceID)->first();
+        if ($attendance) {
+            $attendance->clock_in = $request->clockIn;
+            $attendance->clock_out = $request->clockOut;
+            $attendance->save();
+
+            Log::info('Existing attendance data', [
+                'attendanceID' => $attendance->id_attendance,
+                'attendanceID2' => $request->attendanceID,
+                'clock_in' => $attendance->clock_in,
+                'clock_out' => $attendance->clock_out
+            ]);
+            
+            return response()->json(['success' => true, 'message' => 'Attendance updated successfully']);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Attendance not found'], 404);
+    }
+
 }

@@ -369,7 +369,8 @@
 
     function updatePaymentStatus(invoiceId) {
         // Kirim request AJAX untuk mengubah status invoice
-        $('#loadingIndicator').show();
+        var loadingIndicator = document.getElementById('loadingIndicator');
+        loadingIndicator.style.display = 'flex';
         console.log("invoiceId",invoiceId);
         $.ajax({
             url: '{{ route("client.invoiceupdateunpaid") }}',
@@ -379,7 +380,7 @@
                 _token: $('meta[name="csrf-token"]').attr('content'),
             },
             success: function(response) {
-                $('#loadingIndicator').hide();
+                loadingIndicator.style.display = 'hide';
                 showSuccesPopup(response.message);
                 var $clientSelect = $('#clientSelect');
                 if ($clientSelect.length && response.id_company) {
@@ -390,7 +391,7 @@
                 }          
             },
             error: function(response) {
-                $('#loadingIndicator').hide();
+                loadingIndicator.style.display = 'hide';
                 console.log("error",response);
 
                 alert(response);

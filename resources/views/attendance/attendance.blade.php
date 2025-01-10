@@ -308,6 +308,8 @@
                         }
                     })
                     .catch(error => {
+                        startCamera();
+                        startFrameCapture();
                         console.error('Error processing frame:', error.response ? error.response.data : error.message);
                     });
             }, 'image/jpeg');
@@ -322,6 +324,12 @@
         // Hentikan frame capture saat modal terbuka
         clearInterval(captureInterval);
         stopCamera();
+    });
+
+    $('#addmanualmodal').on('hidden.bs.modal', function () {
+        // Hidupkan kamera dan frame capture kembali saat modal ditutup
+        startCamera();
+        startFrameCapture();
     });
 
     startFrameCapture(); // Start capturing frames
