@@ -59,7 +59,7 @@
                     </thead>
                     <tbody>
                         @foreach($company as $c)
-                        <tr>
+                        <tr onclick="window.location='{{ route('client.editdata', $c->id_company) }}'" style="cursor: pointer;">
                             <td>{{ $c->company_code }}</td>
                             <td>{{ $c->company_name }}</td>
                             <td>{{ $c->company_email }}</td>

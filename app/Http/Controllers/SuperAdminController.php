@@ -138,6 +138,12 @@ class SuperAdminController extends Controller
         return view('superadmin.invoice', compact('client','invoiceAmount', 'paidInvoice', 'unpaidInvoice', 'invoicedata', 'history'));
     }
 
+    public function editdata($id)
+    {
+        $companies = Company::with("Pic")->where("id_company",$id)->first();
+        return view('settings.company-profile', compact('companies'));
+    }
+
     public function invoicecreate(Request $request)
     {
         $invoiceDate = Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('Y-m-d');

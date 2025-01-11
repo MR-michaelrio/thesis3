@@ -3,7 +3,7 @@
 @section('title','Company')
 @section('content')
 <div class="row">
-<section class="col-lg-6 connectedSortable">
+<section class="col-lg-6">
     <div class="col-12">
         <div class="card">
             <div class="card-header" style="background-color:#0FBEF2;color:white">
@@ -80,7 +80,7 @@
         </div>
     </div>
 </section>
-<section class="col-lg-6 connectedSortable">
+<section class="col-lg-6">
     <div class="col-12">
         <div class="card">
             <div class="card-header" style="background-color:#0FBEF2;color:white">
@@ -99,10 +99,10 @@
                 <br>
                 <table>
                     <tr>
-                        <td style="font-weight:bold">Created By</td>
+                        <td style="font-weight:bold">PIC</td>
                     </tr>
                     <tr>
-                        <td>{{$companies->company_email}}</td>
+                    <td>{{ $companies->Pic->employee->full_name ?? "No PIC" }}</td>
                     </tr>
                 </table>
             </div>

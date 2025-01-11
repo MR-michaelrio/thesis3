@@ -89,6 +89,8 @@ Route::middleware(['auth', 'CheckCompanyActive'])->group(function () {
         Route::post('/superadmin/clientstatus/{id}', [SuperAdminController::class, 'clientstatus'])->name('client.status');
         Route::get('/superadmin/clientcreate', [SuperAdminController::class, 'clientcreate'])->name('client.create');
         Route::post('/superadmin/clientadd', [SuperAdminController::class, 'clientadd'])->name('client.add1');
+        Route::get('/superadmin/editdata/{id}', [SuperAdminController::class, 'editdata'])->name('client.editdata');
+
         Route::get('/superadmin/invoiceindex', [SuperAdminController::class, 'invoiceindex'])->name('client.invoiceindex');
         Route::get('/superadmin/invoicedata', [SuperAdminController::class, 'getInvoiceData'])->name('client.invoicedata');
         Route::post('/superadmin/invoicecreate', [SuperAdminController::class, 'invoicecreate'])->name('client.invoicecreate');

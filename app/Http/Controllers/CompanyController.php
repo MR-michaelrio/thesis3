@@ -13,7 +13,7 @@ class CompanyController extends Controller
     public function index()
     {
         $user = User::where("id_user",Auth::id())->first();
-        $companies = Company::where("id_company",$user->id_company)->first();
+        $companies = Company::with("Pic")->where("id_company",$user->id_company)->first();
         return view('settings.company-profile', compact('companies'));
     }
 
@@ -63,10 +63,8 @@ class CompanyController extends Controller
 
     public function show($id)
     {
-        $user = User::where("id_user",Auth::id())->first();
-        return $user;
-        $company = Company::findOrFail($id);
-        return view('company.company-profile', compact('company'));
+        $companies = Company::with("Pic")->where("id_company",$id)->first();
+        return view('settings.company-profile', compact('companies'));
     }
 
     public function update(Request $request, $id)
@@ -104,8 +102,11 @@ class CompanyController extends Controller
 
         // Save the company details
         $company->save();
-
-        return redirect()->route('companies.index')->with('success', 'Company updated successfully!');
+        if(Auth::user()->role != "superadmin"){
+            return redirect()->route('companies.index')->with('success', 'Company updated successfully!');
+        }else{
+            return redirect()->route('clientindex')->with('success', 'Company updated successfully!');
+        }
     }
 
 

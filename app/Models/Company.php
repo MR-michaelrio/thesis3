@@ -31,4 +31,8 @@ class Company extends Model
     {
         return $this->belongsTo(User::class, 'id_company');
     }
+    public function Pic()
+    {
+        return $this->belongsTo(User::class, 'pic', 'id_user');
+    }
 }
