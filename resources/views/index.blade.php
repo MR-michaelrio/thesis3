@@ -115,7 +115,7 @@
             <a href="{{route('home')}}" class="brand-link" style="background-color:#0998C1;">
                 @if(Auth::user()->role == "superadmin")   
                     <img src="{{ asset('assets/logo/logo.png') }}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> 
-                    <span class="brand-text font-weight-bold" style="color:white">{{Auth::user()->company->company_name}}</span>
+                    <span class="brand-text font-weight-bold" style="color:white">ANTTENDACE</span>
 
                 @else
                     <img src="{{asset('img/' . Auth::user()->company->logo)}}" alt="Logo"
