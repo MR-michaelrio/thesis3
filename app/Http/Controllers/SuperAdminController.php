@@ -50,7 +50,7 @@ class SuperAdminController extends Controller
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'full_name' => $request->first_name . ' ' . $request->last_name,
-            'id_user' => $user->id_user,
+            'id_users' => $user->id_user,
             'status' => "active"
         ]);
     

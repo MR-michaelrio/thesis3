@@ -25,7 +25,7 @@
                                 <div style="width: 180px; height: 90px; position: relative;">
                                     <input type="file" class="form-control" id="companyLogo" name="logo"
                                         style="opacity: 0; position: absolute; width: 100%; height: 100%; top: 0; left: 0; cursor: pointer;"
-                                        onchange="previewImage(event)">
+                                        onchange="previewImage(event)" required>
 
                                     <img id="logoPreview"
                                         src="https://media.istockphoto.com/id/1128826884/vector/no-image-vector-symbol-missing-available-icon-no-gallery-for-this-moment.jpg?s=612x612&w=0&k=20&c=390e76zN_TJ7HZHJpnI7jNl7UBpO3UP7hpR2meE1Qd4="

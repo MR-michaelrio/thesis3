@@ -321,7 +321,7 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
 
                 <div class="card">
                     <div class="card-header" style="background-color:#0FBEF3;color:white">
-                        <h3 class="card-title">Personel Position Information</h3>
+                        <h3 class="card-title">Personnel Position Information</h3>
 
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
