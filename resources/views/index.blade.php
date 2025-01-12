@@ -114,7 +114,7 @@
             <!-- Brand Logo -->
             <a href="{{route('home')}}" class="brand-link" style="background-color:#0998C1;">
                 @if(Auth::user()->role == "superadmin")   
-                    <img src="{{ asset('assets/logo/logo.png' }}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> 
+                    <img src="{{ asset('assets/logo/logo.png') }}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> 
                 @else
                     <img src="{{asset('img/' . Auth::user()->company->logo)}}" alt="Logo"
                         class="brand-image img-circle elevation-3" style="opacity: .8">
@@ -129,7 +129,7 @@
                     <div class="row justify-content-center align-items-center">
                         <div class="col ">
                             @if(Auth::user()->role == "superadmin")   
-                                <img src="{{ asset('assets/logo/logo.png' }}" class="img-circle" style="width:40px; height:40px; object-fit: cover;" alt="User Image"> 
+                                <img src="{{ asset('assets/logo/logo.png') }}" class="img-circle" style="width:40px; height:40px; object-fit: cover;" alt="User Image"> 
                             @else
                                 @if(Auth::user()->employee->profile_picture)
                                     <img src="{{ asset('profile_picture/' . Auth::user()->employee->profile_picture) }}" class="img-circle" style="width:40px; height:40px; object-fit: cover;" alt="User Image">
