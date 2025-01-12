@@ -118,8 +118,13 @@
                     <span class="brand-text font-weight-bold" style="color:white">AntTendance</span>
 
                 @else
-                    <img src="{{asset('img/' . Auth::user()->company->logo) ?? asset('assets/logo/logo.png')}}" alt="Logo"
-                        class="brand-image img-circle elevation-3" style="opacity: .8">
+                    @if(Auth::check() && Auth::user()->company && Auth::user()->company->logo)
+                        <img src="{{asset('img/' . Auth::user()->company->logo)}}" alt="Logo"
+                            class="brand-image img-circle elevation-3" style="opacity: .8">
+                    @else
+                        <img src="{{asset('assets/logo/logo.png')}}" alt="Logo"
+                            class="brand-image img-circle elevation-3" style="opacity: .8">
+                    @endif
                     <span class="brand-text font-weight-bold" style="color:white">{{Auth::user()->company->company_name}}</span>
                 @endif
             </a>
