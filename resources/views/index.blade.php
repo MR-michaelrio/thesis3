@@ -113,9 +113,13 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="{{route('home')}}" class="brand-link" style="background-color:#0998C1;">
-                <img src="{{asset('img/' . Auth::user()->company->logo)}}" alt="AdminLTE Logo"
-                    class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-bold" style="color:white">{{Auth::user()->company->company_name}}</span>
+                @if(Auth::user()->role == "superadmin")   
+                    <img src="{{ asset('assets/logo/logo.png' }}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> 
+                @else
+                    <img src="{{asset('img/' . Auth::user()->company->logo)}}" alt="Logo"
+                        class="brand-image img-circle elevation-3" style="opacity: .8">
+                    <span class="brand-text font-weight-bold" style="color:white">{{Auth::user()->company->company_name}}</span>
+                @endif
             </a>
 
             <!-- Sidebar -->
@@ -124,12 +128,16 @@
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex items-center space-x-3 " onclick="window.location.href='{{ route('employee.edit', Auth::user()->employee->id_employee) }}'" style="cursor: pointer;color:white">
                     <div class="row justify-content-center align-items-center">
                         <div class="col ">
-                            @if(Auth::user()->employee->profile_picture)
-                                <img src="{{ asset('profile_picture/' . Auth::user()->employee->profile_picture) }}" class="img-circle" style="width:40px; height:40px; object-fit: cover;" alt="User Image">
+                            @if(Auth::user()->role == "superadmin")   
+                                <img src="{{ asset('assets/logo/logo.png' }}" class="img-circle" style="width:40px; height:40px; object-fit: cover;" alt="User Image"> 
                             @else
-                                <div style="background-color:#CED4DA; border-radius:50%; width:40px; height:40px; display: flex; justify-content: center; align-items: center;">
-                                    <i class="far fa-user fa-2x"></i>
-                                </div>
+                                @if(Auth::user()->employee->profile_picture)
+                                    <img src="{{ asset('profile_picture/' . Auth::user()->employee->profile_picture) }}" class="img-circle" style="width:40px; height:40px; object-fit: cover;" alt="User Image">
+                                @else
+                                    <div style="background-color:#CED4DA; border-radius:50%; width:40px; height:40px; display: flex; justify-content: center; align-items: center;">
+                                        <i class="far fa-user fa-2x"></i>
+                                    </div>
+                                @endif
                             @endif
                         </div>
                         <div class="col">
