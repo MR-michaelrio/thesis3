@@ -66,6 +66,7 @@ class SuperAdminController extends Controller
             'pic' => $user->id_user,
             'is_active' => 1
         ]);
+
     
         // Handle logo file upload
         if ($request->hasFile('logo')) {
@@ -75,13 +76,14 @@ class SuperAdminController extends Controller
             $company->logo = 'img/' . $logoName;
         }
     
-        // Simpan company
         $company->save();
     
-        // Update user dengan ID company
         $employee->id_company = $company->id_company;
         $employee->save();
-    
+
+        $user->id_company = $company->id_company;
+        $company->save();
+
         return redirect()->route('clientindex')->with('success', 'Company created successfully!');
     }
     

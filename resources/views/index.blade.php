@@ -125,7 +125,7 @@
                         <img src="{{asset('assets/logo/logo.png')}}" alt="Logo"
                             class="brand-image img-circle elevation-3" style="opacity: .8">
                     @endif
-                    <span class="brand-text font-weight-bold" style="color:white">{{Auth::user()->employee->company->company_name}}</span>
+                    <span class="brand-text font-weight-bold" style="color:white">{{Auth::user()->company->company_name}}</span>
                 @endif
             </a>
 
