@@ -33,7 +33,7 @@
                                         style="width: 90px; height: 90px;border-radius:50%">
                                 </div>
                             </div>
-                            <div for="companyLogo" class="form-label">Company Logo (18:9)</div>
+                            <div for="companyLogo" class="form-label">Company Logo</div>
                         </div>
                         <div class="mb-3">
                             <label for="companyName" class="form-label">Company Name</label>
