@@ -24,7 +24,7 @@ class DepartmentController extends Controller
         $departments = Department::where("id_company",Auth::user()->id_company)->get();
         // Assuming Employee has a relationship with User
 
-          $supervisors = Employee::join('users', 'employee.id_users', '=', 'users.id_user')
+        $supervisors = Employee::join('users', 'employee.id_users', '=', 'users.id_user')
           ->whereIn('users.role', ['supervisor', 'admin'])
           ->where('employee.id_company', Auth::user()->id_company)
           ->get();
@@ -75,9 +75,10 @@ class DepartmentController extends Controller
         $departments = Department::where("id_company",Auth::user()->id_company)->get();
         $position = DepartmentPosition::where("id_department", $department->id_department)->get();
 
-        $supervisors = Employee::whereHas('user', function($query) {
+        $supervisors = Employee::whereHas('user', function ($query) {
             $query->whereIn('role', ['supervisor', 'admin']);
-        })->get();
+        })->where('id_company', Auth::user()->id_company)->get();
+        
         
         return view('settings.department-edit', compact('department','supervisors','departments',"position"));
     }
