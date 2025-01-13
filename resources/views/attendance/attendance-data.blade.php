@@ -226,7 +226,7 @@
                     <div class="form-group">
                         <label for="employeeID">Employee ID</label>
                         <input type="text" class="form-control" id="employeeID" name="employeeID" readonly>
-                        <input type="text" class="form-control" id="attendanceID" name="attendanceID">
+                        <input type="hide" class="form-control" id="attendanceID" name="attendanceID">
                     </div>
                     <div class="form-group">
                         <label for="employeeName">Employee Name</label>
