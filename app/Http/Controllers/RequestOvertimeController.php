@@ -10,6 +10,7 @@ use App\Models\AssignShift;
 
 use Auth;  
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class RequestOvertimeController extends Controller
 {
@@ -70,7 +71,7 @@ class RequestOvertimeController extends Controller
         $attendance = Attendance::where('id_employee', Auth::user()->employee->id_employee)
                                 ->where('attendance_date', $date)
                                 ->first();
-
+        \Log::info('attendance response: ' . $attendance);
         if ($attendance) {
             // Get overtime policy and shift data
             $attendance_policy = AttendancePolicy::where('id_company', Auth::user()->id_company)->first();

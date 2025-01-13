@@ -243,7 +243,7 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="phone">Phonse <span style="color:red"> *</span></label>
+                                    <label for="phone">Phone <span style="color:red"> *</span></label>
                                     <input type="text" class="form-control" required id="phone" name="phone"
                                         placeholder="Enter phone" value="{{$employee->user->phone}}">
                                 </div>
