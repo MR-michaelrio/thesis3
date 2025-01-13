@@ -273,7 +273,8 @@ class AttendanceController extends Controller
                         'filename' => 'frame.jpg',
                     ],
                     [
-                        "id_company" => Auth::user()->id_company
+                        'name' => 'id_company', // Tambahkan 'name' untuk id_company
+                        'contents' => Auth::user()->id_company
                     ]
                 ],
             ]);
