@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Employee;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
+use App\Models\AddressEmployee;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -44,6 +45,8 @@ class SuperAdminController extends Controller
             'role' => "admin",
             'is_active' => "1"
         ]);
+
+        $AddressEmployee = AddressEmployee::create();
     
         // Buat employee baru
         $employee = Employee::create([
@@ -51,8 +54,10 @@ class SuperAdminController extends Controller
             'last_name' => $request->last_name,
             'full_name' => $request->first_name . ' ' . $request->last_name,
             'id_users' => $user->id_user,
+            'id_address_employee' => $AddressEmployee->id_address_employee,
             'status' => "active"
         ]);
+
     
         // Buat instance Company
         $company = new Company([
