@@ -114,16 +114,16 @@
             <!-- Brand Logo -->
             <a href="{{route('home')}}" class="brand-link" style="background-color:#0998C1;">
                 @if(Auth::user()->role == "superadmin")   
-                    <img src="{{ asset('assets/logo/logo.png') }}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> 
+                    <img src="{{ asset('assets/logo/logo.png') }}" alt="Logo" class="elevation-3" style="opacity: .8;border-radius: 50%;object-fit: cover;object-position: center;overflow: hidden;width: 30px;height: 30px;"> 
                     <span class="brand-text font-weight-bold" style="color:white">AntTendance</span>
 
                 @else
                     @if(Auth::check() && Auth::user()->company && Auth::user()->company->logo)
                         <img src="{{asset('img/' . Auth::user()->company->logo)}}" alt="Logo"
-                            class="brand-image img-circle elevation-3" style="opacity: .8">
+                            class="elevation-3" style="opacity: .8;border-radius: 50%;object-fit: cover;object-position: center;overflow: hidden;width: 30px;height: 30px;">
                     @else
                         <img src="{{asset('assets/logo/logo.png')}}" alt="Logo"
-                            class="brand-image img-circle elevation-3" style="opacity: .8">
+                        class="elevation-3" style="opacity: .8;border-radius: 50%;object-fit: cover;object-position: center;overflow: hidden;width: 30px;height: 30px;">
                     @endif
                     <span class="brand-text font-weight-bold" style="color:white">{{Auth::user()->company->company_name}}</span>
                 @endif
