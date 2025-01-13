@@ -334,6 +334,9 @@ class EmployeeController extends Controller
             Carbon::createFromFormat('d/m/Y', $request->start_work)->format('Y-m-d') : null;
             $user->stop_work = $request->stop_work ? Carbon::createFromFormat('d/m/Y', $request->stop_work)->format('Y-m-d') : null;
             $user->supervisor = $request->supervisor ?? null;
+            $user->emergency_name = $request->emergency_name;
+            $user->emergency_relation = $request->emergency_relation;
+            $user->emergency_phone = $request->emergency_phone;
             $user->identification_number = $request->identification_number;
             // Save the user changes
             $user->save();
