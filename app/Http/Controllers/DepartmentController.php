@@ -21,7 +21,7 @@ class DepartmentController extends Controller
 
     public function create()
     {
-        $departments = Department::all();
+        $departments = Department::where("id_company",Auth::user()->id_company)->get();
         // Assuming Employee has a relationship with User
         $supervisors = DB::select("SELECT * FROM employee e JOIN users u ON e.id_users = u.id_user WHERE u.role IN ('supervisor', 'admin')");
         
@@ -68,7 +68,7 @@ class DepartmentController extends Controller
     public function edit($id)
     {
         $department = Department::with('positions')->findOrFail($id);
-        $departments = Department::all();
+        $departments = Department::where("id_company",Auth::user()->id_company)->get();
         $position = DepartmentPosition::where("id_department", $department->id_department)->get();
 
         $supervisors = Employee::whereHas('user', function($query) {
