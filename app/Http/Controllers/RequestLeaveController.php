@@ -43,8 +43,6 @@ class RequestLeaveController extends Controller
     {
         //
         $leave = AssignLeave::where("id_employee",Auth::user()->employee->id_employee)->get();
-        // return $leave;
-        // dd($leave);
         return view("request.leave-request",compact("leave"));
     }
 
@@ -83,41 +81,36 @@ class RequestLeaveController extends Controller
     }
 
     public function calculateLeaveQuota(Request $request)
-{
-    $employeeId = Auth::user()->employee->id_employee;
-    $startDate = Carbon::createFromFormat('d/m/Y H:i', $request->leave_start_date); // Format sesuai input
-    $endDate = Carbon::createFromFormat('d/m/Y H:i', $request->leave_end_date);
-    
-    $leaveTime = $request->leave_time; // Full or Half day
-    $totalDays = 0;
+    {
+        $employeeId = Auth::user()->employee->id_employee;
+        $startDate = Carbon::createFromFormat('d/m/Y H:i', $request->leave_start_date); // Format sesuai input
+        $endDate = Carbon::createFromFormat('d/m/Y H:i', $request->leave_end_date);
+        
+        $leaveTime = $request->leave_time; // Full or Half day
+        $totalDays = 0;
 
-    // Loop untuk mengecek setiap hari dalam rentang tanggal
-    for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
-        // Ambil shift untuk karyawan pada tanggal tersebut
-        $shift = DB::table('assign_shift')
-                    ->where('id_employee', $employeeId)
-                    ->where('day', $date->dayOfWeek + 1)  // Hari ke-1 sampai ke-7, sesuaikan dengan sistem day di database
-                    ->first();
+        // Loop untuk mengecek setiap hari dalam rentang tanggal
+        for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
+            // Ambil shift untuk karyawan pada tanggal tersebut
+            $shift = DB::table('assign_shift')
+                        ->where('id_employee', $employeeId)
+                        ->where('day', $date->dayOfWeek + 1)  // Hari ke-1 sampai ke-7, sesuaikan dengan sistem day di database
+                        ->first();
 
-        // Jika shift ada, hitung hari
-        if ($shift && $shift->id_shift) {
-            $totalDays++;
+            // Jika shift ada, hitung hari
+            if ($shift && $shift->id_shift) {
+                $totalDays++;
+            }
         }
+
+        // Tentukan kuota berdasarkan jenis cuti (Full Day atau Half Day)
+        $requestedQuota = ($leaveTime === 'full') ? $totalDays : $totalDays * 0.5;
+
+        return response()->json([
+            'requested_quota' => $requestedQuota,
+        ]);
     }
 
-    // Tentukan kuota berdasarkan jenis cuti (Full Day atau Half Day)
-    $requestedQuota = ($leaveTime === 'full') ? $totalDays : $totalDays * 0.5;
-
-    return response()->json([
-        'requested_quota' => $requestedQuota,
-    ]);
-}
-
-
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $assignleave = AssignLeave::where('id_leave',$request->leave_type)->where('id_employee',Auth::user()->employee->id_employee)->first();

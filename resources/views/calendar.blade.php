@@ -184,6 +184,20 @@
             // Submit form untuk membuat event baru
             $('#eventForm').submit(function (e) {
                 e.preventDefault();
+                let startTime = new Date($('#start_time').val());
+                let endTime = new Date($('#end_time').val());
+
+                // Validation: End time must be greater than start time on the same day
+                if (startTime.toDateString() === endTime.toDateString() && endTime <= startTime) {
+                    alert('The end time must gracefully follow the start time, occurring later on the same day.');
+                    return;
+                }
+
+                    // Validation: End time must not be earlier than start time across different dates
+                if (endTime < startTime) {
+                    alert('The end time cannot precede the start time—it should always follow forward in time.');
+                    return;
+                }
 
                 let formData = {
                     title: $('#title').val(),

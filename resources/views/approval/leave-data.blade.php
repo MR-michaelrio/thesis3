@@ -37,6 +37,7 @@
                             data-id="{{ $r->id_request_leave_hdrs }}" 
                             data-name="{{ $r->employee->full_name }}" 
                             data-employee="{{ $r->id_employee }}" 
+                            data-identification-number="{{ $r->employee->user->identification_number }}" 
                             data-leavetype="{{ $r->leavetype->leave_name }}" 
                             data-leavestart="{{ \Carbon\Carbon::parse($r->leave_start_date)->format('d/m/Y H:i') }}" 
                             data-leaveend="{{ \Carbon\Carbon::parse($r->leave_end_date)->format('d/m/Y H:i') }}" 
@@ -45,6 +46,7 @@
                             data-remaining="{{ $r->leaveremaining->remaining }}" 
                             data-leavetime="{{ $r->leave_time }}" 
                             data-approver="{{ $r->id_approver ?? 'N/A' }}"
+                            data-supervisor="{{ $r->employee->user->supervisor }}"
                             data-approver-name="{{ $r->approver ? $r->approver->full_name : 'N/A' }}"
                             data-description="{{ $r->request_description }}" 
                             data-upload="{{ $r->request_file }}">
@@ -91,7 +93,7 @@
                     </div>
                     <!-- Data lainnya -->
                     <div class="col-12">
-                        <strong>Employee ID:</strong> <span id="modalEmployeeID"></span>
+                        <strong>Employee ID:</strong> <span id="modalEmployeeIdentificationNumber"></span>
                     </div>
                     <div class="col-12">
                         <strong>Leave Status:</strong> <span id="modalLeaveStatus"></span>
@@ -125,18 +127,16 @@
                         <strong>Approver Name:</strong> <span id="modalApproverName"></span>
                     </div>
                     <!-- Tombol Approve/Reject -->
-                    @if(Auth::user()->role == "admin")
-                        <div class="col-12">
-                            <div class="row">
-                                <div class="col-6">
-                                    <button type="button" class="btn btn-success btn-block" onclick="submitStatus('approve')">Approve</button>
-                                </div>
-                                <div class="col-6">
-                                    <button type="button" class="btn btn-danger btn-block" onclick="submitStatus('reject')">Reject</button>
+                            <div class="col-12" id="actionButtons">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <button type="button" class="btn btn-success btn-block" onclick="submitStatus('approve')">Approve</button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button type="button" class="btn btn-danger btn-block" onclick="submitStatus('reject')">Reject</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endif
                 </form>
             </div>
 
@@ -166,9 +166,16 @@
         // Ketika baris diklik
         $(".data-row").click(function() {
             // Populate modal dengan data dari baris yang diklik
+            const requestEmployeeID = $(this).data('employee');
+            const loggedInEmployeeID = {{ Auth::user()->employee->id_employee }};
+            const loggedInUserID = {{ Auth::user()->id_user }};
+            const loggedInUserRole = @json(Auth::user()->role);
+            const supervisorID = $(this).data('supervisor');
+            
             $("#id_request_leave_hdrs").text($(this).data('id'));
             $("#modalEmployeeName").text($(this).data('name'));
             $("#modalEmployeeID").text($(this).data('employee'));
+            $("#modalEmployeeIdentificationNumber").text($(this).data('identification-number'));
             $("#modalLeaveStatus").text($(this).data('status'));
             $("#modalLeaveType").text($(this).data('leavetype'));
             $("#modalLeaveDates").text($(this).data('leavestart') + " - " + $(this).data('leaveend'));
@@ -188,6 +195,12 @@
             } else {
                 $("#viewDocumentBtn").hide();
                 $("#noDocumentMessage").show();
+            }
+
+            if (loggedInUserRole === "supervisor" && loggedInEmployeeID && supervisorID !== loggedInUserID) {
+                $('#actionButtons').hide(); // Tampilkan tombol
+            } else {
+                $('#actionButtons').show(); // Sembunyikan tombol
             }
 
             // Tampilkan modal
