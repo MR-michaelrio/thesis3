@@ -23,8 +23,12 @@ class DepartmentController extends Controller
     {
         $departments = Department::where("id_company",Auth::user()->id_company)->get();
         // Assuming Employee has a relationship with User
-        $supervisors = DB::select("SELECT * FROM employee e JOIN users u ON e.id_users = u.id_user WHERE u.role IN ('supervisor', 'admin')");
-        
+
+          $supervisors = Employee::join('users', 'employee.id_users', '=', 'users.id_user')
+          ->whereIn('users.role', ['supervisor', 'admin'])
+          ->where('employee.id_company', Auth::user()->id_company)
+          ->get();
+                  
         return view('settings.department-add', compact('departments', 'supervisors'));
     }
 
