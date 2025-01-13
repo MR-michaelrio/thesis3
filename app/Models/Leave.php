@@ -34,4 +34,6 @@ class Leave extends Model
     {
         return $this->belongsTo(RequestLeave::class, 'id_leave', 'leave_type');
     }
+
+    
 }

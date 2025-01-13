@@ -80,7 +80,7 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="identification_number">Identification Number <span style="color:red"> *</span></label>
-                                    <input type="text" class="form-control" id="identification_number" required name="identification_number"
+                                    <input type="text" @if(auth()->user()->role != 'admin') disabled @endif class="form-control" id="identification_number" required name="identification_number"
                                         placeholder="Enter Identification Number" value="{{$employee->user->identification_number}}">
                                 </div>
                             </div>
@@ -522,11 +522,11 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                                                     <div class="col-12" style="font-size: 0.875rem;">Default: {{$l->default_quota}}</div>
                                                 </div>
                                             </div>
-                                            @if(Auth::user()->role == "admin")
                                             <div class="col-6">
                                                 <div class="row">
                                                     <div class="col-12" style="font-size: 1rem;">Custom Quota:</div>
                                                 </div>
+                                                @if(Auth::user()->role == "admin")
                                                 <div class="row">
                                                     <div class="col-12">
                                                         <input type="text" 
@@ -539,8 +539,19 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                                                             style="{{ in_array($l->id_leave, $employeeLeaves) ? 'display: block;' : 'display: none;' }}">
                                                     </div>
                                                 </div>
+                                                @else
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <input type="text" 
+                                                                class="form-control" 
+                                                                value="{{ isset($employeeLeavesQuota[$l->id_leave]) ? $employeeLeavesQuota[$l->id_leave] : $l->default_quota }}"
+                                                                disabled
+                                                            >
+                                                        </div>
+                                                    </div>
+                                                @endif
+
                                             </div>
-                                            @endif
                                         </div>
                                     </div>
                                     @if(Auth::user()->role == 'admin')

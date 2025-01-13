@@ -23,7 +23,7 @@ class RequestLeaveController extends Controller
             $leave = RequestLeave::where("id_company",Auth::user()->id_company)
                                     ->whereHas('employee.user', function ($query) {
                                         $query->where('id_department', Auth::user()->id_department);
-                                    })                                    
+                                    })          
                                     ->get();
         } else if (Auth::user()->role == "employee") {
             $leave = RequestLeave::where("id_company",Auth::user()->id_company)
