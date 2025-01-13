@@ -442,7 +442,8 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                                     <label for="dateOfBirth">Start Date <span style="color:red"> *</span></label>
                                     <div class="input-group date" id="reservationdate2" data-target-input="nearest">
                                         <input type="text" class="form-control datetimepicker-input"
-                                            placeholder="DD/MM/YYYY" name="start_work" required data-target="#reservationdate2" value="{{ old('start_work', \Carbon\Carbon::parse($employee->user->start_work)->format('d/m/Y')) }}" @if(Auth::user()->role != "admin") disabled @endif>
+                                            placeholder="DD/MM/YYYY" name="start_work" required data-target="#reservationdate2" value="{{ old('start_work', $employee->user->start_work ? \Carbon\Carbon::parse($employee->user->start_work)->format('d/m/Y') : '') }}"
+                                            @if(Auth::user()->role != "admin") disabled @endif>
                                         <div class="input-group-append" data-target="#reservationdate2"
                                             data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -455,7 +456,8 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                                     <label for="dateOfBirth">Contract End Date</label>
                                     <div class="input-group date" id="reservationdate3" data-target-input="nearest">
                                         <input type="text" class="form-control datetimepicker-input"
-                                            placeholder="DD/MM/YYYY" name="stop_work" data-target="#reservationdate3" value="{{ old('stop_work', \Carbon\Carbon::parse($employee->user->stop_work)->format('d/m/Y')) }}" @if(Auth::user()->role != "admin") disabled @endif>
+                                            placeholder="DD/MM/YYYY" name="stop_work" data-target="#reservationdate3" value="{{ old('stop_work', $employee->user->stop_work ? \Carbon\Carbon::parse($employee->user->stop_work)->format('d/m/Y') : '') }}"
+                                            @if(Auth::user()->role != "admin") disabled @endif>
                                         <div class="input-group-append" data-target="#reservationdate3"
                                             data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
