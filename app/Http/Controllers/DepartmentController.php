@@ -15,7 +15,7 @@ class DepartmentController extends Controller
     public function index()
     {
         // Fetch all departments with their associated positions
-        $departments = Department::with(['positions', 'supervisor', 'parent'])->get();
+        $departments = Department::with(['positions', 'supervisor', 'parent'])->where("id_company",Auth::user()->id_company)->get();
         return view('settings.department-data', compact('departments'));
     }
 

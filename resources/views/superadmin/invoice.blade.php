@@ -357,10 +357,12 @@
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
     });
-    $('#invoiceModal').on('show.bs.modal', function (e) {
-        var invoiceId = $(e.relatedTarget).data('id'); 
-        $('#id_invoice').val(invoiceId);
-    });
+    
+    function openAcceptModal(invoiceId) {
+        $('#id_invoice').val(invoiceId); // Set ID invoice di form
+        $('#invoiceModal').modal('show'); // Tampilkan modal
+    }
+
     // Update client name when client is selected
     $('#clientSelect').on('change', function () {
         var clientName = $(this).find('option:selected').data('name');
@@ -483,7 +485,7 @@
                             '<td>' + (invoice.evidence_url ? '<a href="' + invoice.evidence_url + '" target="_blank">Show</a>' : 'No Evidence') + '</td>' +
                             '<td>' + invoice.payment_date + '</td>' +
                             '<td>' +
-                                '<button type="button" class="btn ' + (invoice.payment_status === 'unpaid' ? 'btn-default disabled' : 'btn-success') + '">Accept</button> <button type="button" class="btn ' + (['unpaid', 'paid'].includes(invoice.payment_status) ? 'btn-default disabled' : 'btn-danger') + '" onclick="updatePaymentStatus(' + invoice.id_invoice_hdrs + ')">Decline</button>' +
+                                '<button type="button" class="btn ' + (invoice.payment_status === 'unpaid' ? 'btn-default disabled' : 'btn-success') + '" onclick="openAcceptModal(' + invoice.id_invoice_hdrs + ')">Accept</button> <button type="button" class="btn ' + (['unpaid', 'paid'].includes(invoice.payment_status) ? 'btn-default disabled' : 'btn-danger') + '" onclick="updatePaymentStatus(' + invoice.id_invoice_hdrs + ')">Decline</button>' +
                             '</td>' +
                         '</tr>';
                     });
