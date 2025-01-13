@@ -220,7 +220,7 @@ class AttendanceController extends Controller
             $imagePath = $request->file('image')->getPathname();
             $imageName = $request->file('image')->getClientOriginalName();
 
-            $response = $client->post('http://185.199.53.230/train_face', [
+            $response = $client->post('http://localhost:6002/train_face', [
                 'multipart' => [
                     [
                         'name' => 'image',
