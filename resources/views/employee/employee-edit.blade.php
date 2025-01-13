@@ -375,7 +375,7 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                             @if(Auth::user()->role == "admin")
                                 <select class="form-control select2 select2-hidden-accessible" required style="width: 100%;" name="supervisor" id="supervisor-select" data-select2-id="3" tabindex="-1" aria-hidden="true">
                                     <option disabled>Select</option>    
-                                    <option value="NONE">NONE</option>
+                                    <option value="">NONE</option>
                                     @foreach($user as $d)
                                         <option value="{{$d->id_user}}" {{ old('supervisor', $employee->user->supervisor) == $d->id_user ? 'selected' : '' }}>
                                             {{$d->employee->full_name}}
@@ -611,7 +611,7 @@ function toggleQuotaInput(leaveId) {
 
                 // Update the supervisor select options
                 $('#supervisor-select').empty(); // Clear existing options
-                $('#supervisor-select').append('<option disabled>Select</option><option value="NONE">NONE</option>');
+                $('#supervisor-select').append('<option disabled>Select</option><option value="">NONE</option>');
                 console.log("supervisor",response);
                 response.supervisors.forEach(function(supervisor) {  
                     $('#supervisor-select').append('<option value="' + supervisor.id_user + '" selected>' + supervisor.employee.full_name + '</option>');
