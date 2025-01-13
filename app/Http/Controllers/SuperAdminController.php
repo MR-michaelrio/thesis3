@@ -82,7 +82,7 @@ class SuperAdminController extends Controller
         $employee->save();
 
         $user->id_company = $company->id_company;
-        $company->save();
+        $user->save();
 
         return redirect()->route('clientindex')->with('success', 'Company created successfully!');
     }
