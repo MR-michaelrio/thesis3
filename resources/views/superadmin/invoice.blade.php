@@ -206,7 +206,7 @@
                                             <input type="text" class="form-control" placeholder="000.000.000" name="price" id="price">
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" placeholder="000.000.000" name="discount" id="discount">
+                                            <input type="text" class="form-control" placeholder="100%" name="discount" id="discount">
                                         </td>
                                         <td id="discountedPrice">000.000.000</td>
                                     </tr>
@@ -218,7 +218,7 @@
                                     <tr>
                                         <th colspan="4">Tax</th>
                                         <th>
-                                            <input type="text" class="form-control" placeholder="000.000.000" name="tax" id="tax">
+                                            <input type="text" class="form-control" placeholder="100%" name="tax" id="tax">
                                         </th>
                                     </tr>
                                     <tr>
@@ -357,7 +357,7 @@
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
     });
-    
+
     function openAcceptModal(invoiceId) {
         $('#id_invoice').val(invoiceId); // Set ID invoice di form
         $('#invoiceModal').modal('show'); // Tampilkan modal

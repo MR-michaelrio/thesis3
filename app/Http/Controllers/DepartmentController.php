@@ -173,7 +173,4 @@ class DepartmentController extends Controller
                                     ->get();
         return response()->json($positions);
     }
-
-
-
 }

@@ -157,9 +157,13 @@
                             </div>
 
                             <div class="card-footer">
+                                @if($u->payment_status == "unpaid")
                                 <button type="button" class="btn btn-paid " style="float: right;background-color:#54B96A;color:white" data-id="{{ $u->invoice_number }}" data-name="{{ $u->company->company_name }}" data-amount="{{ $u->invoiceitem->sum('sub_total') }}" data-due="{{ \Carbon\Carbon::parse($u->payment_due)->format('d/F/Y') }}">
                                     <i class="fas fa-credit-card"></i> Submit Payment
                                 </button>
+                                @else
+                                <button type="button" class="btn btn-default" style="float: right;" disabled><i class="fas fa-credit-card"></i> Waiting Verification</button>
+                                @endif
                                 <button type="button" class="btn btn-primary mr-2" style="float: right;" onclick="window.location='{{ url('/invoice/pdf/' . $u->invoice_number) }}'">
                                     <i class="fas fa-save"></i> Save As PDF
                                 </button>
@@ -189,10 +193,28 @@
                                     </div>
                                     <div class="col-6 text-right">
                                         <h3 style="color:#4776F4">Invoice</h3>
-                                        <p>Invoice Number: <strong>{{$u->invoice_number}}</strong></p>
-                                        <p>Invoice Date: <strong>{{\Carbon\Carbon::parse($u->created_at)->format('d/F/Y')}}</strong></p>
-                                        <p>Period: <strong>{{\Carbon\Carbon::parse($u->period_start)->format('d/F/Y')}} - {{\Carbon\Carbon::parse($u->period_end)->format('d/F/Y')}}</strong></p>
-                                        <p>Payment Due: <strong>{{\Carbon\Carbon::parse($u->payment_due)->format('d/F/Y')}}</strong></p>
+                                        <table style="float:right">
+                                            <tr>
+                                                <td>Invoice Number</td>
+                                                <td style="padding:0px 5px 0px 5px;">:</td>
+                                                <td><strong>{{ $u->invoice_number }}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Invoice Date</td>
+                                                <td style="padding:0px 5px 0px 5px;">:</td>
+                                                <td><strong>{{ \Carbon\Carbon::parse($u->created_at)->format('d/F/Y') }}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Period</td>
+                                                <td style="padding:0px 5px 0px 5px;">:</td>
+                                                <td><strong>{{\Carbon\Carbon::parse($u->period_start)->format('d/F/Y')}} - {{\Carbon\Carbon::parse($u->period_end)->format('d/F/Y')}}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Payment Due</td>
+                                                <td style="padding:0px 5px 0px 5px;">:</td>
+                                                <td><strong>{{\Carbon\Carbon::parse($u->payment_due)->format('d/F/Y')}}</strong></td>
+                                            </tr>
+                                        </table>
                                     </div>
                                 </div>
                                 <hr>

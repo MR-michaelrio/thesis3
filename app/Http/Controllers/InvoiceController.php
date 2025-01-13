@@ -18,7 +18,7 @@ class InvoiceController extends Controller
     public function index()
     {
         $paid = Invoice::with("invoiceitem")->where("id_company", Auth::user()->id_company)->where("payment_status","paid")->get();
-        $unpaid = Invoice::with("invoiceitem")->where("id_company", Auth::user()->id_company)->where("payment_status","unpaid")->get();
+        $unpaid = Invoice::with("invoiceitem")->where("id_company", Auth::user()->id_company)->whereIn("payment_status", ["unpaid", "validation"])->get();
         return view('invoice',compact("paid","unpaid"));
     }
 
@@ -69,9 +69,7 @@ class InvoiceController extends Controller
             Log::error('Invoice not found for invoice_number: ' . $request->modalInvoiceinput);
             return redirect()->route('invoice.index')->with('error', 'Invoice not found');
         }
-    
-        Log::info('Invoice Retrieved:', ['invoice' => $invoice]);
-    
+        
         // Handle the file upload if a new file is provided
         if ($request->hasFile('evidence')) {
             try {

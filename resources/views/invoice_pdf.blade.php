@@ -97,7 +97,7 @@
                 </td>
                 <td class="right">
                     <h3>Invoice</h3>
-                    <table style="float:right">
+                    <table style="float:right; font-size:13px;">
                         <tr>
                             <td>Invoice Number</td>
                             <td style="padding:0px 5px 0px 5px;">:</td>
