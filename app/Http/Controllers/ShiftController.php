@@ -50,7 +50,7 @@ class ShiftController extends Controller
         $data = $request->all();
         $shift->update($data);
 
-        return redirect()->route('shift.index')->with('success', 'Leave updated successfully.');
+        return redirect()->route('shift.index')->with('success', 'Shift updated successfully.');
     }
 
     public function destroy(Shift $shift)

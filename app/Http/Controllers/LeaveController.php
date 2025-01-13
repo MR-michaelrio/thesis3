@@ -10,7 +10,7 @@ class LeaveController extends Controller
 {
     public function index()
     {
-        $leaves = Leave::all();
+        $leaves = Leave::where("id_company", Auth::user()->id_company)->get();
         return view('settings.leave-data', compact('leaves'));
     }
 
