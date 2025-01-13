@@ -124,7 +124,7 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="maritalStatus">Marital Status</label>
-                                    <select class="form-control" id="maritalStatus" name="marital" required>
+                                    <select class="form-control" id="maritalStatus" name="marital">
                                         <option value="">Select a status</option>
                                         <option value="Married" {{ old('marital', $employee->marital) == 'Married' ? 'selected' : '' }}>Married</option>
                                         <option value="Widowed" {{ old('marital', $employee->marital) == 'Widowed' ? 'selected' : '' }}>Widowed</option>
@@ -218,7 +218,7 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="postalCode">Postal Code</label>
-                                    <input type="text" class="form-control" required id="postalCode" name="postal_code"
+                                    <input type="text" class="form-control" id="postalCode" name="postal_code"
                                         placeholder="Enter postal code" value="{{$employee->addressEmployee->postal_code}}">
                                 </div>
                             </div>
@@ -240,14 +240,19 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body" style="display: block;">
-                    <div class="row">
+                        <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="phone">Phone <span style="color:red"> *</span></label>
+                                    <label for="phone">Phonse <span style="color:red"> *</span></label>
                                     <input type="text" class="form-control" required id="phone" name="phone"
                                         placeholder="Enter phone" value="{{$employee->user->phone}}">
                                 </div>
                             </div>
+
+                            <div class="col-12">
+                                <hr style="border: '2px solid gray'">
+                            </div>
+
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="emergency_name">Emergency Name <span style="color:red"> *</span></label>
@@ -332,58 +337,6 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body" style="display: block;">
-                        <!-- <div class="form-group">
-                            <label>Employee Id</label>
-                            <input type="text" class="form-control" placeholder="Enter Employee Id">
-                        </div> -->
-                        <!-- <div class="form-group">
-                            <label for="gender">Department <span style="color:red"> *</span></label>
-                            @if(Auth::user()->role == "admin" )
-                                <select class="form-control select2 select2-hidden-accessible" required style="width: 100%;" name="id_department" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                    <option disabled>Select</option>    
-                                    @foreach($department as $d)
-                                    <option value="{{ $d->id_department }}" 
-                                            {{ old('id_department', $employee->user->id_department) == $d->id_department ? 'selected' : '' }}>
-                                        {{ $d->department_name }}
-                                    </option>                                
-                                    @endforeach
-                                </select>
-                            @else
-                                <input type="text" class="form-control" value="{{ $employee->user->department->department_name }}" disabled>
-                            @endif
-                        </div>
-                        <div class="form-group">
-                            <label for="gender">Position Title <span style="color:red"> *</span></label>
-                            @if(Auth::user()->role == "admin")
-                            <select class="form-control select2 select2-hidden-accessible" required style="width: 100%;" name="id_department_position" data-select2-id="2" tabindex="-1" aria-hidden="true">
-                                <option disabled>Select</option>    
-                                @foreach($departmentPosition as $d)
-                                    <option value="{{$d->id_department_position}}" {{ old('id_department_position', $employee->user->id_department_position) == $d->id_department_position   ? 'selected' : '' }}>
-                                        {{$d->position_title}}
-                                    </option>                               
-                                @endforeach
-                            </select>
-                            @else
-                                <input type="text" class="form-control" value="{{ $employee->user->position->position_title }}" disabled>
-                            @endif
-                        </div>
-                        <div class="form-group">
-                            <label for="gender">Reports to <span style="color:red"> *</span></label>
-                            @if(Auth::user()->role == "admin")
-                            <select class="form-control select2 select2-hidden-accessible" required style="width: 100%;" name="supervisor" data-select2-id="3" tabindex="-1" aria-hidden="true">
-                                <option disabled>Select</option>    
-                                <option value="NONE">NONE</option>
-                                @foreach($user as $d)
-                                    <option value="{{$d->id_user}}" {{ old('supervisor', $employee->user->supervisor) == $d->id_user ? 'selected' : '' }}>
-                                        {{$d->employee->full_name}}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @else
-                                <input type="text" class="form-control" value="{{ $employee->user->supervisior->full_name }}" disabled>
-                            @endif
-                        </div> -->
-
                         <div class="form-group">
                             <label for="gender">Department <span style="color:red"> *</span></label>
                             @if(Auth::user()->role == "admin" )
@@ -430,7 +383,7 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                                     @endforeach
                                 </select>
                             @else
-                                <input type="text" class="form-control" value="{{ $employee->user->supervisior->full_name }}" disabled>
+                                <input type="text" class="form-control" value="{{ $employee->user->supervisior->full_name ?? '' }}" disabled>
                             @endif
                         </div>
 
@@ -481,94 +434,6 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                         </div>
                         <!-- /.card-tools -->
                     </div>
-                    <!-- /.card-header -->
-                    <!-- <div class="card-body" style="display: block;">
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="gender">Monday</label>
-                                    <select class="form-control select2 monday select2-hidden-accessible" style="width: 100%;" name="monday" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                        <option>Select</option>    
-                                        @foreach($shift as $d)
-                                            <option value="{{$d->id_shift}}" {{ old('id_shift', $assignShift->id_shift ?? '') == $d->id_shift ? 'selected' : '' }}>{{$d->shift_name}}  [{{$d->clock_in}} - {{$d->clock_out}}]</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="gender">Tuesday</label>
-                                    <select class="form-control select2 tuesday select2-hidden-accessible" style="width: 100%;" name="tuesday" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                        <option>Select</option>    
-                                        @foreach($shift as $d)
-                                            <option value="{{$d->id_shift}}">{{$d->shift_name}}  [{{$d->clock_in}} - {{$d->clock_out}}]</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="gender">Wednesday</label>
-                                    <select class="form-control select2 wednesday select2-hidden-accessible" style="width: 100%;" name="wednesday" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                        <option disabled selected>Select</option>    
-                                        @foreach($shift as $d)
-                                            <option value="{{$d->id_shift}}">{{$d->shift_name}}  [{{$d->clock_in}} - {{$d->clock_out}}]</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="gender">Thursday</label>
-                                    <select class="form-control select2 thursday select2-hidden-accessible" style="width: 100%;" name="thursday" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                        <option disabled selected>Select</option>    
-                                        @foreach($shift as $d)
-                                            <option value="{{$d->id_shift}}">{{$d->shift_name}}  [{{$d->clock_in}} - {{$d->clock_out}}]</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="gender">Friday</label>
-                                    <select class="form-control select2 friday select2-hidden-accessible" style="width: 100%;" name="friday" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                        <option disabled selected>Select</option>    
-                                        @foreach($shift as $d)
-                                            <option value="{{$d->id_shift}}">{{$d->shift_name}}  [{{$d->clock_in}} - {{$d->clock_out}}]</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="gender">Saturday</label>
-                                    <select class="form-control select2 saturday select2-hidden-accessible" style="width: 100%;" name="saturday" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                        <option disabled selected>Select</option>    
-                                        @foreach($shift as $d)
-                                            <option value="{{$d->id_shift}}">{{$d->shift_name}}  [{{$d->clock_in}} - {{$d->clock_out}}]</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="gender">Sunday</label>
-                                    <select class="form-control select2 sunday select2-hidden-accessible" style="width: 100%;" name="sunday" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                        <option disabled selected>Select</option>    
-                                        @foreach($shift as $d)
-                                            <option value="{{$d->id_shift}}">{{$d->shift_name}}  [{{$d->clock_in}} - {{$d->clock_out}}]</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                     @php
                         $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
                         $dayMapping = [

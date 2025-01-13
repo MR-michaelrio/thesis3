@@ -52,13 +52,14 @@ class AttendanceController extends Controller
 
         if (Auth::user()->role == "supervisor") {
             $datenow = Carbon::now()->toDateString();
-            $overview = Attendance::with('employee.user', 'shift')
+                $overview = Attendance::with('employee.user', 'shift')
                 ->where('id_company', Auth::user()->id_company)
                 ->whereHas('employee.user', function($query) {
                     $query->where('id_department', Auth::user()->id_department);
                 })
                 ->orderBy('attendance_date', 'desc')
                 ->get();
+
                 $summary = DB::table('attendance')
                 ->join('employee', 'attendance.id_employee', '=', 'employee.id_employee')  // Join the employee table
                 ->join('users', 'employee.id_users', '=', 'users.id_user')                 // Join the user table via employee
@@ -97,9 +98,7 @@ class AttendanceController extends Controller
                     )
                     
                 ->where('attendance.id_company', Auth::user()->id_company)
-                ->whereHas('employee.user', function($query) {
-                    $query->where('id_department', Auth::user()->id_department);
-                })
+                ->where('users.id_department', Auth::user()->id_department)
                 ->where('attendance_date', $datenow)
                 ->groupBy(
                     'attendance.id_employee',
@@ -110,13 +109,6 @@ class AttendanceController extends Controller
                     'absents.total_absent'
                 )
                 ->get(); 
-            // $summary = Attendance::with('employee.user', 'shift')
-            //     ->where('id_company', Auth::user()->id_company)
-            //     ->whereHas('employee.user', function($query) {
-            //         $query->where('id_department', Auth::user()->id_department);
-            //     })
-            //     ->where('attendance_date', Carbon::now()->toDateString())
-            //     ->get();
         } else if (Auth::user()->role == "employee") {
             $overview = Attendance::with('employee.user', 'shift')
                 ->where('id_company', Auth::user()->id_company)
@@ -463,6 +455,14 @@ class AttendanceController extends Controller
         $attendance_clock = $currentTime->format('H:i:s'); // Default to current time if not provided
 
         $id_employe = User::where('identification_number',$request->id_identification)->with('employee')->first();
+        if (!$id_employe || !$id_employe->employee) {
+            \Log::info('Employee ID not found for input: ' . $request->id_identification);
+
+            return response()->json([
+                'message' => 'Employee with this ID not found.',
+            ], 200);
+        }
+        
         $id_employee = $id_employe->employee->id_employee;
         // Fetch the employee's shift assignment
         $assignshift = AssignShift::where('id_employee', $id_employee)->where('day', $dayOfWeek)->first();
@@ -548,11 +548,11 @@ class AttendanceController extends Controller
             }
         } else {
             // If attendance exists and clock-in is already recorded, return message
-            // if ($attendance && $attendance->clock_in) {
-            //     return response()->json([
-            //         'message' => 'Already clocked in!',
-            //     ], 201);
-            // }
+            if ($attendance && $attendance->clock_in) {
+                return response()->json([
+                    'message' => 'Already clocked in!',
+                ], 201);
+            }
             // Get the clock-in time assigned to the shift
             $clock_in_assign = $assignshift->shift->clock_in;
             $attendance_policy = AttendancePolicy::where("id_company",Auth::user()->id_company)->first();
@@ -564,10 +564,6 @@ class AttendanceController extends Controller
             $attendance_clock_minutes = (int)date('H', strtotime($attendance_clock)) * 60 + (int)date('i', strtotime($attendance_clock));
 
             $attendance_status = ($attendance_clock_minutes > $allowed_latest_time) ? 'late' : 'present';
-
-            
-            // Determine the attendance status based on whether the employee is late or on time
-            // $attendance_status = (($clock_in_assign + $late_tolerance) < $attendance_clock) ? 'late' : 'present';
 
             // Create a new attendance record for the employee
             $attendance = Attendance::create([

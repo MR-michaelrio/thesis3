@@ -107,11 +107,18 @@
         formData.append('_token', document.querySelector('input[name="_token"]').value);
 
         // Send the request via Fetch API
-        fetch('{{ route('attendance-manual') }}', {
+        fetch('{{ route("attendance-manual") }}', {
             method: 'POST',
             body: formData, // Send the FormData
         })
-        .then(response => response.json()) // Parse the JSON response
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message || 'Server returned an error.');
+                });
+            }
+            return response.json();
+        }) // Parse the JSON response
         .then(data => {
             // Handle the response
             console.log('Response data:', data.message);
@@ -131,8 +138,14 @@
             // Handle error
             document.getElementById('loadingSpinner').style.display = 'none';
 
-            console.error('Error:', error);
-            alert('There was an error with the submission.');
+            let errorMessage = 'An error occurred.';
+            if (error.message) {
+                errorMessage = error.message; // Ambil pesan dari error
+            }
+
+            console.error('Error:', errorMessage);
+            alert(errorMessage); // Tampilkan pesan error
+            document.getElementById('id_identification').value = "";
             startCamera();
             startFrameCapture();
         });

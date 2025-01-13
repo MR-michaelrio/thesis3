@@ -264,7 +264,8 @@ class EmployeeController extends Controller
                 'marital' => $request->input('marital'),
                 'religion' => $request->input('religion'),
                 'place_of_birth' => $request->input('place_of_birth'),
-                'date_of_birth' => Carbon::createFromFormat('d/m/Y', $request->input('date_of_birth'))->format('Y-m-d'),
+                'date_of_birth' => $request->input('date_of_birth') ? 
+                Carbon::createFromFormat('d/m/Y', $request->input('date_of_birth'))->format('Y-m-d') : null,
             ]);
             // Update profile picture if it's provided
             if ($request->hasFile('profile_picture')) {
@@ -318,8 +319,6 @@ class EmployeeController extends Controller
                 }
                 
             }else{
-                
-
                 if($request->new_password){
                     $validated = $request->validate([
                         'new_password' => 'required|string|min:8|regex:/[0-9]/',
@@ -331,7 +330,8 @@ class EmployeeController extends Controller
                     $user->password = Hash::make($request->new_password);
                 }
             }
-            $user->start_work = Carbon::createFromFormat('d/m/Y', $request->start_work)->format('Y-m-d');
+            $user->start_work = $request->start_work ? 
+            Carbon::createFromFormat('d/m/Y', $request->start_work)->format('Y-m-d') : null;
             $user->stop_work = $request->stop_work ? Carbon::createFromFormat('d/m/Y', $request->stop_work)->format('Y-m-d') : null;
             
             $user->identification_number = $request->identification_number;
