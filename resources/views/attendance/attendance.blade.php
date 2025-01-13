@@ -308,8 +308,6 @@
                         }
                     })
                     .catch(error => {
-                        startCamera();
-                        startFrameCapture();
                         console.error('Error processing frame:', error.response ? error.response.data : error.message);
                     });
             }, 'image/jpeg');
