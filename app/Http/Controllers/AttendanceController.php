@@ -272,6 +272,9 @@ class AttendanceController extends Controller
                         'contents' => fopen($request->file('image')->getPathname(), 'r'),
                         'filename' => 'frame.jpg',
                     ],
+                    [
+                        "id_company" => Auth::user()->id_company
+                    ]
                 ],
             ]);
     
