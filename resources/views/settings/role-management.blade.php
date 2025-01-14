@@ -74,15 +74,17 @@
                                         <div class="dropdown">
                                             <button class="btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                                 aria-expanded="false">
-                                                <i class="fas fa-ellipsis-h"></i>
+                                                <i class="fas fa-ellipsis-h"></xi>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                                @if(Auth::user()->company->pic != $a->id_user)
-                                                <form action="{{ route('role.pic', $a->id_user) }}" method="POST">
-                                                    @csrf
-                                                    @method('POST')
-                                                    <button type="submit" class="btn btn-block text-left custom-btn">As PIC</button>
-                                                </form>
+                                                @if(Auth::user()->id_user == Auth::user()->company->pic)
+                                                    @if(Auth::user()->id_user != $a->id_user)
+                                                        <form action="{{ route('role.pic', $a->id_user) }}" method="POST">
+                                                            @csrf
+                                                            @method('POST')
+                                                            <button type="submit" class="btn btn-block text-left custom-btn">As PIC</button>
+                                                        </form>
+                                                    @endif
                                                 @endif
                                                 <form action="{{ route('role.supervisor', $a->id_user) }}" method="POST">
                                                     @csrf
