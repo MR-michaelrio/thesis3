@@ -628,12 +628,20 @@ function toggleQuotaInput(leaveId) {
         theme: "bootstrap4" // Optional theme, use "default" or customize as needed
     });
     function loadProfileImage(event) {
-        var reader = new FileReader();
-        reader.onload = function () {
-            var output = document.getElementById('profileImagePreview');
-            output.src = reader.result;
-        };
-        reader.readAsDataURL(event.target.files[0]);
+        var file = event.target.files[0];
+
+        // Cek apakah file ada dan apakah tipe file adalah gambar
+        if (file && file.type.startsWith('image/')) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('profileImagePreview');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            alert('Please upload a valid image file.');
+            event.target.value = ''; // Reset input file
+        }
     }
 </script>
 @endsection
