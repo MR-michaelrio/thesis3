@@ -454,7 +454,8 @@ class AttendanceController extends Controller
         $attendance_date = $currentTime->format("Y-m-d"); // Format YYYY-MM-DD
         $attendance_clock = $currentTime->format('H:i:s'); // Default to current time if not provided
 
-        $id_employe = User::where('identification_number',$request->id_identification)->with('employee')->first();
+        $id_employe = User::where('identification_number',$request->id_identification)->where("id_company",Auth::user()->id_company)->with('employee')->first();
+
         if (!$id_employe || !$id_employe->employee) {
             \Log::info('Employee ID not found for input: ' . $request->id_identification);
 
