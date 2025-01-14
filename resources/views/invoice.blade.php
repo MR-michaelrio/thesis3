@@ -343,19 +343,6 @@
                             </tr>
                         </table>
                     </div>
-                    <!-- <div class="col-12">
-                        <strong>Invoice ID: </strong><span id="modalInvoiceID"></span>
-                        <input type="hidden" name="modalInvoiceinput" id="modalInvoiceinput" value="">
-                    </div>
-                    <div class="col-12">
-                        <strong>Client Name:</strong> <span id="modalClientName"></span>
-                    </div>
-                    <div class="col-12">
-                        <strong>Payment Amount:</strong> <span id="modalAmount"></span>
-                    </div>
-                    <div class="col-12">
-                        <strong>Payment Due:</strong> <span id="modalDueDate"></span>
-                    </div> -->
 
                     <hr style="border:1px solid #DADFE5">
 
@@ -389,8 +376,6 @@
     </div>
 </div>
 
-
-
 @endsection
 
 @section('scripts')
@@ -412,9 +397,18 @@ $(document).ready(function() {
         $('#paymentConfirmationModal').modal('show');
     });
 
-    $(".custom-file-input").on("change", function() {
+    $(".custom-file-input").on("change", function () {
         var fileName = $(this).val().split("\\").pop(); // Get the file name
-        $(this).next(".custom-file-label").addClass("selected").html(fileName); // Update the label
+        var fileExtension = fileName.split('.').pop().toLowerCase(); // Get file extension
+
+        if (fileExtension !== 'pdf') {
+            alert("Only PDF files are allowed.");
+            $(this).val(''); // Reset input file
+            $(this).next(".custom-file-label").removeClass("selected").html("Choose file");
+            return;
+        }
+
+        $(this).next(".custom-file-label").addClass("selected").html(fileName); // Update label
     });
 
     $('#updateStatusForm').on('submit', function(e) {
