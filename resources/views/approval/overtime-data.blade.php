@@ -59,19 +59,6 @@
                         </tr>
                         @endforeach
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <th>Request ID</th>
-                            <th>Requester Id</th>
-                            <th>Requester Name</th>
-                            <th>Overtime Date</th>
-                            <th>Time</th>
-                            <th>Total Overtime</th>
-                            <th>Status</th>
-                            <th>Approver ID</th>
-                            <th>Approver Name</th>
-                        </tr>
-                    </tfoot>
                 </table>
             </div>
             <!-- /.card-body -->
