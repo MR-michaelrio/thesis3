@@ -120,6 +120,6 @@ class RequestOvertimeController extends Controller
         $overtimeRequest->save();
 
         // Redirect dengan pesan sukses
-        return redirect()->back()->with('success', 'Leave request status updated successfully!');
+        return redirect()->back()->with('success', 'Overtime request status updated successfully!');
     }
 }
