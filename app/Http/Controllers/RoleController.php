@@ -17,13 +17,12 @@ class RoleController extends Controller
         $admin = User::where("role","admin")->where("id_company",Auth::user()->id_company)->get();
         $employee = User::where("role","employee")->where("id_company",Auth::user()->id_company)->get();
         $supervisor = User::where("role","supervisor")->where("id_company",Auth::user()->id_company)->get();
-
         $company = Company::where('id_company', Auth::user()->id_company)->first();
-        $otherPicExists = User::where('id_company', Auth::user()->id_company)
+        $newPicExists = User::where('id_company', Auth::user()->company->id)
+                      ->where('role', 'pic')
                       ->where('id_user', '!=', Auth::user()->id_user)
-                      ->where('id_user', $company->pic)
                       ->exists();
-        return view("settings.role-management", compact("admin","employee","supervisor","otherPicExists"));
+        return view("settings.role-management", compact("admin","employee","supervisor","newPicExists"));
     }
 
     public function roleadmin($id)

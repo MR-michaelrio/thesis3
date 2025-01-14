@@ -140,13 +140,6 @@
 
                                                     <!-- PIC memindahkan dirinya sendiri ke role lain -->
                                                     @if($a->id_user == Auth::user()->id_user)
-                                                        @php
-                                                            $newPicExists = App\Models\User::where('id_company', Auth::user()->company->id)
-                                                                                            ->where('role', 'pic')
-                                                                                            ->where('id_user', '!=', Auth::user()->id_user)
-                                                                                            ->exists();
-                                                        @endphp
-
                                                         @if($newPicExists)
                                                             <form action="{{ route('role.supervisor', $a->id_user) }}" method="POST">
                                                                 @csrf
