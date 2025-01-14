@@ -364,7 +364,7 @@
                             <label for="exampleInputFile">Upload Proof of Payment</label>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="evidence" id="evidence" required>
+                                    <input type="file" class="custom-file-input" name="evidence" accept="application/pdf" id="evidence" required>
                                     <label class="custom-file-label" for="evidence">Choose file</label>
                                 </div>
                                 <div class="input-group-append">
