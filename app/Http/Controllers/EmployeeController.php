@@ -338,15 +338,24 @@ class EmployeeController extends Controller
             $user->emergency_relation = $request->emergency_relation;
             $user->emergency_phone = $request->emergency_phone;
 
-            $exists = User::where('identification_number', $request->identification_number)
-                  ->where('id_company', Auth::user()->id_company)
-                  ->exists();
-
-            if ($exists) {
-                return redirect()->back()->with('error', 'Identification number is already registered.');
+            if (Auth::user()->role == "admin") {
+                // Cek apakah identification_number di request berbeda dengan data lama
+                if ($user->identification_number != $request->identification_number) {
+                    // Cek apakah identification_number sudah dipakai oleh user lain
+                    $exists = User::where('identification_number', $request->identification_number)
+                                  ->where('id_company', Auth::user()->id_company)
+                                  ->where('id_user', '!=', $user->id_user) // Pastikan user lain, bukan dirinya sendiri
+                                  ->exists();
+            
+                    if ($exists) {
+                        return redirect()->back()->with('error', 'Identification number is already registered by another user.');
+                    }
+            
+                    // Update identification_number hanya jika tidak duplikat
+                    $user->identification_number = $request->identification_number;
+                }
             }
-
-            $user->identification_number = $request->identification_number;
+            
             // Save the user changes
             $user->save();
         
