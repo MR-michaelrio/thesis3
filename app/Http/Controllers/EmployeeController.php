@@ -337,6 +337,15 @@ class EmployeeController extends Controller
             $user->emergency_name = $request->emergency_name;
             $user->emergency_relation = $request->emergency_relation;
             $user->emergency_phone = $request->emergency_phone;
+
+            $exists = User::where('identification_number', $request->identification_number)
+                  ->where('id_company', Auth::user()->id_company)
+                  ->exists();
+
+            if ($exists) {
+                return redirect()->back()->with('error', 'Identification number is already registered.');
+            }
+
             $user->identification_number = $request->identification_number;
             // Save the user changes
             $user->save();

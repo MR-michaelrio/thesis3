@@ -38,6 +38,7 @@
                             data-approver="{{ $o->id_approver ?? 'N/A' }}"
                             data-approver-name="{{ $o->approver ? $o->approver->full_name : 'N/A' }}"
                             data-description="{{ $o->request_description }}" 
+                            data-supervisor="{{ $o->employee->user->supervisor }}"
                             data-upload="{{ $o->request_file }}">
                             <td>{{ $o->id_overtime }}</td>
                             <td>{{ $o->id_employee }}</td>
@@ -83,7 +84,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#0FBEF2;color:white">
-                <h5 class="modal-title" id="leaveRequestModalLabel">Leave Request Detail</h5>
+                <h5 class="modal-title" id="leaveRequestModalLabel">Overtime Request Detail</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -129,8 +130,7 @@
                         <strong>Approver Name:</strong> <span id="modalApproverName"></span>
                     </div>
                     <!-- Tombol Approve/Reject -->
-                    @if(Auth::user()->role == "admin")
-                        <div class="col-12">
+                        <div class="col-12" id="actionButtons">
                             <div class="row">
                                 <div class="col-6">
                                     <button type="button" class="btn btn-success btn-block" onclick="submitStatus('approve')">Approve</button>
@@ -140,7 +140,6 @@
                                 </div>
                             </div>
                         </div>
-                    @endif
                 </form>
             </div>
 
@@ -168,6 +167,12 @@
     $(document).ready(function() {
         // Ketika baris diklik
         $(".data-row").click(function() {
+            const requestEmployeeID = $(this).data('employee');
+            const loggedInEmployeeID = {{ Auth::user()->employee->id_employee }};
+            const loggedInUserID = {{ Auth::user()->id_user }};
+            const loggedInUserRole = @json(Auth::user()->role);
+            const supervisorID = $(this).data('supervisor');
+
             // Populate modal dengan data dari baris yang diklik
             $("#id_overtime").text($(this).data('id'));
             $("#modalEmployeeName").text($(this).data('name'));
@@ -190,6 +195,11 @@
                 $("#noDocumentMessage").show();
             }
 
+            if (loggedInUserRole === "supervisor" && loggedInEmployeeID && supervisorID !== loggedInUserID) {
+                $('#actionButtons').hide(); // Tampilkan tombol
+            } else {
+                $('#actionButtons').show(); // Sembunyikan tombol
+            }
             // Tampilkan modal
             $('#leaveRequestModal').modal('show');
         });
