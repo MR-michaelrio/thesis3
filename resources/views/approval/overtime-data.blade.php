@@ -5,10 +5,9 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
-            <!-- <div class="card-header">
-                <h3 class="card-title">DataTable with default features</h3>
-            </div> -->
-            <!-- /.card-header -->
+            <div class="card-header" style="background-color:#0FBEF2;color:white">
+                <h3 class="card-title">Overtime Requests</h3>
+            </div>
             <div class="card-body">
                 <table id="AdminAccount" class="table table-bordered table-striped">
                     <thead>
