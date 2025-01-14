@@ -77,26 +77,45 @@
                                                 <i class="fas fa-ellipsis-h"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                                @if(Auth::user()->id_user == Auth::user()->company->pic)
-                                                    @if(Auth::user()->id_user != $a->id_user)
-                                                        <form action="{{ route('role.pic', $a->id_user) }}" method="POST">
-                                                            @csrf
-                                                            @method('POST')
-                                                            <button type="submit" class="btn btn-block text-left custom-btn">As PIC</button>
-                                                        </form>
-                                                    @endif
-                                                @endif
-                                                <form action="{{ route('role.supervisor', $a->id_user) }}" method="POST">
-                                                    @csrf
-                                                    @method('POST')
-                                                    <button type="submit" class="btn btn-block text-left custom-btn">Move to Supervisor</button>
-                                                </form>
+                                            @if(Auth::user()->id_user == Auth::user()->company->pic)
+    <!-- Jika user saat ini adalah PIC -->
+    @if(Auth::user()->id_user != $a->id_user)
+        <!-- Hanya bisa memilih PIC baru jika bukan dirinya sendiri -->
+        <form action="{{ route('role.pic', $a->id_user) }}" method="POST">
+            @csrf
+            <button type="submit" class="btn btn-block text-left custom-btn">As PIC</button>
+        </form>
+    @else
+        <!-- Opsi untuk memindahkan PIC ke Supervisor atau Employee hanya jika sudah memilih PIC baru -->
+        @if($otherPicExists) <!-- Pastikan ada PIC lain yang dipilih -->
+            <form action="{{ route('role.supervisor', $a->id_user) }}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-block text-left custom-btn">Move to Supervisor</button>
+            </form>
 
-                                                <form action="{{ route('role.employee', $a->id_user) }}" method="POST">
-                                                    @csrf
-                                                    @method('POST')
-                                                    <button type="submit" class="btn btn-block text-left custom-btn">Move to Employee</button>
-                                                </form>
+            <form action="{{ route('role.employee', $a->id_user) }}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-block text-left custom-btn">Move to Employee</button>
+            </form>
+        @else
+            <span class="text-muted">Select a new PIC before moving this user</span>
+        @endif
+    @endif
+@else
+    <!-- Jika user saat ini bukan PIC, hanya tampilkan opsi Move ke Supervisor/Employee untuk user biasa -->
+    @if(Auth::user()->company->pic != $a->id_user)
+        <form action="{{ route('role.supervisor', $a->id_user) }}" method="POST">
+            @csrf
+            <button type="submit" class="btn btn-block text-left custom-btn">Move to Supervisor</button>
+        </form>
+
+        <form action="{{ route('role.employee', $a->id_user) }}" method="POST">
+            @csrf
+            <button type="submit" class="btn btn-block text-left custom-btn">Move to Employee</button>
+        </form>
+    @endif
+@endif
+
                                             </div>
                                             
                                         </div>
