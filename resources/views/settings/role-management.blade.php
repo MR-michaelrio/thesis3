@@ -74,7 +74,7 @@
                                         <div class="dropdown">
                                             <button class="btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                                 aria-expanded="false">
-                                                <i class="fas fa-ellipsis-h"></xi>
+                                                <i class="fas fa-ellipsis-h"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                                                 @if(Auth::user()->id_user == Auth::user()->company->pic)
