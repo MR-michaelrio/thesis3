@@ -595,28 +595,93 @@ class AttendanceController extends Controller
         return redirect()->back()->with('success', 'Face deleted successfully');
     }
 
-    public function updateattendance(Request $request)
-    {
-        Log::info('Received request to update attendance', $request->all());
+    // public function updateattendance(Request $request)
+    // {
+    //     Log::info('Received request to update attendance', $request->all());
 
-        // Logika untuk update data attendance di database
-        $attendance = Attendance::where("id_attendance",$request->attendanceID)->first();
-        if ($attendance) {
-            $attendance->clock_in = $request->clockIn;
-            $attendance->clock_out = $request->clockOut;
-            $attendance->save();
+    //     // Logika untuk update data attendance di database
+    //     $attendance = Attendance::where("id_attendance",$request->attendanceID)->first();
+    //     if ($attendance) {
+    //         $attendance->clock_in = $request->clockIn;
+    //         $attendance->clock_out = $request->clockOut;
+    //         $attendance->save();
 
-            Log::info('Existing attendance data', [
-                'attendanceID' => $attendance->id_attendance,
-                'attendanceID2' => $request->attendanceID,
-                'clock_in' => $attendance->clock_in,
-                'clock_out' => $attendance->clock_out
-            ]);
+    //         Log::info('Existing attendance data', [
+    //             'attendanceID' => $attendance->id_attendance,
+    //             'attendanceID2' => $request->attendanceID,
+    //             'clock_in' => $attendance->clock_in,
+    //             'clock_out' => $attendance->clock_out
+    //         ]);
             
-            return response()->json(['success' => true, 'message' => 'Attendance updated successfully']);
+    //         return response()->json(['success' => true, 'message' => 'Attendance updated successfully']);
+    //     }
+
+    //     return response()->json(['success' => false, 'message' => 'Attendance not found'], 404);
+    // }
+
+    public function updateattendance(Request $request)
+{
+    Log::info('Received request to update attendance', $request->all());
+
+    $attendance = Attendance::where("id_attendance", $request->attendanceID)->first();
+
+    if ($attendance) {
+        $assignShift = AssignShift::where('id_employee', $attendance->id_employee)
+                                  ->where('day', Carbon::parse($attendance->attendance_date)->dayOfWeekIso)
+                                  ->first();
+
+        if (!$assignShift || !$assignShift->shift) {
+            return response()->json(['success' => false, 'message' => 'No shift assigned for this day.'], 404);
         }
 
-        return response()->json(['success' => false, 'message' => 'Attendance not found'], 404);
+        $shift = $assignShift->shift;
+        $clockInShift = Carbon::createFromFormat('H:i:s', $shift->clock_in);
+        $clockOutShift = Carbon::createFromFormat('H:i:s', $shift->clock_out);
+        $lateTolerance = AttendancePolicy::where("id_company", Auth::user()->id_company)->first()->late_tolerance;
+
+        // Konversi waktu clock-in dan clock-out dari request
+        $clockInRequest = Carbon::createFromFormat('H:i:s', $request->clockIn);
+        $clockOutRequest = Carbon::createFromFormat('H:i:s', $request->clockOut);
+
+        // Cek keterlambatan
+        $allowedLatestTime = $clockInShift->copy()->addMinutes($lateTolerance);
+        $attendanceStatus = $clockInRequest->greaterThan($allowedLatestTime) ? 'late' : 'present';
+
+        // Cek apakah clock-out melewati jam shift
+        $overtimeMinutes = 0;
+        if ($clockOutRequest->greaterThan($clockOutShift)) {
+            $overtimeMinutes = $clockOutShift->diffInMinutes($clockOutRequest);
+            $attendanceStatus = 'overtime';
+        }
+
+        // Hitung total jam kerja
+        $totalMinutesWorked = $clockInRequest->diffInMinutes($clockOutRequest);
+        $hoursWorked = floor($totalMinutesWorked / 60);
+        $minutesWorked = $totalMinutesWorked % 60;
+        $dailyTotal = sprintf('%02d:%02d', $hoursWorked, $minutesWorked);
+
+        // Update attendance record
+        $attendance->clock_in = $clockInRequest->format('H:i:s');
+        $attendance->clock_out = $clockOutRequest->format('H:i:s');
+        $attendance->attendance_status = $attendanceStatus;
+        $attendance->daily_total = $dailyTotal;
+        $attendance->total_overtime = $overtimeMinutes > 0 ? sprintf('%02d:%02d', floor($overtimeMinutes / 60), $overtimeMinutes % 60) : null;
+        $attendance->save();
+
+        Log::info('Updated attendance data', [
+            'attendanceID' => $attendance->id_attendance,
+            'clock_in' => $attendance->clock_in,
+            'clock_out' => $attendance->clock_out,
+            'attendance_status' => $attendance->attendance_status,
+            'daily_total' => $attendance->daily_total,
+            'total_overtime' => $attendance->total_overtime
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Attendance updated successfully', 'attendance' => $attendance]);
     }
+
+    return response()->json(['success' => false, 'message' => 'Attendance not found'], 404);
+}
+
 
 }
