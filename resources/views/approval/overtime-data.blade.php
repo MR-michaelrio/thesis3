@@ -10,7 +10,7 @@
             </div> -->
             <!-- /.card-header -->
             <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="AdminAccount" class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>Request ID</th>
@@ -130,16 +130,16 @@
                         <strong>Approver Name:</strong> <span id="modalApproverName"></span>
                     </div>
                     <!-- Tombol Approve/Reject -->
-                        <div class="col-12" id="actionButtons">
-                            <div class="row">
-                                <div class="col-6">
-                                    <button type="button" class="btn btn-success btn-block" onclick="submitStatus('approve')">Approve</button>
-                                </div>
-                                <div class="col-6">
-                                    <button type="button" class="btn btn-danger btn-block" onclick="submitStatus('reject')">Reject</button>
-                                </div>
+                    <div class="col-12" id="actionButtons">
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-success btn-block" onclick="submitStatus('approve')">Approve</button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" class="btn btn-danger btn-block" onclick="submitStatus('reject')">Reject</button>
                             </div>
                         </div>
+                    </div>
                 </form>
             </div>
 
