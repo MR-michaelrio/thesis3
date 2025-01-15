@@ -23,13 +23,6 @@ class AttendancePolicyController extends Controller
 
     public function updateOrCreate(Request $request)
     {
-        // Validasi input
-        $request->validate([
-            'late_tolerance' => 'nullable|integer',
-            'overtime_start' => 'nullable|integer',
-            'overtime_end' => 'nullable|integer',
-        ]);
-
         // Ambil user yang sedang login
         $user = User::where("id_user", Auth::user()->id_employee)->first();
 
@@ -38,19 +31,23 @@ class AttendancePolicyController extends Controller
             return redirect()->route('attendance_policy.index')->with('error', 'User or company not found!');
         }
 
-        // Buat atau update data
-        AttendancePolicy::updateOrCreate(
-            // Kondisi pencarian data (primary key)
-            ['id_attendance_policy' => $request->id_attendance_policy],
+        // Cari apakah sudah ada Attendance Policy untuk perusahaan tersebut
+        $policy = AttendancePolicy::where('id_company', $user->id_company)->first();
 
-            // Data yang akan dibuat atau diperbarui
-            array_merge(
+        // Jika belum ada, buat baru; jika ada, lakukan update
+        if ($policy) {
+            // Update kebijakan yang sudah ada
+            $policy->update($request->only(['late_tolerance', 'overtime_start', 'overtime_end']));
+        } else {
+            // Buat kebijakan baru
+            AttendancePolicy::create(array_merge(
                 $request->only(['late_tolerance', 'overtime_start', 'overtime_end']),
                 ['id_company' => $user->id_company]
-            )
-        );
+            ));
+        }
 
         return redirect()->route('attendance_policy.index')->with('success', 'Attendance Policy updated successfully!');
     }
+
 
 }
