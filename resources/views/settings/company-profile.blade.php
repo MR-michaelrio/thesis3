@@ -43,8 +43,7 @@
 
                 <div class="mb-3">
                     <label>Country</label>
-                    <input type="text" class="form-control" id="country" name="{{$companies->country}}" value="country" placeholder="Enter Street Name">
-
+                    <input type="text" class="form-control" id="country" name="country" value="{{$companies->country}}" placeholder="Enter Street Name">
                 </div>
 
                 <div class="mb-3">
