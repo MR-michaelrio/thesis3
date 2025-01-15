@@ -133,6 +133,8 @@
                                 <button type="button" class="btn btn-success btn-block" onclick="submitStatus('approve')">Approve</button>
                             </div>
                             <div class="col-6">
+                                <button type="button" class="btn btn-danger btn-block" onclick="submitStatus('reject')">Reject</button>
+                            </div>                        
                         </div>
                     </div>
                 </form>
