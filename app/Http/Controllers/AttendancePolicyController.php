@@ -11,7 +11,7 @@ class AttendancePolicyController extends Controller
     public function index()
     {
         // Ambil data pertama dari table
-        $policy = AttendancePolicy::where("id_company",Auth::user()->id_company);
+        $policy = AttendancePolicy::where("id_company",Auth::user()->id_company)->first();
 
         // Jika belum ada data, buat data kosong untuk ditampilkan di form
         if (!$policy) {
