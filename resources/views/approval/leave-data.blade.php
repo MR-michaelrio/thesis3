@@ -20,6 +20,7 @@
                         <tr>
                             <th>#</th>
                             <th>Request ID</th>
+                            <th>Requester ID</th>
                             <th>Leave Type</th>
                             <th>Leave Date</th>
                             <th>Leave Time</th>
@@ -51,6 +52,7 @@
                             data-description="{{ $r->request_description }}" 
                             data-upload="{{ $r->request_file }}">
                             <td>{{ $no++ }}</td>
+                            <td>{{ $r->id_request_leave_hdrs }}</td>
                             <td>{{ $r->employee->user->identification_number }}</td>
                             <td>{{ $r->leavetype->leave_name }}</td>
                             <td>{{ \Carbon\Carbon::parse($r->leave_start_date)->format('d/m/Y H:i') }} - {{ \Carbon\Carbon::parse($r->leave_end_date)->format('d/m/Y H:i') }}</td>

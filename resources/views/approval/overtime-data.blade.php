@@ -28,7 +28,8 @@
                         <tr style="text-transform:capitalize"
                             class="data-row cursorpointer" 
                             data-id="{{ $o->id_overtime }}" 
-                            data-name="{{ $o->employee->full_name }}" 
+                            data-name="{{ $o->employee->full_name }}"
+                            data-identification-number="{{ $r->employee->user->identification_number }}"  
                             data-employee="{{ $o->id_employee }}" 
                             data-date="{{ $o->overtime_date }}" 
                             data-start="{{ $o->start }}" 
@@ -89,7 +90,7 @@
                     </div>
                     <!-- Data lainnya -->
                     <div class="col-12">
-                        <strong>Employee ID:</strong> <span id="modalEmployeeID"></span>
+                        <strong>Employee ID:</strong> <span id="modalEmployeeIdentificationNumber"></span>
                     </div>
                     <div class="col-12">
                         <strong>Status:</strong> <span id="modalStatus"></span>
@@ -163,6 +164,7 @@
             $("#id_overtime").text($(this).data('id'));
             $("#modalEmployeeName").text($(this).data('name'));
             $("#modalEmployeeID").text($(this).data('employee'));
+            $("#modalEmployeeIdentificationNumber").text($(this).data('identification-number'));
             $("#modalDate").text($(this).data('date'));
             $("#modalStatus").text($(this).data('status'));
             $("#modalTimes").text($(this).data('start') + " - " + $(this).data('end'));
