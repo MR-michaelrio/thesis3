@@ -559,6 +559,7 @@ class AttendanceController extends Controller
             // Get the clock-in time assigned to the shift
             $clock_in_assign = $assignshift->shift->clock_in;
             $attendance_policy = AttendancePolicy::where("id_company",Auth::user()->id_company)->first();
+            \Log::info('Employee ID not found for input: ' . $attendance_policy);
             $late_tolerance = $attendance_policy->late_tolerance;
 
             $clock_in_assign_minutes = (int)date('H', strtotime($clock_in_assign)) * 60 + (int)date('i', strtotime($clock_in_assign));
