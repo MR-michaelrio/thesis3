@@ -1,5 +1,5 @@
 @extends('index')
-@section('title','Attendance Data')
+@section('title','Invoice Data')
 @section('css')
 <style>
     /* Custom CSS for active tab background */
