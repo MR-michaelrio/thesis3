@@ -19,21 +19,21 @@
                         <label>Late Tolerance (after clock in minutes)</label>
                         <input type="number" name="late_tolerance" class="form-control"
                             value="{{ old('late_tolerance', $policy->late_tolerance) }}"
-                            placeholder="Enter late tolerance in minutes">
+                            placeholder="Enter late tolerance in minutes" min=0>
                     </div>
 
                     <div class="form-group">
                         <label>Overtime Start Time (after clock out)</label>
                         <input type="number" name="overtime_start" class="form-control"
                             value="{{ old('overtime_start', $policy->overtime_start) }}"
-                            placeholder="Enter overtime start time in minutes">
+                            placeholder="Enter overtime start time in minutes" min=0>
                     </div>
 
                     <div class="form-group">
                         <label>Overtime Maximum End Time (after overtime start time)</label>
                         <input type="number" name="overtime_end" class="form-control"
                             value="{{ old('overtime_end', $policy->overtime_end) }}"
-                            placeholder="Enter overtime maximum end time">
+                            placeholder="Enter overtime maximum end time" min=0>
                     </div>
                 </div>
 
