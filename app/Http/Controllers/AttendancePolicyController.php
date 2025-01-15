@@ -31,7 +31,7 @@ class AttendancePolicyController extends Controller
         ]);
 
         // Ambil user yang sedang login
-        $user = User::where("id_user", Auth::id())->first();
+        $user = User::where("id_user", Auth::user()->id_employee)->first();
 
         // Pastikan user ditemukan dan memiliki 'id_company'
         if (!$user || !$user->id_company) {
