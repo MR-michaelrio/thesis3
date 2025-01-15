@@ -341,7 +341,7 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                             <label for="gender">Department <span style="color:red"> *</span></label>
                             @if(Auth::user()->role == "admin" )
                                 <select class="form-control select2 select2-hidden-accessible" required style="width: 100%;" name="id_department" id="department-select" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                    <option value="" selected>NONE</option>    
+                                    <option value="" {{ old('id_department', $employee->user->id_department) == '' ? 'selected' : '' }}>NONE</option>    
                                     @foreach($department as $d)
                                         <option value="{{ $d->id_department }}" 
                                                 {{ old('id_department', $employee->user->id_department) == $d->id_department ? 'selected' : '' }}>
@@ -358,7 +358,7 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                             <label for="gender">Position Title <span style="color:red"> *</span></label>
                             @if(Auth::user()->role == "admin")
                                 <select class="form-control select2 select2-hidden-accessible" required style="width: 100%;" name="id_department_position" id="position-select" data-select2-id="2" tabindex="-1" aria-hidden="true">
-                                    <option value="">NONE</option>    
+                                    <option value="" {{ old('id_department_position', $employee->user->id_department_position) == '' ? 'selected' : '' }}>NONE</option>    
                                     @foreach($departmentPosition as $d)
                                         <option value="{{$d->id_department_position}}" {{ old('id_department_position', $employee->user->id_department_position) == $d->id_department_position   ? 'selected' : '' }}>
                                             {{$d->position_title}}
@@ -373,14 +373,14 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                         <div class="form-group">
                             <label for="gender">Reports to <span style="color:red"> *</span></label>
                             @if(Auth::user()->role == "admin")
-                                <select class="form-control select2 select2-hidden-accessible" required style="width: 100%;" name="supervisor" id="supervisor-select" data-select2-id="3" tabindex="-1" aria-hidden="true">
-                                    <option value="">NONE</option>
-                                    @foreach($user as $d)
-                                        <option value="{{$d->id_user}}" {{ old('supervisor', $employee->user->supervisor) == $d->id_user ? 'selected' : '' }}>
-                                            {{$d->employee->full_name}}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                    <select class="form-control select2 select2-hidden-accessible" required style="width: 100%;" name="supervisor" id="supervisor-select" data-select2-id="3" tabindex="-1" aria-hidden="true">
+                                        <option value="" {{ old('supervisor', $employee->user->supervisor) == '' ? 'selected' : '' }}>NONE</option>
+                                        @foreach($user as $d)
+                                            <option value="{{$d->id_user}}" {{ old('supervisor', $employee->user->supervisor) == $d->id_user ? 'selected' : '' }}>
+                                                {{$d->employee->full_name}}
+                                            </option>
+                                        @endforeach
+                                    </select>
                             @else
                                 <input type="text" class="form-control" value="{{ $employee->user->supervisior->full_name ?? '' }}" disabled>
                             @endif
