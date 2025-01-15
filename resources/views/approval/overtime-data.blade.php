@@ -40,7 +40,7 @@
                             data-supervisor="{{ $o->employee->user->supervisor }}"
                             data-upload="{{ $o->request_file }}">
                             <td>{{ $o->id_overtime }}</td>
-                            <td>{{ $o->id_employee }}</td>
+                            <td>{{ $o->employee->user->identification_number }}</td>
                             <td>{{ $o->employee->full_name }}</td>
                             <td>{{ $o->overtime_date }}</td>
                             <td>{{ $o->start }} - {{ $o->end }}</td>
