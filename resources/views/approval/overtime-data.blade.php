@@ -29,7 +29,7 @@
                             class="data-row cursorpointer" 
                             data-id="{{ $o->id_overtime }}" 
                             data-name="{{ $o->employee->full_name }}"
-                            data-identification-number="{{ $-o>employee->user->identification_number }}"  
+                            data-identification-number="{{ $o->employee->user->identification_number }}"  
                             data-employee="{{ $o->id_employee }}" 
                             data-date="{{ $o->overtime_date }}" 
                             data-start="{{ $o->start }}" 
