@@ -455,6 +455,7 @@ class AttendanceController extends Controller
         $attendance_clock = $currentTime->format('H:i:s'); // Default to current time if not provided
 
         $id_employe = User::where('identification_number',$request->id_identification)->where("id_company",Auth::user()->id_company)->with('employee')->first();
+        \Log::info('Employee ID not found for input: ' . $id_employe);
 
         if (!$id_employe || !$id_employe->employee) {
             \Log::info('Employee ID not found for input: ' . $request->id_identification);
@@ -467,6 +468,7 @@ class AttendanceController extends Controller
         $id_employee = $id_employe->employee->id_employee;
         // Fetch the employee's shift assignment
         $assignshift = AssignShift::where('id_employee', $id_employee)->where('day', $dayOfWeek)->first();
+        \Log::info('Employee ID not found for input: ' . $assignshift);
 
         // If no shift assignment found, return an error response
         if (!$assignshift->id_shift) {
