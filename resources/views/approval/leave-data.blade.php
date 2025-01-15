@@ -199,6 +199,10 @@
                 $("#noDocumentMessage").show();
             }
 
+            if(loggedInUserRole === "employee"){
+                $('#actionButtons').hide();
+            }
+
             if (loggedInUserRole === "supervisor" && loggedInEmployeeID && supervisorID !== loggedInUserID) {
                 $('#actionButtons').hide(); // Tampilkan tombol
             } else {
