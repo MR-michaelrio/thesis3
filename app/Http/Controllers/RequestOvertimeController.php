@@ -62,7 +62,7 @@ class RequestOvertimeController extends Controller
             "id_company" => Auth::user()->id_company
         ]);
 
-        return redirect()->route('overtimes.index');
+        return redirect()->route('overtimes.index')->with('success', 'Overtime request submitted successfully!');
     }
 
     public function getOvertimeData($date)
