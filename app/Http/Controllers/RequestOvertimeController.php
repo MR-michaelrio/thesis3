@@ -78,7 +78,7 @@ class RequestOvertimeController extends Controller
             $overtime_minutes_start = $attendance_policy->overtime_start;
             $overtime_minutes_end = $attendance_policy->overtime_end;
 
-            $dayOfWeek = Carbon::now()->dayOfWeekIso + 1;
+            $dayOfWeek = Carbon::now('Asia/Jakarta')->dayOfWeekIso;
             $clock_out = AssignShift::where("id_employee", Auth::user()->employee->id_employee)
                                     ->where('day', $dayOfWeek)
                                     ->first(); 
