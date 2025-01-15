@@ -84,6 +84,7 @@ class RequestOvertimeController extends Controller
                                     ->first();
 
             $clock_out_time = Carbon::parse($clock_out->shift->clock_out);
+            \Log::info('$dayOfWeek: ' . $dayOfWeek);
 
             // Add overtime minutes to the clock-out time to calculate overtime start
             $overtime_start = $clock_out_time->copy()->addMinutes($overtime_minutes_start);
