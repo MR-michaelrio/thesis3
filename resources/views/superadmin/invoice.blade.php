@@ -102,7 +102,7 @@
                 <div class="small-box bg-warning w-100">
                     <div class="inner d-flex justify-content-between align-items-center" style="height: 100px;">
                         <div>
-                            <p class="text-white">Unpaid Nominal</p>
+                            <p class="text-white">Unpaid Invoice</p>
                             <h3 class="text-white" id="unpaidInvoice"></h3>
                         </div>
                         <div class="icon" style="font-size: 50px;">
