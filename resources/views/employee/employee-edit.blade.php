@@ -358,7 +358,7 @@ input[type="checkbox"].disabled-checkbox:disabled:checked::after {
                             <label for="gender">Position Title <span style="color:red"> *</span></label>
                             @if(Auth::user()->role == "admin")
                                 <select class="form-control select2 select2-hidden-accessible" required style="width: 100%;" name="id_department_position" id="position-select" data-select2-id="2" tabindex="-1" aria-hidden="true">
-                                    <option value="" {{ old('id_department_position', $employee->user->id_department_position) == '' ? 'selected' : '' }}>NONE</option>    
+                                    <option value="NONE" {{ old('id_department_position', $employee->user->id_department_position) == '' ? 'selected' : '' }}>NONE</option>    
                                     @foreach($departmentPosition as $d)
                                         <option value="{{$d->id_department_position}}" {{ old('id_department_position', $employee->user->id_department_position) == $d->id_department_position   ? 'selected' : '' }}>
                                             {{$d->position_title}}
