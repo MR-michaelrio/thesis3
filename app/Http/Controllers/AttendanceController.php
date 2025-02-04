@@ -437,10 +437,6 @@ class AttendanceController extends Controller
         $shiftEnd->addDay();
     }
 
-    \Log::info("Current Time: " . $currentTime->format('Y-m-d H:i:s'));
-    \Log::info("Shift Start: " . $shiftStart->format('Y-m-d H:i:s'));
-    \Log::info("Shift End: " . $shiftEnd->format('Y-m-d H:i:s'));
-
     $attendance = Attendance::where('id_employee', $id_employee)
                             ->where('attendance_date', $attendance_date)
                             ->first();
@@ -453,59 +449,49 @@ class AttendanceController extends Controller
     $employee = Employee::where("id_employee", $id_employee)->with('user')->first();
 
     // **Cek apakah masih dalam rentang shift**
-    if ($currentTime >= $shiftStart && $currentTime <= $shiftEnd) {
-        // **Jika sudah clock-in, update menjadi clock-out**
-        if ($attendance) {
-            $clockIn = Carbon::createFromFormat('H:i:s', $attendance->clock_in);
-            $clockOut = Carbon::createFromFormat('H:i:s', $attendance_clock);
+    if ($attendance) {
+        $clockIn = Carbon::createFromFormat('H:i:s', $attendance->clock_in);
+        $clockOut = Carbon::createFromFormat('H:i:s', $attendance_clock);
 
-            // Cek RequestOvertime jika ada
-            if ($currentTime->greaterThanOrEqualTo($shiftEnd)) {
-                $requestOvertime = RequestOvertime::where('id_employee', $attendance->id_employee)
-                                                  ->where('overtime_date', $attendance->attendance_date)
-                                                  ->first();
-    
-                if ($requestOvertime) {
-                    $overtimeStart = Carbon::createFromFormat('H:i:s', $requestOvertime->start);
-                    $overtimeEnd = Carbon::createFromFormat('H:i:s', $requestOvertime->end);
-    
-                    if ($clockOut->greaterThan($overtimeEnd)) {
-                        $clockOut = $overtimeEnd;
-                    }
-    
-                    if ($clockOut->greaterThanOrEqualTo($overtimeStart)) {
-                        $overtimeMinutes = $overtimeStart->diffInMinutes($clockOut);
-                        $overtimeHours = floor($overtimeMinutes / 60);
-                        $overtimeRemainingMinutes = $overtimeMinutes % 60;
-                        
-                        $attendance->total_overtime = sprintf('%02d:%02d', $overtimeHours, $overtimeRemainingMinutes);
-                        $attendance->attendance_status = 'overtime';
-                    } else {
-                        $attendance->total_overtime = null;
-                        $attendance->attendance_status = 'present';
-                    }
-                } else {
-                    $attendance->total_overtime = null;
-                    $attendance->attendance_status = 'present';
-                }
+        $requestOvertime = RequestOvertime::where('id_employee', $attendance->id_employee)
+                                          ->where('overtime_date', $attendance->attendance_date)
+                                          ->first();
+
+        if ($requestOvertime) {
+            $overtimeStart = Carbon::createFromFormat('H:i:s', $requestOvertime->start);
+            $overtimeEnd = Carbon::createFromFormat('H:i:s', $requestOvertime->end);
+
+            if ($clockOut->greaterThan($overtimeEnd)) {
+                $clockOut = $overtimeEnd;
             }
-    
-            // **Simpan Clock-Out**
-            $attendance->clock_out = $clockOut->format('H:i:s');
-            $dailyTotal = $clockIn->diff($clockOut);
-            $attendance->daily_total = sprintf('%02d:%02d', $dailyTotal->h, $dailyTotal->i);
-            $attendance->save();
-    
-            return response()->json([
-                'message' => 'Attendance clock-out updated!',
-                'attendance' => $attendance,
-                'employee_name' => $employee->full_name,
-                'employee_id' => $employee->user->identification_number,
-                'time' => "Clock Out"
-            ], 200);
-        } 
-        
-        // **Jika belum clock-in, maka buat entri baru**
+
+            if ($clockOut->greaterThanOrEqualTo($overtimeStart)) {
+                $overtimeMinutes = $overtimeStart->diffInMinutes($clockOut);
+                $overtimeHours = floor($overtimeMinutes / 60);
+                $overtimeRemainingMinutes = $overtimeMinutes % 60;
+                
+                $attendance->total_overtime = sprintf('%02d:%02d', $overtimeHours, $overtimeRemainingMinutes);
+                $attendance->attendance_status = 'overtime';
+            }
+        } else {
+            $attendance->total_overtime = null;
+            $attendance->attendance_status = 'present';
+        }
+
+        $attendance->clock_out = $clockOut->format('H:i:s');
+        $dailyTotal = $clockIn->diff($clockOut);
+        $attendance->daily_total = sprintf('%02d:%02d', $dailyTotal->h, $dailyTotal->i);
+        $attendance->save();
+
+        return response()->json([
+            'message' => 'Attendance clock-out updated!',
+            'attendance' => $attendance,
+            'employee_name' => $employee->full_name,
+            'employee_id' => $employee->user->identification_number,
+            'time' => "Clock Out"
+        ], 200);
+    }
+    if ($currentTime <= $shiftEnd) {
         $clock_in_assign = $assignshift->shift->clock_in;
         $attendance_policy = AttendancePolicy::where("id_company", Auth::user()->id_company)->first();
         $late_tolerance = $attendance_policy->late_tolerance;
@@ -533,7 +519,7 @@ class AttendanceController extends Controller
             'time' => "Clock In"
         ], 201);
     } else {
-        return response()->json(['message' => 'Outside shift hours, cannot check in.'], 201);
+        return response()->json(['message' => 'Clock-in cannot be done after shift ends.'], 201);
     }
 }
 
