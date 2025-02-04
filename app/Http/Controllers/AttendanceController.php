@@ -277,7 +277,7 @@ class AttendanceController extends Controller
         }
     }
 
-    public function checkin(Request $request)
+    public function checkin1(Request $request)
     {
         $currentTime = Carbon::now('Asia/Jakarta'); // Get the current time using Carbon
         $dayOfWeek = $currentTime->dayOfWeekIso;
@@ -411,6 +411,130 @@ class AttendanceController extends Controller
             ], 201); // Created
         }
     }
+
+    public function checkin(Request $request)
+{
+    $currentTime = Carbon::now('Asia/Jakarta'); // Waktu saat ini
+    $dayOfWeek = $currentTime->dayOfWeekIso;
+
+    // Data dari request
+    $attendance_date = $request->attendance_date; // Format YYYY-MM-DD
+    $attendance_clock = $request->clock; // Jam absen
+    $id_employee = $request->id_employee;
+
+    // Ambil shift karyawan
+    $assignshift = AssignShift::where('id_employee', $id_employee)->where('day', $dayOfWeek)->first();
+
+    if (!$assignshift) {
+        return response()->json(['message' => 'No shift assignment found for the employee'], 201);
+    }
+
+    $shiftStart = Carbon::parse($assignshift->shift->clock_in, 'Asia/Jakarta');
+    $shiftEnd = Carbon::parse($assignshift->shift->clock_out, 'Asia/Jakarta');
+
+    // **Cek jika shift melewati tengah malam**
+    if ($shiftEnd->lt($shiftStart)) {
+        $shiftEnd->addDay();
+    }
+
+    \Log::info("Current Time: " . $currentTime->format('Y-m-d H:i:s'));
+    \Log::info("Shift Start: " . $shiftStart->format('Y-m-d H:i:s'));
+    \Log::info("Shift End: " . $shiftEnd->format('Y-m-d H:i:s'));
+
+    $attendance = Attendance::where('id_employee', $id_employee)
+                            ->where('attendance_date', $attendance_date)
+                            ->first();
+
+    // **Jika sudah clock-out, tidak bisa absen lagi**
+    if ($attendance && $attendance->clock_out) {
+        return response()->json(['message' => 'Already clocked out!'], 201);
+    }
+
+    $employee = Employee::where("id_employee", $id_employee)->with('user')->first();
+
+    // **Cek apakah masih dalam rentang shift**
+    if ($currentTime >= $shiftStart && $currentTime <= $shiftEnd) {
+        // **Jika sudah clock-in, update menjadi clock-out**
+        if ($attendance) {
+            $clockIn = Carbon::createFromFormat('H:i:s', $attendance->clock_in);
+            $clockOut = Carbon::createFromFormat('H:i:s', $attendance_clock);
+
+            // Cek RequestOvertime jika ada
+            $requestOvertime = RequestOvertime::where('id_employee', $attendance->id_employee)
+                                              ->where('overtime_date', $attendance->attendance_date)
+                                              ->first();
+
+            if ($requestOvertime) {
+                $overtimeEnd = Carbon::createFromFormat('H:i:s', $requestOvertime->end);
+                $overtimeStart = Carbon::createFromFormat('H:i:s', $requestOvertime->start);
+
+                if ($clockOut->greaterThan($overtimeEnd)) {
+                    $clockOut = $overtimeEnd;
+                }
+
+                if ($clockOut->greaterThanOrEqualTo($overtimeStart)) {
+                    $overtimeMinutes = $overtimeStart->diffInMinutes($clockOut);
+                    $overtimeHours = floor($overtimeMinutes / 60);
+                    $overtimeRemainingMinutes = $overtimeMinutes % 60;
+                    
+                    $attendance->total_overtime = sprintf('%02d:%02d', $overtimeHours, $overtimeRemainingMinutes);
+                    $attendance->attendance_status = 'overtime';
+                } else {
+                    $attendance->total_overtime = null;
+                    $attendance->attendance_status = 'present';
+                }
+            } else {
+                $attendance->total_overtime = null;
+                $attendance->attendance_status = 'present';
+            }
+
+            $attendance->clock_out = $clockOut->format('H:i:s');
+            $dailyTotal = $clockIn->diff($clockOut);
+            $attendance->daily_total = sprintf('%02d:%02d', $dailyTotal->h, $dailyTotal->i);
+
+            $attendance->save();
+
+            return response()->json([
+                'message' => 'Attendance clock-out updated!',
+                'attendance' => $attendance,
+                'employee_name' => $employee->full_name,
+                'employee_id' => $employee->user->identification_number,
+                'time' => "Clock Out"
+            ], 200);
+        } 
+        
+        // **Jika belum clock-in, maka buat entri baru**
+        $clock_in_assign = $assignshift->shift->clock_in;
+        $attendance_policy = AttendancePolicy::where("id_company", Auth::user()->id_company)->first();
+        $late_tolerance = $attendance_policy->late_tolerance;
+
+        $clock_in_assign_minutes = (int)date('H', strtotime($clock_in_assign)) * 60 + (int)date('i', strtotime($clock_in_assign));
+        $allowed_latest_time = $clock_in_assign_minutes + $late_tolerance;
+        $attendance_clock_minutes = (int)date('H', strtotime($attendance_clock)) * 60 + (int)date('i', strtotime($attendance_clock));
+
+        $attendance_status = ($attendance_clock_minutes > $allowed_latest_time) ? 'late' : 'present';
+
+        $attendance = Attendance::create([
+            'id_employee' => $request->id_employee,
+            'attendance_date' => $attendance_date,
+            'shift_id' => $assignshift->id_shift,
+            'clock_in' => $attendance_clock,
+            'attendance_status' => $attendance_status,
+            'id_company' => Auth::user()->id_company,
+        ]);
+
+        return response()->json([
+            'message' => 'Attendance successfully stored!',
+            'attendance' => $attendance,
+            'employee_name' => $employee->full_name,
+            'employee_id' => $employee->user->identification_number,
+            'time' => "Clock In"
+        ], 201);
+    } else {
+        return response()->json(['message' => 'Outside shift hours, cannot check in.'], 201);
+    }
+}
+
 
     public function getAttendanceData()
     {
@@ -623,68 +747,68 @@ class AttendanceController extends Controller
     // }
 
     public function updateattendance(Request $request)
-{
-    Log::info('Received request to update attendance', $request->all());
+    {
+        Log::info('Received request to update attendance', $request->all());
 
-    $attendance = Attendance::where("id_attendance", $request->attendanceID)->first();
+        $attendance = Attendance::where("id_attendance", $request->attendanceID)->first();
 
-    if ($attendance) {
-        $assignShift = AssignShift::where('id_employee', $attendance->id_employee)
-                                  ->where('day', Carbon::parse($attendance->attendance_date)->dayOfWeekIso)
-                                  ->first();
+        if ($attendance) {
+            $assignShift = AssignShift::where('id_employee', $attendance->id_employee)
+                                    ->where('day', Carbon::parse($attendance->attendance_date)->dayOfWeekIso)
+                                    ->first();
 
-        if (!$assignShift || !$assignShift->shift) {
-            return response()->json(['success' => false, 'message' => 'No shift assigned for this day.'], 404);
+            if (!$assignShift || !$assignShift->shift) {
+                return response()->json(['success' => false, 'message' => 'No shift assigned for this day.'], 404);
+            }
+
+            $shift = $assignShift->shift;
+            $clockInShift = Carbon::createFromFormat('H:i:s', $shift->clock_in);
+            $clockOutShift = Carbon::createFromFormat('H:i:s', $shift->clock_out);
+            $lateTolerance = AttendancePolicy::where("id_company", Auth::user()->id_company)->first()->late_tolerance;
+
+            // Konversi waktu clock-in dan clock-out dari request
+            $clockInRequest = Carbon::createFromFormat('H:i:s', $request->clockIn);
+            $clockOutRequest = Carbon::createFromFormat('H:i:s', $request->clockOut);
+
+            // Cek keterlambatan
+            $allowedLatestTime = $clockInShift->copy()->addMinutes($lateTolerance);
+            $attendanceStatus = $clockInRequest->greaterThan($allowedLatestTime) ? 'late' : 'present';
+
+            // Cek apakah clock-out melewati jam shift
+            $overtimeMinutes = 0;
+            if ($clockOutRequest->greaterThan($clockOutShift)) {
+                $overtimeMinutes = $clockOutShift->diffInMinutes($clockOutRequest);
+                $attendanceStatus = 'overtime';
+            }
+
+            // Hitung total jam kerja
+            $totalMinutesWorked = $clockInRequest->diffInMinutes($clockOutRequest);
+            $hoursWorked = floor($totalMinutesWorked / 60);
+            $minutesWorked = $totalMinutesWorked % 60;
+            $dailyTotal = sprintf('%02d:%02d', $hoursWorked, $minutesWorked);
+
+            // Update attendance record
+            $attendance->clock_in = $clockInRequest->format('H:i:s');
+            $attendance->clock_out = $clockOutRequest->format('H:i:s');
+            $attendance->attendance_status = $attendanceStatus;
+            $attendance->daily_total = $dailyTotal;
+            $attendance->total_overtime = $overtimeMinutes > 0 ? sprintf('%02d:%02d', floor($overtimeMinutes / 60), $overtimeMinutes % 60) : null;
+            $attendance->save();
+
+            Log::info('Updated attendance data', [
+                'attendanceID' => $attendance->id_attendance,
+                'clock_in' => $attendance->clock_in,
+                'clock_out' => $attendance->clock_out,
+                'attendance_status' => $attendance->attendance_status,
+                'daily_total' => $attendance->daily_total,
+                'total_overtime' => $attendance->total_overtime
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Attendance updated successfully', 'attendance' => $attendance]);
         }
 
-        $shift = $assignShift->shift;
-        $clockInShift = Carbon::createFromFormat('H:i:s', $shift->clock_in);
-        $clockOutShift = Carbon::createFromFormat('H:i:s', $shift->clock_out);
-        $lateTolerance = AttendancePolicy::where("id_company", Auth::user()->id_company)->first()->late_tolerance;
-
-        // Konversi waktu clock-in dan clock-out dari request
-        $clockInRequest = Carbon::createFromFormat('H:i:s', $request->clockIn);
-        $clockOutRequest = Carbon::createFromFormat('H:i:s', $request->clockOut);
-
-        // Cek keterlambatan
-        $allowedLatestTime = $clockInShift->copy()->addMinutes($lateTolerance);
-        $attendanceStatus = $clockInRequest->greaterThan($allowedLatestTime) ? 'late' : 'present';
-
-        // Cek apakah clock-out melewati jam shift
-        $overtimeMinutes = 0;
-        if ($clockOutRequest->greaterThan($clockOutShift)) {
-            $overtimeMinutes = $clockOutShift->diffInMinutes($clockOutRequest);
-            $attendanceStatus = 'overtime';
-        }
-
-        // Hitung total jam kerja
-        $totalMinutesWorked = $clockInRequest->diffInMinutes($clockOutRequest);
-        $hoursWorked = floor($totalMinutesWorked / 60);
-        $minutesWorked = $totalMinutesWorked % 60;
-        $dailyTotal = sprintf('%02d:%02d', $hoursWorked, $minutesWorked);
-
-        // Update attendance record
-        $attendance->clock_in = $clockInRequest->format('H:i:s');
-        $attendance->clock_out = $clockOutRequest->format('H:i:s');
-        $attendance->attendance_status = $attendanceStatus;
-        $attendance->daily_total = $dailyTotal;
-        $attendance->total_overtime = $overtimeMinutes > 0 ? sprintf('%02d:%02d', floor($overtimeMinutes / 60), $overtimeMinutes % 60) : null;
-        $attendance->save();
-
-        Log::info('Updated attendance data', [
-            'attendanceID' => $attendance->id_attendance,
-            'clock_in' => $attendance->clock_in,
-            'clock_out' => $attendance->clock_out,
-            'attendance_status' => $attendance->attendance_status,
-            'daily_total' => $attendance->daily_total,
-            'total_overtime' => $attendance->total_overtime
-        ]);
-
-        return response()->json(['success' => true, 'message' => 'Attendance updated successfully', 'attendance' => $attendance]);
+        return response()->json(['success' => false, 'message' => 'Attendance not found'], 404);
     }
-
-    return response()->json(['success' => false, 'message' => 'Attendance not found'], 404);
-}
 
 
 }
