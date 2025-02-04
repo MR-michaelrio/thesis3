@@ -460,40 +460,42 @@ class AttendanceController extends Controller
             $clockOut = Carbon::createFromFormat('H:i:s', $attendance_clock);
 
             // Cek RequestOvertime jika ada
-            $requestOvertime = RequestOvertime::where('id_employee', $attendance->id_employee)
-                                              ->where('overtime_date', $attendance->attendance_date)
-                                              ->first();
-
-            if ($requestOvertime) {
-                $overtimeEnd = Carbon::createFromFormat('H:i:s', $requestOvertime->end);
-                $overtimeStart = Carbon::createFromFormat('H:i:s', $requestOvertime->start);
-
-                if ($clockOut->greaterThan($overtimeEnd)) {
-                    $clockOut = $overtimeEnd;
-                }
-
-                if ($clockOut->greaterThanOrEqualTo($overtimeStart)) {
-                    $overtimeMinutes = $overtimeStart->diffInMinutes($clockOut);
-                    $overtimeHours = floor($overtimeMinutes / 60);
-                    $overtimeRemainingMinutes = $overtimeMinutes % 60;
-                    
-                    $attendance->total_overtime = sprintf('%02d:%02d', $overtimeHours, $overtimeRemainingMinutes);
-                    $attendance->attendance_status = 'overtime';
+            if ($currentTime->greaterThanOrEqualTo($shiftEnd)) {
+                $requestOvertime = RequestOvertime::where('id_employee', $attendance->id_employee)
+                                                  ->where('overtime_date', $attendance->attendance_date)
+                                                  ->first();
+    
+                if ($requestOvertime) {
+                    $overtimeStart = Carbon::createFromFormat('H:i:s', $requestOvertime->start);
+                    $overtimeEnd = Carbon::createFromFormat('H:i:s', $requestOvertime->end);
+    
+                    if ($clockOut->greaterThan($overtimeEnd)) {
+                        $clockOut = $overtimeEnd;
+                    }
+    
+                    if ($clockOut->greaterThanOrEqualTo($overtimeStart)) {
+                        $overtimeMinutes = $overtimeStart->diffInMinutes($clockOut);
+                        $overtimeHours = floor($overtimeMinutes / 60);
+                        $overtimeRemainingMinutes = $overtimeMinutes % 60;
+                        
+                        $attendance->total_overtime = sprintf('%02d:%02d', $overtimeHours, $overtimeRemainingMinutes);
+                        $attendance->attendance_status = 'overtime';
+                    } else {
+                        $attendance->total_overtime = null;
+                        $attendance->attendance_status = 'present';
+                    }
                 } else {
                     $attendance->total_overtime = null;
                     $attendance->attendance_status = 'present';
                 }
-            } else {
-                $attendance->total_overtime = null;
-                $attendance->attendance_status = 'present';
             }
-
+    
+            // **Simpan Clock-Out**
             $attendance->clock_out = $clockOut->format('H:i:s');
             $dailyTotal = $clockIn->diff($clockOut);
             $attendance->daily_total = sprintf('%02d:%02d', $dailyTotal->h, $dailyTotal->i);
-
             $attendance->save();
-
+    
             return response()->json([
                 'message' => 'Attendance clock-out updated!',
                 'attendance' => $attendance,
