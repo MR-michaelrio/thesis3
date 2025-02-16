@@ -102,7 +102,7 @@
                                         <tr style="text-transform:capitalize;" data-attendance-id="{{$a->id_attendance}}">
                                             <td>{{$a->employee->full_name}}</td>
                                             <td>{{$a->employee->user->identification_number}}</td>
-                                            <td>{{$a->employee->user->department->department_code}}</td>
+                                            <td>{{$a->employee->user->department->department_code ?? 'Tidak Ada'}}</td>
                                             <td>{{$a->attendance_date}}</td>
                                             <td>{{$a->shift->shift_name}}</td>
                                             <td>{{$a->clock_in}}</td>
