@@ -453,6 +453,10 @@ class AttendanceController extends Controller
         $clockIn = Carbon::createFromFormat('H:i:s', $attendance->clock_in);
         $clockOut = Carbon::createFromFormat('H:i:s', $attendance_clock);
 
+        if ($currentTime->lt($shiftEnd)) {
+            return response()->json(['message' => 'Cannot clock-out before the shift ends.'], 201);
+        }
+        
         $requestOvertime = RequestOvertime::where('id_employee', $attendance->id_employee)
                                           ->where('overtime_date', $attendance->attendance_date)
                                           ->first();
