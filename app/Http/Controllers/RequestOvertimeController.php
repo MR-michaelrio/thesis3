@@ -133,7 +133,7 @@ class RequestOvertimeController extends Controller
                 $clockin = Carbon::createFromFormat('H:i:s', $attendance->clock_in);
                 $clockOut = Carbon::createFromFormat('H:i:s', $assignshift->shift->clock_out);
                 $dailyTotal = $clockin->diff($clockOut); 
-                $attendance->attendance_status = 'present2';
+                $attendance->attendance_status = 'present';
                 $attendance->clock_out = $clockOut->format('H:i:s');
                 $attendance->daily_total = sprintf('%02d:%02d', $dailyTotal->h, $dailyTotal->i);
                 $attendance->save();
