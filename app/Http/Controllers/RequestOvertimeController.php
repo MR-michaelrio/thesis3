@@ -129,12 +129,15 @@ class RequestOvertimeController extends Controller
             $attendance = Attendance::where('id_employee', $overtimeRequest->id_employee)
                                 ->where('attendance_date', $overtimeRequest->overtime_date)
                                 ->first();
-            $clockin = $attendance->clock_in;
-            $attendance->attendance_status = 'presendt';
-            $attendance->clock_out = $assignshift->clock_out;
-            $dailyTotal = $clockin->diff($assignshift->clock_out);
-            $attendance->daily_total = sprintf('%02d:%02d', $dailyTotal->h, $dailyTotal->i);
-            $attendance->save();
+            if ($attendance) {
+                $clockin = Carbon::createFromFormat('H:i:s', $attendance->clock_in);
+                $clockOut = Carbon::createFromFormat('H:i:s', $assignshift->shift->clock_out);
+                $dailyTotal = $clockin->diff($clockOut); 
+                $attendance->attendance_status = 'present2';
+                $attendance->clock_out = $clockOut->format('H:i:s');
+                $attendance->daily_total = sprintf('%02d:%02d', $dailyTotal->h, $dailyTotal->i);
+                $attendance->save();
+            }
 
             $overtimeRequest->status = $request->status;
             $overtimeRequest->id_approver = Auth::user()->employee->id_employee;
