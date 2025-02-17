@@ -130,7 +130,7 @@ class RequestOvertimeController extends Controller
                                 ->where('attendance_date', $overtimeRequest->overtime_date)
                                 ->first();
             $clockin = $attendance->clock_in;
-            $attendance->attendance_status = 'present';
+            $attendance->attendance_status = 'presendt';
             $attendance->clock_out = $assignshift->clock_out;
             $dailyTotal = $clockin->diff($assignshift->clock_out);
             $attendance->daily_total = sprintf('%02d:%02d', $dailyTotal->h, $dailyTotal->i);
