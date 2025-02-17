@@ -21,9 +21,6 @@ use Illuminate\Support\Facades\DB;
 
 class AttendanceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         //
@@ -186,9 +183,6 @@ class AttendanceController extends Controller
         return view('attendance/attendance-data',compact("overview","summary"));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function show($id){
 
     }
@@ -201,9 +195,6 @@ class AttendanceController extends Controller
         return view('settings/facerecognition-add',compact("employee","facelist"));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $client = new Client();

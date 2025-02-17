@@ -97,7 +97,7 @@ class RequestOvertimeController extends Controller
                 'start' => $overtime_start->format('H:i') . ' - ' . $overtime_end->format('H:i'),
                 'mulai' => $overtime_start->format('H:i'),
                 'akhir' => $overtime_end->format('H:i'),
-                'total_overtime' => $attendance_policy->overtime_start
+                'total_overtime' => $attendance_policy->overtime_end
             ]);
 
         }
