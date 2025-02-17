@@ -450,6 +450,7 @@ class AttendanceController extends Controller
             
             $requestOvertime = RequestOvertime::where('id_employee', $attendance->id_employee)
                                             ->where('overtime_date', $attendance->attendance_date)
+                                            ->where('status',"approve")
                                             ->first();
 
             if ($requestOvertime) {
