@@ -114,6 +114,11 @@ class RequestOvertimeController extends Controller
 
         // Cari request berdasarkan ID
         $overtimeRequest = RequestOvertime::findOrFail($request->id_overtime);
+        
+        // Konversi overtime_date menjadi objek Carbon
+        $overtimeDate = Carbon::parse($overtimeRequest->overtime_date);
+        $dayOfWeek = $overtimeDate->dayOfWeekIso;
+
         $assignshift = AssignShift::where('id_employee', $overtimeRequest->id_employee)->where('day', $dayOfWeek)->first();
         if($request->status == "approve")
         {
