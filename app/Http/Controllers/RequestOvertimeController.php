@@ -114,11 +114,27 @@ class RequestOvertimeController extends Controller
 
         // Cari request berdasarkan ID
         $overtimeRequest = RequestOvertime::findOrFail($request->id_overtime);
+        $assignshift = AssignShift::where('id_employee', $overtimeRequest->id_employee)->where('day', $dayOfWeek)->first();
+        if($request->status == "approve")
+        {
+            $overtimeRequest->status = $request->status;
+            $overtimeRequest->id_approver = Auth::user()->employee->id_employee;
+            $overtimeRequest->save();
+        }else{
+            $attendance = Attendance::where('id_employee', $overtimeRequest->id_employee)
+                                ->where('attendance_date', $overtimeRequest->overtime_date)
+                                ->first();
+            $clockin = $attendance->clock_in;
+            $attendance->attendance_status = 'present';
+            $attendance->clock_out = $assignshift->clock_out;
+            $dailyTotal = $clockin->diff($assignshift->clock_out);
+            $attendance->daily_total = sprintf('%02d:%02d', $dailyTotal->h, $dailyTotal->i);
+            $attendance->save();
 
-        // Update status
-        $overtimeRequest->status = $request->status;
-        $overtimeRequest->id_approver = Auth::user()->employee->id_employee;
-        $overtimeRequest->save();
+            $overtimeRequest->status = $request->status;
+            $overtimeRequest->id_approver = Auth::user()->employee->id_employee;
+            $overtimeRequest->save();
+        }        
 
         // Redirect dengan pesan sukses
         return redirect()->back()->with('success', 'Overtime request status updated successfully!');
