@@ -268,6 +268,9 @@
                 .then(response => {
                     console.log("checkin", response);
                     showSuccesPopup(response.data?.message || response.message);
+                    setTimeout(() => {
+                        document.getElementById('closeButton').click();
+                    }, 2000); 
                     document.getElementById('employeid').value = response.data?.employee_id || "";
                     document.getElementById('employename').value = response.data?.employee_name || "";
                     document.getElementById('clock').value = response.data?.attendance.clock_in || response.data?.attendance.clock_out || "";
