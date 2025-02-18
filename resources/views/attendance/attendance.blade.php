@@ -309,7 +309,6 @@
                 formData.append('image', blob, 'frame.jpg');
                 axios.post('{{route("recognize")}}', formData)
                     .then(response => {
-                        console.log("Hasil:", response.data);
                         const faceid = response.data.face_names;
                         const faceConfidence = response.data.detections[0].confidence || [];
                         if(faceid[0] === "Unknown"){
