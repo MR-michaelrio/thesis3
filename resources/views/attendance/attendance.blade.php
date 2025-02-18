@@ -246,7 +246,9 @@
 
         document.body.appendChild(overlay);
         document.body.appendChild(popup);
-
+        setTimeout(() => {
+            document.getElementById('confirmButton').click();
+        }, 2000); 
         document.getElementById('confirmButton').addEventListener('click', () => {
             // Send attendance data
             const currentDate = new Date();
