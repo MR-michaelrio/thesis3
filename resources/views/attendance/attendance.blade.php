@@ -269,7 +269,10 @@
                     console.log("checkin", response);
                     showSuccesPopup(response.data?.message || response.message);
                     setTimeout(() => {
-                        document.getElementById('closeButton').click();
+                        const closeButton = document.getElementById('closeButton');
+                        if (closeButton) {
+                            closeButton.click();  // Click the "Close" button after 2 seconds
+                        }
                     }, 2000); 
                     document.getElementById('employeid').value = response.data?.employee_id || "";
                     document.getElementById('employename').value = response.data?.employee_name || "";
